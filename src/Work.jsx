@@ -1,5 +1,5 @@
 export function Marquee() {
-  const items = ['Pixel-perfect since 2024', 'Design × Engineering', 'Brand → Web', 'Built to convert', 'Refined to last'];
+  const items = ['Pixel-perfect since 2024', 'Design × Engineering', 'Brand → Web', 'Built to convert', 'Made in Mumbai'];
   return (
     <div className="marquee" aria-hidden>
       <div className="marquee-track">
@@ -20,13 +20,13 @@ export function Marquee() {
 
 export function Work() {
   const items = [
-    { num: '01', name: 'Halcyon Capital',     meta: ['Brand', 'Site', '2026'],          href: '/case-studies/halcyon/',    live: true },
-    { num: '02', name: 'Northbound Advisory', meta: ['Brand + Site', 'Advisory', '2026'], href: '/case-studies/northbound/' },
-    { num: '03', name: 'Field & Foundry',     meta: ['E-commerce', 'Webflow', '2025'] },
-    { num: '04', name: 'Northbound Type',     meta: ['Foundry', 'Design + Dev', '2025'] },
-    { num: '05', name: 'Hexa Systems',        meta: ['SaaS', 'Site + Docs', '2025'] },
-    { num: '06', name: 'Rosemark Hotels',     meta: ['Hospitality', 'CMS', '2024'] },
-    { num: '07', name: 'Atlas Robotics',      meta: ['B2B', 'Site', '2024'] },
+    { num: '01', name: 'Mehta & Sons',     meta: ['Family Office', 'Brand + Site', '2026'], href: '/case-studies/halcyon/', live: true },
+    { num: '02', name: 'Sahyadri & Co',    meta: ['Tax + Advisory', 'Brand + Site', '2026'], href: '/case-studies/sahyadri/' },
+    { num: '03', name: 'Forest & Loom',    meta: ['D2C Textiles', 'Shopify', '2025'] },
+    { num: '04', name: 'Sangam Type Co',   meta: ['Type Foundry', 'Design + Dev', '2025'] },
+    { num: '05', name: 'Pravah Cloud',     meta: ['B2B SaaS', 'Site + Docs', '2025'] },
+    { num: '06', name: 'Coast & Co',       meta: ['Boutique Hotels', 'CMS', '2024'] },
+    { num: '07', name: 'Karya Industries', meta: ['Industrial', 'Site', '2024'] },
   ];
 
   return (

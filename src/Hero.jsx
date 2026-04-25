@@ -89,7 +89,7 @@ export function Hero() {
 
         <div className="hero-foot">
           <p style={{ maxWidth: '46ch', fontSize: 18 }}>
-            OnePixel is a small, opinionated studio building modern, polished websites for brands that refuse to look like everyone else.
+            OnePixel is a small, opinionated studio in Mumbai building modern, polished websites for the brands India is building next.
           </p>
           <div className="hero-cta-wrap">
             <a href="#contact" className="btn btn-primary">

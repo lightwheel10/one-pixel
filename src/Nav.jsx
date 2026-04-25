@@ -86,7 +86,7 @@ export function Nav({ dark, onToggleTheme }) {
       <a href="#top" className="nav-logo">
         <PixelMark />
         <span>OnePixel</span>
-        <span style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--muted)', marginLeft: 8, letterSpacing: '0.1em' }}>STUDIO ’24</span>
+        <span style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--muted)', marginLeft: 8, letterSpacing: '0.1em' }}>MUMBAI · ’24</span>
       </a>
       <div className="nav-links" style={{ display: wide ? 'flex' : 'none' }}>
         <a href="#work">Work</a>

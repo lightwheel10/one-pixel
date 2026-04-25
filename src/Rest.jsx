@@ -2,9 +2,9 @@ import { useState } from 'react';
 
 export function Testimonials() {
   const items = [
-    { quote: 'They didn’t just redesign our site — they reset what our brand could look like online.', who: 'Mara Vance',    role: 'CEO, Halcyon Capital',         av: 'MV' },
-    { quote: 'Fastest, sharpest, calmest project I’ve ever shipped with an agency. We launched a week ahead.', who: 'Daniel Oduya', role: 'Head of Marketing, Hexa', av: 'DO' },
-    { quote: 'Every detail was considered. Our conversion rate is up 38% three months in.',           who: 'Sasha Rein',    role: 'Founder, Field & Foundry',     av: 'SR' },
+    { quote: 'They didn’t just redesign our site — they reset what our brand could look like online.',           who: 'Naina Mehta',   role: 'Principal Broker, Mehta & Sons', av: 'NM' },
+    { quote: 'Fastest, sharpest, calmest project I’ve ever shipped with an agency. We launched a week ahead.',   who: 'Rohan Khanna',  role: 'Head of Growth, Pravah Cloud',   av: 'RK' },
+    { quote: 'Every detail was considered. Our conversion rate is up 38% three months in.',                      who: 'Ananya Patel',  role: 'Founder, Forest & Loom',         av: 'AP' },
   ];
   return (
     <section id="testimonials" style={{ background: 'var(--paper)' }}>
@@ -37,11 +37,11 @@ export function Testimonials() {
 
 export function FAQ() {
   const qs = [
-    { q: 'How much does a project cost?', a: 'Most projects range from $25k to $120k+ depending on scope. We send a detailed proposal after our discovery call so the number reflects your reality, not a template.' },
+    { q: 'How do you scope a project?', a: 'Every project starts with a 60-minute discovery call. We listen, understand the work ahead, and send a detailed proposal scoped to your reality — not a templated rate card. The first call is on us, with no commitment to take it further.' },
     { q: 'How long does it take?', a: 'Marketing sites typically take 4–6 weeks. Larger brand-and-build engagements run 6–10 weeks. We start one new project per month and protect that pace fiercely.' },
-    { q: 'Do you work with our existing design / dev team?', a: 'Yes — we love embedded engagements. We can lead, support, or hand off. We’ve shipped alongside in-house teams at Series A startups all the way to public companies.' },
+    { q: 'Do you work with our existing design or dev team?', a: 'Yes — we love embedded engagements. We can lead, support, or hand off. We’ve shipped alongside in-house teams from early-stage Mumbai and Bangalore startups to listed companies.' },
     { q: 'What stack do you build on?', a: 'Webflow when speed matters and a non-engineer should be able to update copy. Next.js + Sanity / Contentful when the site has product surface area. We pick the right tool, not the trendy one.' },
-    { q: 'Do you offer ongoing care?', a: 'Yes. Every project includes 30 days of free post-launch tuning. After that, we offer monthly retainers for design and engineering — most clients keep us on for 6–12 months.' },
+    { q: 'Do you offer ongoing care?', a: 'Yes. Every project includes 30 days of post-launch tuning. After that, we offer monthly retainers for design and engineering — most clients keep us on for 6–12 months.' },
     { q: 'Why “OnePixel”?', a: 'Because the difference between average and exceptional is usually one pixel — repeated, obsessively, across every screen. That’s the bar.' },
   ];
   const [open, setOpen] = useState(0);
@@ -116,8 +116,8 @@ export function Contact() {
             <div className="contact-block">
               <div className="label">Email · for new projects</div>
               <div className="big">
-                <a href="mailto:hello@onepixel.studio">
-                  hello@onepixel.studio <span>↗</span>
+                <a href="mailto:hello@onepixel.in">
+                  hello@onepixel.in <span>↗</span>
                 </a>
               </div>
             </div>
@@ -139,8 +139,8 @@ export function Contact() {
               <div className="label">Elsewhere</div>
               <div className="big" style={{ display: 'flex', gap: 24, fontSize: 22 }}>
                 <a href="#">Twitter</a>
-                <a href="#">Read.cv</a>
-                <a href="#">Are.na</a>
+                <a href="#">Instagram</a>
+                <a href="#">LinkedIn</a>
               </div>
             </div>
           </div>
@@ -150,7 +150,7 @@ export function Contact() {
         </div>
       </div>
       <div className="footer">
-        <div>© 2026 OnePixel Studio · Made one pixel at a time</div>
+        <div>© 2026 OnePixel Studio · Mumbai · Made one pixel at a time</div>
         <div className="footer-links">
           <a href="#">Privacy</a>
           <a href="#">Imprint</a>

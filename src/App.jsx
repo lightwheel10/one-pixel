@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Loader } from './Loader.jsx';
 import { Nav } from './Nav.jsx';
 import { Hero } from './Hero.jsx';
 import { Marquee, Work } from './Work.jsx';
@@ -62,6 +63,7 @@ export default function App() {
 
   return (
     <>
+      <Loader />
       <Nav dark={dark} onToggleTheme={() => setDark(d => !d)} />
       <Hero />
       <Marquee />

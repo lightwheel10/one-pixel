@@ -33,14 +33,14 @@ function PixelDispersion() {
         display: 'inline-block',
         verticalAlign: 'middle',
         height: '0.85em',
-        aspectRatio: '1.5/1',
+        aspectRatio: '1/1',
         position: 'relative',
         cursor: 'crosshair',
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <svg viewBox={`0 0 ${size * 1.5} ${size}`} preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%' }} ref={ref}>
+      <svg viewBox={`0 0 ${size} ${size}`} preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%' }} ref={ref}>
         {particles.map((p, i) => {
           const offset = hovered ? p.drift * 0.6 : 0;
           const tx = p.drift > 0 ? offset * (0.5 + Math.sin(i) * 0.4) : 0;
@@ -48,22 +48,23 @@ function PixelDispersion() {
           const driftClass = p.drift > 0
             ? (i % 3 === 0 ? 'pix-drift-a' : i % 3 === 1 ? 'pix-drift-b' : 'pix-drift-c')
             : '';
+          // Idle drift (keyframe) lives on the <g>; hover dispersion (translate)
+          // lives on the inner <rect>. Separate elements → the two transforms
+          // compose instead of the animation overriding the inline transform.
           return (
-            <rect
-              key={i}
-              x={p.x}
-              y={p.y}
-              width="0.95"
-              height="0.95"
-              fill={p.color}
-              className={driftClass}
-              style={{
-                transition: `transform ${0.5 + (i % 7) * 0.05}s cubic-bezier(.2,.7,.3,1)`,
-                transform: `translate(${tx}px, ${ty}px)`,
-                transformOrigin: `${p.x}px ${p.y}px`,
-                animationDelay: `${(i % 11) * 0.18}s`,
-              }}
-            />
+            <g key={i} className={driftClass} style={{ animationDelay: `${(i % 11) * 0.18}s` }}>
+              <rect
+                x={p.x}
+                y={p.y}
+                width="0.95"
+                height="0.95"
+                fill={p.color}
+                style={{
+                  transition: `transform ${0.5 + (i % 7) * 0.05}s cubic-bezier(.2,.7,.3,1)`,
+                  transform: `translate(${tx}px, ${ty}px)`,
+                }}
+              />
+            </g>
           );
         })}
       </svg>
@@ -81,7 +82,7 @@ export function Hero() {
           <span className="line">
             <em>premium</em> websites
           </span>
-          <span className="line" style={{ display: 'flex', alignItems: 'baseline', gap: '0.2em', flexWrap: 'wrap' }}>
+          <span className="line" style={{ display: 'flex', alignItems: 'center', gap: '0.1em', flexWrap: 'wrap' }}>
             <PixelDispersion />
             <span>by <span className="accent">pixel.</span></span>
           </span>

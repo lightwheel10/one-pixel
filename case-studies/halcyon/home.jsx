@@ -6,7 +6,7 @@ export function TopBar() {
     <div className="hc-topbar">
       <span><span className="dot"></span>Established 1962 · Bandra, Bombay</span>
       <span style={{ display: 'flex', gap: 24 }}>
-        <span>Mumbai · Maharashtra</span>
+        <span>Maharashtra</span>
         <a href="/">← Back to OnePixel</a>
       </span>
     </div>
@@ -71,7 +71,7 @@ export function Hero() {
         </h1>
         <div className="hc-hero-aside">
           <p>
-            Mehta &amp; Sons is a third-generation family office representing private estates and quiet houses across Mumbai and the Western Ghats. We list few properties, considered carefully, and carry each from valuation to closing — by hand.
+            Mehta &amp; Sons is a third-generation family office representing private estates and quiet houses across the Western Ghats. We list few properties, considered carefully, and carry each from valuation to closing — by hand.
           </p>
         </div>
       </div>

@@ -339,11 +339,9 @@ section { position: relative; padding: 120px 0; }
   border-top: 1px solid var(--line);
   align-items: center;
   cursor: pointer;
-  transition: padding .35s ease, background .25s;
   position: relative;
 }
 .work-item:last-child { border-bottom: 1px solid var(--line); }
-.work-item:hover { padding-left: 24px; padding-right: 24px; }
 .work-item .num { font-family: var(--mono); font-size: 12px; color: var(--muted); }
 .work-item .name {
   font-family: var(--display);
@@ -383,7 +381,6 @@ section { position: relative; padding: 120px 0; }
 @media (max-width: 800px) {
   .work-item { grid-template-columns: 40px 1fr; padding: 24px 0; }
   .work-item .meta, .work-item .arr { display: none; }
-  .work-item:hover { padding-left: 0; padding-right: 0; }
 }
 
 /* ============ SERVICES ============ */
@@ -899,8 +896,6 @@ section { position: relative; padding: 120px 0; }
 .btn:active { transform: translateY(0); }
 
 /* Work item arrow nudge */
-.work-item .num { transition: color .3s, transform .3s; }
-.work-item:hover .num { color: var(--accent); transform: translateX(4px); }
 
 /* Service card hover lift */
 .svc-card { transition: background .3s, transform .3s; }

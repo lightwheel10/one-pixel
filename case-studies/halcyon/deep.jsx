@@ -287,7 +287,7 @@ export function Contact() {
           <aside className="hc-contact-aside">
             <div className="item">
               <div className="label">Office</div>
-              <div className="value"><em>14 Hill Road</em><div className="value-sub">Bandra (W), Mumbai 400050</div></div>
+              <div className="value"><em>14 Hill Road</em><div className="value-sub">Bandra (W), 400050</div></div>
             </div>
             <div className="item">
               <div className="label">Telephone</div>
@@ -315,7 +315,7 @@ export function Footer() {
         <div className="hc-footer-top">
           <div>
             <div className="hc-footer-mark">Mehta<br />&amp; Sons.</div>
-            <p>A family-run real-estate office representing private estates and quiet houses across Mumbai and the Western Ghats. Established 1962.</p>
+            <p>A family-run real-estate office representing private estates and quiet houses across the Western Ghats. Established 1962.</p>
           </div>
           <div>
             <h4>Browse</h4>
@@ -339,7 +339,7 @@ export function Footer() {
             <h4>Visit</h4>
             <ul>
               <li>14 Hill Road</li>
-              <li>Bandra (W), Mumbai 400050</li>
+              <li>Bandra (W), 400050</li>
               <li>+91 22 2640 0162</li>
               <li>By appointment</li>
             </ul>

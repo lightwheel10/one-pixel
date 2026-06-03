@@ -1,5 +1,5 @@
 export function Marquee() {
-  const items = ['Pixel-perfect since 2024', 'Design × Engineering', 'Brand → Web', 'Built to convert', 'Made in Mumbai'];
+  const items = ['Pixel-perfect since 2024', 'Design × Engineering', 'Brand → Web', 'Built to convert', 'Made in India'];
   return (
     <div className="marquee" aria-hidden>
       <div className="marquee-track">

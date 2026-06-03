@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 
-export function Loader() {
+export function Loader({ duration = 9000, mark = 'OnePixel' }) {
+  // All timings are tuned to a 9s intro; `scale` re-paces the whole
+  // choreography for shorter uses (e.g. a ~2.5s page-transition loader).
+  // duration === 9000 → scale 1 → identical to the original intro.
+  const scale = duration / 9000;
+
   const [gone, setGone] = useState(false);
   const [mounted, setMounted] = useState(true);
   const [flickering, setFlickering] = useState(false);
@@ -9,12 +14,12 @@ export function Loader() {
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
-    const flick = setTimeout(() => setFlickering(true), 4800);
-    const dismiss = setTimeout(() => setGone(true), 7500);
+    const flick = setTimeout(() => setFlickering(true), 4800 * scale);
+    const dismiss = setTimeout(() => setGone(true), 7500 * scale);
     const unmount = setTimeout(() => {
       setMounted(false);
       document.body.style.overflow = prevOverflow;
-    }, 9000);
+    }, 9000 * scale);
 
     return () => {
       clearTimeout(flick);
@@ -22,7 +27,7 @@ export function Loader() {
       clearTimeout(unmount);
       document.body.style.overflow = prevOverflow;
     };
-  }, []);
+  }, [scale]);
 
   // Pre-compute pixel grid: black core (column-wave fade-in + random pops) + dispersion
   const pixelsRef = useRef(null);
@@ -36,7 +41,7 @@ export function Loader() {
     for (let y = 0; y < fullSize; y++) {
       for (let x = 0; x < coreEnd; x++) {
         const fadeinDelay = Math.round(
-          x * 220 + Math.sin((y / fullSize) * Math.PI * 2) * 80 + 100
+          (x * 220 + Math.sin((y / fullSize) * Math.PI * 2) * 80 + 100) * scale
         );
         arr.push({
           x, y,
@@ -44,8 +49,8 @@ export function Loader() {
           kind: 'march',
           fadeinDelay,
           popColor: Math.random() < 0.6 ? '#FF6B47' : '#C7DDD8',
-          popDelay: 2.0 + Math.random() * 3.5,    // 2.0–5.5s — first pops appear once core is mostly in
-          popDuration: 4.5 + Math.random() * 3.5, // 4.5–8s loop per pixel
+          popDelay: (2.0 + Math.random() * 3.5) * scale,    // 2.0–5.5s — first pops appear once core is mostly in
+          popDuration: (4.5 + Math.random() * 3.5) * scale, // 4.5–8s loop per pixel
         });
       }
     }
@@ -60,7 +65,7 @@ export function Loader() {
           if (r < 0.5)        { color = '#FF6B47';      kind = 'color'; }
           else if (r < 0.85)  { color = 'currentColor'; kind = 'static'; }
           else                { color = '#C7DDD8';      kind = 'color'; }
-          const delay = 2800 + Math.round((x - coreEnd) * 110 + y * 14);
+          const delay = Math.round((2800 + (x - coreEnd) * 110 + y * 14) * scale);
           arr.push({ x, y, color, kind, delay });
         }
       }
@@ -72,7 +77,11 @@ export function Loader() {
   if (!mounted) return null;
 
   return (
-    <div className={`loader ${flickering ? 'flickering' : ''} ${gone ? 'gone' : ''}`} aria-hidden>
+    <div
+      className={`loader ${flickering ? 'flickering' : ''} ${gone ? 'gone' : ''}`}
+      style={{ transitionDuration: `${1100 * scale}ms` }}
+      aria-hidden
+    >
       <div className="loader-stage">
         <svg viewBox="0 0 14 14" preserveAspectRatio="xMidYMid meet" className="loader-cluster">
           {pixels.map((p, i) => (
@@ -97,7 +106,10 @@ export function Loader() {
             />
           ))}
         </svg>
-        <div className="loader-mark">OnePixel · Mumbai</div>
+        <div
+          className="loader-mark"
+          style={{ animationDelay: `${4000 * scale}ms`, animationDuration: `${800 * scale}ms` }}
+        >{mark}</div>
       </div>
     </div>
   );

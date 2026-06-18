@@ -64,35 +64,53 @@ export function PixelMark({ size = 22 }) {
 
 export function Nav({ dark, onToggleTheme }) {
   const [scrolled, setScrolled] = useState(false);
-  const [wide, setWide] = useState(() => typeof window === 'undefined' ? true : window.innerWidth >= 700);
+  // Paras: mobile dropdown open/closed. Desktop vs mobile show/hide is now pure CSS
+  // (media queries), so the old `wide`/resize-listener logic is gone.
+  const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
-    const onResize = () => setWide(window.innerWidth >= 700);
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onResize);
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onResize);
-    };
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
   return (
     <nav className="nav" style={{ borderBottomColor: scrolled ? 'var(--line)' : 'transparent' }}>
       <a href="#top" className="nav-logo">
         <PixelMark />
         <span>OnePixel</span>
-        <span style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--muted)', marginLeft: 8, letterSpacing: '0.1em' }}>EST. ’24</span>
+        <span className="nav-est">EST. ’24</span>
       </a>
-      <div className="nav-links" style={{ display: wide ? 'flex' : 'none' }}>
+      {/* Paras: desktop inline links — CSS hides these < 700px in favour of the dropdown. */}
+      <div className="nav-links">
         <a href="#work">Work</a>
         <a href="#services">Services</a>
         <a href="#process">Process</a>
         <a href="#faq">FAQ</a>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+      <div className="nav-right">
         <ThemeToggle dark={dark} onToggle={onToggleTheme} />
         <a href="#contact" className="nav-cta">
           Start a project <span className="arr">→</span>
         </a>
+        {/* Paras: hamburger — CSS shows it only < 700px; toggles the dropdown below. */}
+        <button
+          className="nav-burger"
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((o) => !o)}
+        >
+          <span className={`nav-burger-box ${menuOpen ? 'open' : ''}`} aria-hidden>
+            <span></span><span></span>
+          </span>
+        </button>
+      </div>
+      {/* Paras: mobile dropdown — restores the section links (hidden on mobile) plus the
+          CTA; tapping any item closes it. CSS reveals this only < 700px. */}
+      <div className={`nav-mobile ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(false)}>
+        <a href="#work">Work</a>
+        <a href="#services">Services</a>
+        <a href="#process">Process</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact" className="nav-mobile-cta">Start a project <span className="arr">→</span></a>
       </div>
     </nav>
   );

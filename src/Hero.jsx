@@ -29,14 +29,7 @@ function PixelDispersion() {
 
   return (
     <span
-      style={{
-        display: 'inline-block',
-        verticalAlign: 'middle',
-        height: '0.85em',
-        aspectRatio: '1/1',
-        position: 'relative',
-        cursor: 'crosshair',
-      }}
+      className="hero-pixblock"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -82,7 +75,9 @@ export function Hero() {
           <span className="line">
             <em>premium</em> websites
           </span>
-          <span className="line" style={{ display: 'flex', alignItems: 'center', gap: '0.1em', flexWrap: 'wrap' }}>
+          {/* Paras: pixel block + “by pixel.” — layout moved to CSS (.hero-line-pix) so the
+              block size and the gap before “by” can shrink on phones, where this line crowded. */}
+          <span className="line hero-line-pix">
             <PixelDispersion />
             <span>by <span className="accent">pixel.</span></span>
           </span>

@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
 import { Loader } from './Loader.jsx';
 import { Nav } from './Nav.jsx';
 import { Hero } from './Hero.jsx';
@@ -6,11 +9,16 @@ import { Marquee, Work } from './Work.jsx';
 import { Services, Process } from './ServicesProcess.jsx';
 import { Testimonials, FAQ, Contact } from './Rest.jsx';
 
+gsap.registerPlugin(ScrollTrigger, SplitText);
+
 export default function App() {
   const [dark, setDark] = useState(() => {
     try {
-      return localStorage.getItem('onepixel-theme') === 'dark';
-    } catch (e) { return false; }
+      // Paras: dark is the default theme on first open; a returning visitor's
+      // saved choice is still respected.
+      const saved = localStorage.getItem('onepixel-theme');
+      return saved ? saved === 'dark' : true;
+    } catch (e) { return true; }
   });
 
   useEffect(() => {
@@ -19,8 +27,11 @@ export default function App() {
   }, [dark]);
 
   useEffect(() => {
+    // Paras · 2026-06-18: .work-item AND .section-head removed here — both are now GSAP
+    // reveals (Work.jsx, and the section-head effect below), so the IntersectionObserver
+    // shouldn't also reveal them.
     const targets = document.querySelectorAll(
-      'section .section-head, .work-item, .svc-card, .testimonial, .faq-item, .proc-display, .proc-strip, .hero-foot, .marquee'
+      '.svc-card, .testimonial, .faq-item, .proc-display, .proc-strip, .proc-list-item, .hero-foot, .marquee'
     );
     targets.forEach(t => t.classList.add('reveal'));
     const io = new IntersectionObserver((entries) => {
@@ -33,6 +44,26 @@ export default function App() {
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
     targets.forEach(t => io.observe(t));
     return () => io.disconnect();
+  }, []);
+
+  // Paras · 2026-06-18: section headings reveal on scroll — the title animates word-by-word
+  // (SplitText) with the number + sub-text fading up alongside; the coral “em” word lands last
+  // since it's last in each title. Reduced-motion safe; SplitText is reverted on cleanup.
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const splits = [];
+    const ctx = gsap.context(() => {
+      document.querySelectorAll('.section-head').forEach((head) => {
+        const title = head.querySelector('.section-title');
+        const split = title ? new SplitText(title, { type: 'words' }) : null;
+        if (split) splits.push(split);
+        const tl = gsap.timeline({ scrollTrigger: { trigger: head, start: 'top 80%' } });
+        if (split) tl.from(split.words, { y: 20, opacity: 0, stagger: 0.045, duration: 0.6, ease: 'power3.out' }, 0);
+        const others = head.querySelectorAll('.section-num, .section-sub');
+        if (others.length) tl.from(others, { y: 18, opacity: 0, stagger: 0.12, duration: 0.6, ease: 'power3.out' }, 0.08);
+      });
+    });
+    return () => { ctx.revert(); splits.forEach((s) => s.revert()); };
   }, []);
 
   useEffect(() => {

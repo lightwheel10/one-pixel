@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 function ServiceIcon({ variant, accent }) {
   const cells = {
@@ -119,8 +123,53 @@ export function Process() {
     { n: '04', t: 'Launch + Care',  tag: 'Ship',   d: 'We ship the site, monitor it, and stick around. 30 days of post-launch tuning is included with every project.',           time: 'Week 8 →', deliverables: ['Launch day', '30-day care', 'Retainer optional'] },
   ];
   const [active, setActive] = useState(0);
+  const ref = useRef(null);
+  const fillRef = useRef(null);
+
+  // Paras · 2026-06-18: the rail fill is driven imperatively so it can track scroll
+  // CONTINUOUSLY (it used to jump 25% per step, which read as "stuck then jump"). On scroll
+  // it follows progress 1:1; on click it eases to the node.
+  const setFill = (pct, animate) => {
+    const el = fillRef.current;
+    if (!el) return;
+    gsap.killTweensOf(el);
+    if (animate) gsap.to(el, { width: pct + '%', duration: 0.5, ease: 'power2.out' });
+    else el.style.width = pct + '%';
+  };
+  const goTo = (i) => { setActive(i); setFill((i / (steps.length - 1)) * 100, true); };
+
+  useEffect(() => { setFill((active / (steps.length - 1)) * 100, false); }, []); // initial fill
+
+  // Paras · 2026-06-18: drive the 4 steps from scroll. ONLY on a wide + tall screen does the
+  // .proc-stage core FREEZE-PIN and scrub the steps (fill tracks scroll 1:1, content cross-fades,
+  // pin kept short ~1.8 viewports). Phones / short screens DON'T scrub at all — CSS swaps the
+  // stage for the static .proc-list (every step stacked, see render), so nothing changes under
+  // you while reading. So there's no mobile ScrollTrigger here anymore. Reduced-motion: no pin.
+  useEffect(() => {
+    const reduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const onScroll = (self) => {
+      const p = self.progress;
+      if (fillRef.current) { gsap.killTweensOf(fillRef.current); fillRef.current.style.width = p * 100 + '%'; }
+      setActive(Math.min(steps.length - 1, Math.floor(p * steps.length)));
+    };
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 901px) and (min-height: 800px)', () => {
+      if (reduce()) return;
+      const stage = ref.current.querySelector('.proc-stage');
+      ScrollTrigger.create({
+        trigger: stage,
+        pin: stage,
+        start: 'top 96px',
+        end: () => '+=' + window.innerHeight * 1.8,
+        anticipatePin: 1,
+        onUpdate: onScroll,
+      });
+    });
+    return () => mm.revert();
+  }, []);
+
   return (
-    <section id="process" style={{ padding: 0 }}>
+    <section id="process" style={{ padding: 0 }} ref={ref}>
       <div className="process">
         <div className="shell">
           <div className="section-head">
@@ -133,16 +182,17 @@ export function Process() {
             </div>
           </div>
 
+          <div className="proc-stage">
           <div className="proc-rail" role="tablist">
             <div className="proc-rail-line" aria-hidden></div>
-            <div className="proc-rail-fill" style={{ width: `${((active + 1) / steps.length) * 100}%` }} aria-hidden></div>
+            <div className="proc-rail-fill" ref={fillRef} aria-hidden></div>
             {steps.map((s, i) => (
               <button
                 key={i}
                 role="tab"
                 aria-selected={active === i}
                 className={`proc-rail-node ${active >= i ? 'on' : ''} ${active === i ? 'current' : ''}`}
-                onClick={() => setActive(i)}
+                onClick={() => goTo(i)}
                 style={{ left: `${(i / (steps.length - 1)) * 100}%` }}
               >
                 <span className="proc-rail-dot"></span>
@@ -152,8 +202,8 @@ export function Process() {
           </div>
 
           <div className="proc-display">
-            <div className="proc-big-num" aria-hidden>{steps[active].n}</div>
-            <div className="proc-body">
+            <div className="proc-big-num" key={'num' + active} aria-hidden>{steps[active].n}</div>
+            <div className="proc-body" key={'body' + active}>
               <div className="proc-meta">
                 <span className="proc-time">{steps[active].time}</span>
                 <span className="proc-of">Phase {active + 1} of {steps.length}</span>
@@ -178,13 +228,38 @@ export function Process() {
             {steps.map((s, i) => (
               <button
                 key={i}
-                onClick={() => setActive(i)}
+                onClick={() => goTo(i)}
                 className={`proc-strip-item ${active === i ? 'on' : ''}`}
               >
                 <span className="proc-strip-num">{s.n}</span>
                 <span className="proc-strip-name">{s.t}</span>
                 <span className="proc-strip-time">{s.time}</span>
               </button>
+            ))}
+          </div>
+          </div>
+
+          {/* Paras · 2026-06-18: phones + short screens get every step as a static stacked list
+              (the pinned single-display scrub above is desktop-only). Nothing swaps under you
+              while reading. CSS swaps .proc-stage ↔ .proc-list at the same breakpoint the pin uses. */}
+          <div className="proc-list">
+            {steps.map((s, i) => (
+              <div key={i} className="proc-list-item">
+                <div className="proc-list-head">
+                  <span className="proc-list-num">{s.n}</span>
+                  <span className="proc-list-time">{s.time}</span>
+                </div>
+                <h3 className="proc-list-title">{s.t}</h3>
+                <p className="proc-list-desc">{s.d}</p>
+                <div className="proc-deliv">
+                  <div className="proc-deliv-label">You receive</div>
+                  <ul>
+                    {s.deliverables.map((d, j) => (
+                      <li key={j}><span className="proc-deliv-pip"></span>{d}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             ))}
           </div>
         </div>

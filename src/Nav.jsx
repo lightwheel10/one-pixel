@@ -48,16 +48,18 @@ function ThemeToggle({ dark, onToggle }) {
 }
 
 export function PixelMark({ size = 22 }) {
+  // Paras: the two dark accent pixels use currentColor (var(--ink)) instead of #0A0A0A
+  // so they don't vanish on the dark nav; the coral/mint pixels stay fixed.
   return (
     <svg width={size} height={size} viewBox="0 0 22 22" aria-hidden>
       <rect x="0" y="3" width="13" height="13" fill="currentColor" />
       <rect x="14" y="4" width="3" height="3" fill="#FF6B47" />
       <rect x="18" y="3" width="2" height="2" fill="#C7DDD8" />
-      <rect x="14" y="9" width="2" height="2" fill="#0A0A0A" />
+      <rect x="14" y="9" width="2" height="2" fill="currentColor" />
       <rect x="17" y="10" width="3" height="3" fill="#FF6B47" />
       <rect x="13" y="14" width="2" height="2" fill="#FF6B47" />
       <rect x="15" y="17" width="2" height="2" fill="#C7DDD8" />
-      <rect x="11" y="18" width="2" height="2" fill="#0A0A0A" />
+      <rect x="11" y="18" width="2" height="2" fill="currentColor" />
     </svg>
   );
 }

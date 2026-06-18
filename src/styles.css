@@ -234,8 +234,7 @@ img { display: block; max-width: 100%; }
 }
 .btn-primary { background: var(--ink); color: var(--bg); }
 .btn-primary:hover { background: var(--accent); }
-.btn-ghost { border: 1px solid var(--ink); }
-.btn-ghost:hover { background: var(--ink); color: var(--bg); }
+/* Paras: .btn-ghost removed — was only used by the hero "Selected work" button, which is gone. */
 .btn .pix {
   width: 8px; height: 8px; background: currentColor;
   transition: transform .25s;
@@ -346,7 +345,9 @@ section { position: relative; padding: 120px 0; }
   position: relative;
   cursor: default;
 }
-.hero-title em { font-style: italic; font-family: 'Instrument Serif', serif; font-weight: 400; letter-spacing: -0.02em;}
+/* Paras · 2026-06-18: highlight “premium” in the coral accent (matches “pixel.” and the
+   section-title emphasis), on top of the existing italic-serif treatment. All screens. */
+.hero-title em { font-style: italic; font-family: 'Instrument Serif', serif; font-weight: 400; letter-spacing: -0.02em; color: var(--accent); }
 
 /* Paras: pixel dispersion block (hero title, line 3). Layout used to be inline on the
    element; moved here so the size is responsive — see the phone override below. */
@@ -357,7 +358,14 @@ section { position: relative; padding: 120px 0; }
   aspect-ratio: 1 / 1;
   position: relative;
   cursor: crosshair;
+  /* Paras: drives the block's 'currentColor' pixels — ink (black on light, cream on dark). */
+  color: var(--ink);
 }
+/* Paras · 2026-06-18: let scattered pixels fly out past the block on scroll. Safe on desktop
+   because the viewBox (14) equals the content, so nothing extra shows at rest — only the
+   GSAP-scattered pixels spill. (Transforms don't affect layout, so no scrollbars.) Mobile
+   re-clips below to keep the viewBox-12 crop. */
+.hero-pixblock svg { overflow: visible; }
 /* Paras: the “[block] by pixel.” line — flex row; the gap before “by” widens on phones. */
 .hero-title .hero-line-pix {
   display: flex;
@@ -390,12 +398,34 @@ section { position: relative; padding: 120px 0; }
    crowds “by pixel.”. Here we loosen the leading and shrink/space the block. Desktop
    (>600px) keeps the original tight, dramatic title look. */
 @media (max-width: 600px) {
-  .hero-title { line-height: 0.96; }
-  .hero-pixblock { height: 0.66em; }
+  /* Paras · 2026-06-18: make the title clearly the dominant element on phones — larger size
+     + looser leading so “We design premium…” reads as the main title, then a gap, then the
+     smaller sub-text. (Phone only; desktop keeps its own size.) */
+  .hero-title { font-size: clamp(60px, 16vw, 76px); line-height: 1.1; }
+  /* Paras · 2026-06-18: no mobile height override — the block uses the base 0.85em (bigger).
+     This line is NOT flex (the .hero-title .line intro rule below resets display:block), so the
+     block is placed by vertical-align in inline flow. `middle` targets the x-height middle,
+     which sits ~0.1em BELOW the true glyph centre here (“by pixel.” has tall ascenders b/l/i-dot
+     but short descenders); translateY(-0.1em) lifts the block's centre onto the text's actual
+     vertical centre. Both em-based, so they scale. (viewBox crop to 12 is set in Hero.jsx.) */
+  .hero-pixblock { vertical-align: middle; transform: translateY(-0.1em); }
+  /* Paras · 2026-06-18: re-clip on phones so the viewBox-12 crop holds (the desktop rule sets
+     overflow:visible). Scatter is therefore bounded to the block on mobile. */
+  .hero-pixblock svg { overflow: hidden; }
   .hero-title .hero-line-pix { gap: 0.26em; }
   /* Paras: tighter top/bottom padding on phones (the hero already sizes to content from
      the base rule, so this just trims the gaps to phone scale). */
   .hero { padding-top: 104px; padding-bottom: 56px; }
+  /* Paras · 2026-06-18: on first load the hero + marquee should fill the screen and the
+     Work section should sit just below the fold (it was peeking in on taller phones).
+     100px = the marquee's fixed height here, so hero + marquee == one screen. svh tracks
+     the visible area under the mobile address bar; the vh line is a fallback. */
+  .hero { min-height: calc(100vh - 100px); }
+  .hero { min-height: calc(100svh - 100px); }
+  /* Paras · 2026-06-18: title + sub-text stay one cohesive, centred block (no space-between
+     void). 48px sits between the big title and the sub-text so the hierarchy reads clearly. */
+  .hero { justify-content: center; }
+  .hero-foot { margin-top: 48px; }
 }
 
 /* ============ MARQUEE ============ */
@@ -412,10 +442,13 @@ section { position: relative; padding: 120px 0; }
   white-space: nowrap;
   animation: scroll 40s linear infinite;
   font-family: var(--display);
+  /* Paras · 2026-06-18: the CSS scroll above is the fallback (reduced-motion / no-JS).
+     When GSAP drives a scroll-velocity-reactive version it adds .js-marquee to disable it. */
   font-size: clamp(28px, 4.5vw, 64px);
   font-weight: 500;
   letter-spacing: -0.03em;
 }
+.marquee-track.js-marquee { animation: none; will-change: transform; }
 .marquee-track span { display: inline-flex; align-items: center; gap: 64px; }
 .marquee-track .star { color: var(--accent); }
 @keyframes scroll {
@@ -571,7 +604,17 @@ section { position: relative; padding: 120px 0; }
   top: 36px; left: 12px;
   height: 2px;
   background: var(--accent);
-  transition: width .6s cubic-bezier(.5,1.4,.4,1);
+  /* Paras · 2026-06-18: width is driven imperatively (continuous on scroll, GSAP-eased on
+     click), so no CSS transition here — it would lag the per-frame scroll updates. */
+}
+/* Paras · 2026-06-18: each step's number + body cross-fade in on change (key={active} remount),
+   so scrolling the pinned steps reads as smooth transitions, not abrupt swaps. */
+.proc-big-num { animation: proc-num-in .5s cubic-bezier(.2,.7,.2,1); }
+.proc-display .proc-body { animation: proc-step-in .45s cubic-bezier(.2,.7,.2,1); }
+@keyframes proc-num-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes proc-step-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .proc-big-num, .proc-display .proc-body { animation: none; }
 }
 .proc-rail-node {
   position: absolute;
@@ -770,6 +813,63 @@ section { position: relative; padding: 120px 0; }
   color: rgba(255,255,255,.4);
 }
 
+/* Paras · 2026-06-18: mobile Process. The pinned rail+display+strip (.proc-stage) is a desktop
+   delight, but on phones it scroll-swapped the single display under your finger (disorienting)
+   and the strip cramped “Launch + Care” onto two lines. So on phones / short screens we hide the
+   stage and show .proc-list instead — all four steps stacked as a plain, readable list. The
+   breakpoint matches the JS pin's exactly (min 901w AND 800h → pinned; otherwise → list), so the
+   two never show at once. */
+.proc-list { display: none; }
+@media (max-width: 900px), (max-height: 799px) {
+  .proc-stage { display: none; }
+  .proc-list { display: flex; flex-direction: column; margin-top: 8px; }
+}
+.proc-list-item {
+  padding: 32px 0;
+  border-top: 1px solid rgba(255,255,255,.12);
+}
+.proc-list-item:last-child { border-bottom: 1px solid rgba(255,255,255,.12); }
+.proc-list-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.proc-list-num {
+  font-family: var(--display);
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: rgba(255,255,255,.4);
+}
+.proc-list-time {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.proc-list-time::before { content: ""; width: 6px; height: 6px; background: var(--accent); }
+.proc-list-title {
+  font-family: var(--display);
+  font-size: clamp(32px, 9vw, 46px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 14px;
+  color: #F5F1EA;
+}
+.proc-list-desc {
+  color: rgba(255,255,255,.78);
+  font-size: 16px;
+  line-height: 1.55;
+  max-width: 52ch;
+  margin-bottom: 20px;
+}
+
 /* ============ TESTIMONIALS ============ */
 .testimonials-row {
   display: grid;
@@ -851,7 +951,10 @@ section { position: relative; padding: 120px 0; }
 /* ============ CONTACT ============ */
 .contact {
   background: var(--ink);
-  color: var(--bg);
+  /* Paras: fixed light text (not var(--bg)). This section is dark in BOTH themes, so
+     var(--bg) flipped to near-black in dark mode and made the heading + email/cal/social
+     links invisible. Matches how .process hard-codes its light text. */
+  color: #F5F1EA;
   /* Paras: dropped the negative margin (see .process) — it overflowed the viewport. */
   padding: 140px var(--gutter) 80px;
   position: relative;
@@ -900,6 +1003,11 @@ section { position: relative; padding: 120px 0; }
   width: 600px; height: 400px;
   pointer-events: none;
 }
+/* Paras · 2026-06-18: hide this 600px decorative block on mobile. Anchored bottom-right at a
+   fixed 600px, it spilled across the whole narrow column and sat right over the cal.com link,
+   “Booking June 2026” and the social links — cream pixels behind light text made them unreadable.
+   On desktop there's a wide empty corner for it; on phones it only collides, so we drop it. */
+@media (max-width: 900px) { .contact-pixels { display: none; } }
 .footer {
   display: flex; justify-content: space-between;
   align-items: center;
@@ -914,7 +1022,15 @@ section { position: relative; padding: 120px 0; }
   margin-top: -1px;
 }
 .footer-links { display: flex; gap: 28px; }
-.footer-links a:hover { color: var(--bg); }
+/* Paras: brighten to fixed light on hover — var(--bg) flipped to dark and hid the link in dark mode. */
+.footer-links a:hover { color: #F5F1EA; }
+/* Paras · 2026-06-18: stack the footer on phones. The base row is space-between with no wrap, so
+   on narrow screens the three groups collided and “Back to top ↑” broke onto four lines. Stacking
+   gives each its own line with breathing room; the links wrap rather than cram. */
+@media (max-width: 700px) {
+  .footer { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .footer-links { flex-wrap: wrap; gap: 20px 24px; }
+}
 
 /* ============ PIXEL CURSOR TRAIL ============ */
 .pix-trail {

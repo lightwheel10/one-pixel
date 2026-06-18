@@ -93,6 +93,9 @@ img { display: block; max-width: 100%; }
 }
 .nav-logo .lockup { display:flex; align-items:baseline; gap: 2px; }
 .nav-logo .dot { width: 8px; height: 8px; background: var(--accent); display: inline-block; margin-right: 8px; }
+/* Paras: the “EST. ’24” badge — was inline-styled; moved to a class so it can be
+   hidden on small phones (see the 420px media query below). */
+.nav-est { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-left: 8px; letter-spacing: 0.1em; }
 .nav-links {
   display: flex; gap: 28px;
   font-family: var(--mono);
@@ -118,6 +121,61 @@ img { display: block; max-width: 100%; }
 .nav-cta:hover { background: var(--accent); }
 .nav-cta .arr { display: inline-block; transition: transform .25s; }
 .nav-cta:hover .arr { transform: translateX(3px); }
+
+/* Paras: groups the theme toggle + CTA (+ hamburger on mobile) on the right. */
+.nav-right { display: flex; align-items: center; gap: 14px; }
+
+/* Paras: hamburger button — hidden on desktop, shown < 700px (see media query).
+   Two bars that rotate into an X when the dropdown is open. */
+.nav-burger { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; }
+.nav-burger-box { position: relative; width: 22px; height: 14px; }
+.nav-burger-box span {
+  position: absolute; left: 0; right: 0; height: 2px;
+  background: var(--ink);
+  transition: top .25s ease, transform .25s ease;
+}
+.nav-burger-box span:nth-child(1) { top: 2px; }
+.nav-burger-box span:nth-child(2) { top: 10px; }
+.nav-burger-box.open span:nth-child(1) { top: 6px; transform: rotate(45deg); }
+.nav-burger-box.open span:nth-child(2) { top: 6px; transform: rotate(-45deg); }
+
+/* Paras: mobile dropdown — collapsed (max-height:0) until the hamburger opens it.
+   Drops under the fixed nav row; holds the section links (hidden on mobile) plus the CTA.
+   Background is solid var(--bg) (theme-aware) so the links stay readable over the hero —
+   a translucent panel let the hero text bleed through where backdrop-blur isn't supported. */
+.nav-mobile {
+  display: none;
+  position: absolute;
+  top: 100%; left: 0; right: 0;
+  flex-direction: column;
+  background: var(--bg);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .35s cubic-bezier(.2,.7,.2,1);
+}
+.nav-mobile.open { max-height: 360px; border-bottom: 1px solid var(--line); }
+.nav-mobile a {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 18px var(--gutter);
+  border-top: 1px solid var(--line);
+}
+.nav-mobile a:first-child { border-top: 0; }
+.nav-mobile-cta { color: var(--accent); }
+
+/* Paras: < 700px — swap the inline links + bar CTA for the hamburger-driven dropdown. */
+@media (max-width: 700px) {
+  .nav-links { display: none; }
+  .nav-cta { display: none; }
+  .nav-burger { display: inline-flex; }
+  .nav-mobile { display: flex; }
+}
+/* Paras: drop the decorative “EST. ’24” badge on small phones so the bar never clips. */
+@media (max-width: 420px) {
+  .nav-est { display: none; }
+}
 
 /* ============ THEME TOGGLE ============ */
 .theme-toggle {
@@ -228,13 +286,15 @@ section { position: relative; padding: 120px 0; }
 }
 
 /* ============ HERO ============ */
+/* Paras: hero sizes to its content and sits below the fixed nav. Was min-height:100vh +
+   vertical-centre, which left large empty gaps above the title and below the buttons on
+   every screen; now the next section is visible and the space reads as intentional. */
 .hero {
   padding-top: 140px;
   padding-bottom: 80px;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   position: relative;
 }
 .hero-grid {
@@ -272,7 +332,9 @@ section { position: relative; padding: 120px 0; }
 .hero-title {
   font-family: var(--display);
   font-weight: 500;
-  font-size: clamp(56px, 13vw, 220px);
+  /* Paras: floor lowered 56→48px so the title isn't edge-to-edge on the smallest phones
+     (it filled the full width at 320px). Only affects ≲430px; desktop scaling unchanged. */
+  font-size: clamp(48px, 13vw, 220px);
   line-height: 0.86;
   letter-spacing: -0.05em;
   position: relative; z-index: 2;
@@ -285,6 +347,24 @@ section { position: relative; padding: 120px 0; }
   cursor: default;
 }
 .hero-title em { font-style: italic; font-family: 'Instrument Serif', serif; font-weight: 400; letter-spacing: -0.02em;}
+
+/* Paras: pixel dispersion block (hero title, line 3). Layout used to be inline on the
+   element; moved here so the size is responsive — see the phone override below. */
+.hero-pixblock {
+  display: inline-block;
+  vertical-align: middle;
+  height: 0.85em;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  cursor: crosshair;
+}
+/* Paras: the “[block] by pixel.” line — flex row; the gap before “by” widens on phones. */
+.hero-title .hero-line-pix {
+  display: flex;
+  align-items: center;
+  gap: 0.1em;
+  flex-wrap: wrap;
+}
 
 .hero-foot {
   display: grid;
@@ -304,6 +384,19 @@ section { position: relative; padding: 120px 0; }
   line-height: 1.5;
 }
 .hero-cta-wrap { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* Paras: phone-only hero tuning. On small screens the title pins to its floor and stacks
+   four lines; the default 0.86 leading then leaves ~0px between lines and the pixel block
+   crowds “by pixel.”. Here we loosen the leading and shrink/space the block. Desktop
+   (>600px) keeps the original tight, dramatic title look. */
+@media (max-width: 600px) {
+  .hero-title { line-height: 0.96; }
+  .hero-pixblock { height: 0.66em; }
+  .hero-title .hero-line-pix { gap: 0.26em; }
+  /* Paras: tighter top/bottom padding on phones (the hero already sizes to content from
+     the base rule, so this just trims the gaps to phone scale). */
+  .hero { padding-top: 104px; padding-bottom: 56px; }
+}
 
 /* ============ MARQUEE ============ */
 .marquee {
@@ -436,7 +529,9 @@ section { position: relative; padding: 120px 0; }
 .process {
   background: #0A0A0A;
   color: #F5F1EA;
-  margin: 0 calc(var(--gutter) * -1);
+  /* Paras: no negative margin — the parent <section> is already full-width, so this
+     fills edge-to-edge on its own. The old margin pushed it one gutter past the
+     viewport, causing horizontal scroll on every screen size. */
   padding: 140px var(--gutter);
   position: relative;
   overflow: hidden;
@@ -757,7 +852,7 @@ section { position: relative; padding: 120px 0; }
 .contact {
   background: var(--ink);
   color: var(--bg);
-  margin: 0 calc(var(--gutter) * -1);
+  /* Paras: dropped the negative margin (see .process) — it overflowed the viewport. */
   padding: 140px var(--gutter) 80px;
   position: relative;
   overflow: hidden;
@@ -814,7 +909,8 @@ section { position: relative; padding: 120px 0; }
   letter-spacing: 0.12em; text-transform: uppercase;
   color: rgba(255,255,255,.5);
   background: var(--ink);
-  margin: 0 calc(var(--gutter) * -1);
+  /* Paras: keep the -1px seam over the contact band, but drop the horizontal
+     negative margin that overflowed the viewport. */
   margin-top: -1px;
 }
 .footer-links { display: flex; gap: 28px; }

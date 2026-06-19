@@ -393,6 +393,14 @@ section { position: relative; padding: 120px 0; }
 }
 .hero-cta-wrap { display: flex; gap: 12px; flex-wrap: wrap; }
 
+/* Paras · 2026-06-19: desktop hero at 75% — same look as browser-zooming the hero, just smaller.
+   `zoom` reflows like a real browser zoom, so the title, sub-text, button AND every gap shrink
+   together — identical original top-aligned proportions, 25% smaller. One knob: change 0.75 to
+   taste. The ≤600px phone hero below is untouched. */
+@media (min-width: 601px) {
+  .hero { zoom: 0.75; }
+}
+
 /* Paras: phone-only hero tuning. On small screens the title pins to its floor and stacks
    four lines; the default 0.86 leading then leaves ~0px between lines and the pixel block
    crowds “by pixel.”. Here we loosen the leading and shrink/space the block. Desktop
@@ -601,7 +609,10 @@ section { position: relative; padding: 120px 0; }
 }
 .proc-rail-fill {
   position: absolute;
-  top: 36px; left: 12px;
+  /* Paras · 2026-06-19: left:0 (was 12px) so the fill ends exactly on the node centers — they sit
+     at 0%–100% of the rail, i.e. its edges. At left:12px + width:100% the fill overshot the last
+     node (SHIP) by 12px and poked out the right of its block. */
+  top: 36px; left: 0;
   height: 2px;
   background: var(--accent);
   /* Paras · 2026-06-18: width is driven imperatively (continuous on scroll, GSAP-eased on
@@ -868,6 +879,18 @@ section { position: relative; padding: 120px 0; }
   line-height: 1.55;
   max-width: 52ch;
   margin-bottom: 20px;
+}
+
+/* Paras · 2026-06-19: the Process freeze shows the WHOLE stage at once (rail + display + strip).
+   That stack was ~770px tall, so on shorter qualifying screens (≥800px tall) the bottom strip
+   — Discovery / Direction / Build / Launch + Care — clipped off the foot of the viewport. Tighten
+   the three biggest internal gaps (rail→display, display padding, display→strip) ONLY while the
+   freeze is active so the full stack fits with room to spare. This media query is exactly the
+   condition under which .proc-stage is shown + pinned, so nothing else is affected. */
+@media (min-width: 901px) and (min-height: 800px) {
+  .proc-rail { margin-bottom: 32px; }   /* was 80 */
+  .proc-display { padding: 44px 0; }     /* was 56 */
+  .proc-strip { margin-top: 32px; }      /* was 48 */
 }
 
 /* ============ TESTIMONIALS ============ */

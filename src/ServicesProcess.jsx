@@ -159,7 +159,9 @@ export function Process() {
       ScrollTrigger.create({
         trigger: stage,
         pin: stage,
-        start: 'top 96px',
+        // Paras · 2026-06-19: pin 10px higher (96 → 86) so the bottom strip (Discovery / Direction /
+        // Build / Launch) isn't clipped at the foot of shorter ≥800px screens. Still clears the nav (~75px).
+        start: 'top 86px',
         end: () => '+=' + window.innerHeight * 1.8,
         anticipatePin: 1,
         onUpdate: onScroll,

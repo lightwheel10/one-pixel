@@ -127,8 +127,9 @@ export function Hero() {
             A small, opinionated studio building modern websites for the brands India is building next.
           </p>
           <div className="hero-cta-wrap">
+            {/* Paras · 2026-06-19: CTA text unified with the nav ("Start a project") so every CTA reads the same. */}
             <a href="#contact" className="btn btn-primary">
-              <span className="pix"></span> Book intro call
+              <span className="pix"></span> Start a project
             </a>
           </div>
         </div>

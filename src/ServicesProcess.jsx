@@ -117,14 +117,20 @@ function ProcPixels({ step }) {
 
 export function Process() {
   const steps = [
-    { n: '01', t: 'Discovery',      tag: 'Listen', d: 'A 60-min call. We dig into your business, your audience, and the metric that actually matters — without a pitch deck.', time: 'Week 1',   deliverables: ['Kickoff brief', 'Audience map', 'Success metric'] },
-    { n: '02', t: 'Direction',      tag: 'Decide', d: 'Two visual directions, one strategy. We pick a path together in a single review. No 14-revision rounds.',                time: 'Week 1–2', deliverables: ['Two directions', 'Moodboard', 'Site map'] },
-    { n: '03', t: 'Build',          tag: 'Make',   d: 'Design and engineering happen in parallel. Weekly demos in your live staging URL — not slides, not PDFs.',                time: 'Week 3–7', deliverables: ['Live staging', 'Weekly demos', 'CMS handoff'] },
-    { n: '04', t: 'Launch + Care',  tag: 'Ship',   d: 'We ship the site, monitor it, and stick around. 30 days of post-launch tuning is included with every project.',           time: 'Week 8 →', deliverables: ['Launch day', '30-day care', 'Retainer optional'] },
+    { n: '01', t: 'Discovery',      tag: 'Listen', d: 'A 60 minute call. We dig into your business, your audience, and the metric that actually matters. No pitch deck.', time: 'Week 1',     deliverables: ['Kickoff brief', 'Audience map', 'Success metric'] },
+    { n: '02', t: 'Direction',      tag: 'Decide', d: 'Two visual directions, one strategy. We pick a path together in a single review. No fourteen rounds of revisions.', time: 'Week 1 to 2', deliverables: ['Two directions', 'Moodboard', 'Site map'] },
+    { n: '03', t: 'Build',          tag: 'Make',   d: 'Design and engineering happen in parallel. Weekly demos in your live staging URL. Not slides, not PDFs.',           time: 'Week 3 to 7', deliverables: ['Live staging', 'Weekly demos', 'CMS handoff'] },
+    { n: '04', t: 'Launch + Care',  tag: 'Ship',   d: 'We ship the site, monitor it, and stick around. 30 days of tuning after launch is included with every project.',     time: 'Week 8 →',   deliverables: ['Launch day', '30 days of care', 'Retainer optional'] },
   ];
   const [active, setActive] = useState(0);
   const ref = useRef(null);
   const fillRef = useRef(null);
+
+  // Paras · 2026-06-19: mobile Process is a swipe carousel (horizontal scroll-snap). activeCard
+  // tracks which card is centered so the pixel dots below reflect it; a dot tap scrolls to its card.
+  const [activeCard, setActiveCard] = useState(0);
+  const carouselRef = useRef(null);
+  const rafRef = useRef(0);
 
   // Paras · 2026-06-18: the rail fill is driven imperatively so it can track scroll
   // CONTINUOUSLY (it used to jump 25% per step, which read as "stuck then jump"). On scroll
@@ -140,11 +146,39 @@ export function Process() {
 
   useEffect(() => { setFill((active / (steps.length - 1)) * 100, false); }, []); // initial fill
 
+  // Paras · 2026-06-19: carousel plumbing. On swipe/scroll, find the card whose center is nearest
+  // the track's center and light up its dot (rAF-throttled so it's cheap per frame). A dot tap
+  // centers that card. No pin, no scrub — the user drives it by swiping; nothing moves on its own.
+  const syncDot = () => {
+    const track = carouselRef.current;
+    if (!track) return;
+    const mid = track.getBoundingClientRect().left + track.clientWidth / 2;
+    let best = 0, bestDist = Infinity;
+    for (let i = 0; i < track.children.length; i++) {
+      const r = track.children[i].getBoundingClientRect();
+      const d = Math.abs(r.left + r.width / 2 - mid);
+      if (d < bestDist) { bestDist = d; best = i; }
+    }
+    setActiveCard(best);
+  };
+  const onCarouselScroll = () => {
+    cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(syncDot);
+  };
+  const goToCard = (i) => {
+    const track = carouselRef.current;
+    const card = track && track.children[i];
+    if (!card) return;
+    // center this card in the track viewport; scroll-snap settles the rest
+    track.scrollTo({ left: card.offsetLeft + card.offsetWidth / 2 - track.clientWidth / 2, behavior: 'smooth' });
+  };
+  useEffect(() => () => cancelAnimationFrame(rafRef.current), []);
+
   // Paras · 2026-06-18: drive the 4 steps from scroll. ONLY on a wide + tall screen does the
   // .proc-stage core FREEZE-PIN and scrub the steps (fill tracks scroll 1:1, content cross-fades,
   // pin kept short ~1.8 viewports). Phones / short screens DON'T scrub at all — CSS swaps the
-  // stage for the static .proc-list (every step stacked, see render), so nothing changes under
-  // you while reading. So there's no mobile ScrollTrigger here anymore. Reduced-motion: no pin.
+  // stage for the .proc-mobile swipe carousel (see render), driven by the user's thumb, not scroll.
+  // So there's no mobile ScrollTrigger here anymore. Reduced-motion: no pin.
   useEffect(() => {
     const reduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const onScroll = (self) => {
@@ -177,7 +211,7 @@ export function Process() {
           <div className="section-head">
             <div><div className="section-num">[ 03 ] Process</div></div>
             <div>
-              <h2 className="section-title">From kickoff to <em>live</em> in 4–8 weeks.</h2>
+              <h2 className="section-title">From kickoff to <em>live</em> in 4 to 8 weeks.</h2>
               <p className="section-sub" style={{ marginTop: 24 }}>
                 One project at a time. One small senior team. No account managers, no relay races, no surprises.
               </p>
@@ -241,28 +275,51 @@ export function Process() {
           </div>
           </div>
 
-          {/* Paras · 2026-06-18: phones + short screens get every step as a static stacked list
-              (the pinned single-display scrub above is desktop-only). Nothing swaps under you
-              while reading. CSS swaps .proc-stage ↔ .proc-list at the same breakpoint the pin uses. */}
-          <div className="proc-list">
-            {steps.map((s, i) => (
-              <div key={i} className="proc-list-item">
-                <div className="proc-list-head">
-                  <span className="proc-list-num">{s.n}</span>
-                  <span className="proc-list-time">{s.time}</span>
-                </div>
-                <h3 className="proc-list-title">{s.t}</h3>
-                <p className="proc-list-desc">{s.d}</p>
-                <div className="proc-deliv">
-                  <div className="proc-deliv-label">You receive</div>
-                  <ul>
-                    {s.deliverables.map((d, j) => (
-                      <li key={j}><span className="proc-deliv-pip"></span>{d}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
+          {/* Paras · 2026-06-19: phones + short screens get a swipe carousel (horizontal scroll-snap)
+              instead of the pinned desktop stage — swipe through the 4 steps; the pixel dots track
+              your position and let you jump. Nothing swaps under your thumb (the old mobile pin did,
+              which was disorienting) — you drive it. CSS swaps .proc-stage ↔ .proc-mobile at the
+              exact breakpoint the pin uses, so the two never show at once. */}
+          <div className="proc-mobile">
+            <div className="proc-carousel" ref={carouselRef} onScroll={onCarouselScroll}>
+              {steps.map((s, i) => (
+                <article key={i} className={`proc-card ${activeCard === i ? 'on' : ''}`}>
+                  <span className="proc-card-ghost" aria-hidden>{s.n}</span>
+                  <div className="proc-card-head">
+                    <span className="proc-card-num">{s.n}</span>
+                    <span className="proc-card-time">{s.time}</span>
+                  </div>
+                  <h3 className="proc-card-title">{s.t}</h3>
+                  <p className="proc-card-desc">{s.d}</p>
+                  {/* Paras · 2026-06-19: "You receive" as a deliverables manifest (framed header +
+                      count, then a coral pixel-check checklist). .proc-card-deliv scopes the restyle
+                      to the mobile cards — the desktop .proc-display version keeps its chip layout. */}
+                  <div className="proc-deliv proc-card-deliv">
+                    <div className="proc-deliv-label">
+                      <span>You receive</span>
+                      <span className="proc-deliv-count">{s.deliverables.length}</span>
+                    </div>
+                    <ul>
+                      {s.deliverables.map((d, j) => (
+                        <li key={j}><span className="proc-check" aria-hidden></span>{d}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="proc-dots" role="tablist" aria-label="Process steps">
+              {steps.map((s, i) => (
+                <button
+                  key={i}
+                  role="tab"
+                  aria-selected={activeCard === i}
+                  aria-label={`${s.t}, step ${i + 1} of ${steps.length}`}
+                  className={`proc-dot ${activeCard === i ? 'on' : ''}`}
+                  onClick={() => goToCard(i)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

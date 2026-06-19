@@ -824,62 +824,167 @@ section { position: relative; padding: 120px 0; }
   color: rgba(255,255,255,.4);
 }
 
-/* Paras · 2026-06-18: mobile Process. The pinned rail+display+strip (.proc-stage) is a desktop
-   delight, but on phones it scroll-swapped the single display under your finger (disorienting)
-   and the strip cramped “Launch + Care” onto two lines. So on phones / short screens we hide the
-   stage and show .proc-list instead — all four steps stacked as a plain, readable list. The
-   breakpoint matches the JS pin's exactly (min 901w AND 800h → pinned; otherwise → list), so the
-   two never show at once. */
-.proc-list { display: none; }
+/* Paras · 2026-06-19: mobile Process = swipe carousel. The pinned rail+display+strip (.proc-stage)
+   is a desktop delight; on phones / short screens we hide it and show .proc-mobile — a horizontal
+   scroll-snap carousel of the 4 step cards + pixel dots. Swipe to advance; dots track + jump.
+   Breakpoint matches the JS pin's exactly (min 901w AND 800h → pinned stage; else → carousel), so
+   the two never show at once. (Replaces the earlier static stacked list — user wanted more than a list.) */
+.proc-mobile { display: none; }
 @media (max-width: 900px), (max-height: 799px) {
   .proc-stage { display: none; }
-  .proc-list { display: flex; flex-direction: column; margin-top: 8px; }
+  .proc-mobile {
+    display: block;
+    margin-top: 16px;
+    /* Paras · 2026-06-19: full-bleed OUT of both nested gutters (.process + .shell = 2×--gutter)
+       so the cards can be wide. At 80% of the doubly-inset track they were 198px-wide slivers and
+       the copy wrapped every ~3 words; full-bleed lets one card span ~84% of the viewport. */
+    margin-inline: calc(-2 * var(--gutter));
+  }
 }
-.proc-list-item {
-  padding: 32px 0;
-  border-top: 1px solid rgba(255,255,255,.12);
+.proc-carousel {
+  position: relative;              /* so card.offsetLeft is in the track's scroll coords (goToCard) */
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;           /* Firefox: hide the scrollbar */
+  /* side padding = the screen-edge gutter; lets the first + last card still reach center */
+  padding: 6px 7% 10px;
 }
-.proc-list-item:last-child { border-bottom: 1px solid rgba(255,255,255,.12); }
-.proc-list-head {
+.proc-carousel::-webkit-scrollbar { display: none; }   /* Chrome / Safari */
+.proc-card {
+  position: relative;
+  scroll-snap-align: center;
+  flex: 0 0 84%;
+  max-width: 420px;
+  box-sizing: border-box;
+  padding: 26px 24px 24px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.02);
+  overflow: hidden;
+  transition: border-color .35s, background .35s;
+}
+.proc-card.on { border-color: rgba(255,107,71,.45); background: rgba(255,107,71,.05); }
+/* big ghost number — echoes the desktop outlined proc-big-num, pure brand texture behind the copy */
+.proc-card-ghost {
+  position: absolute;
+  top: -18px; right: 2px;
+  font-family: var(--display);
+  font-size: 130px; line-height: 1; font-weight: 500; letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255,255,255,.07);
+  pointer-events: none; user-select: none;
+}
+.proc-card-head {
+  position: relative;            /* sit above the ghost number */
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 14px;
+  gap: 14px;
+  margin-bottom: 16px;
 }
-.proc-list-num {
-  font-family: var(--display);
-  font-size: 24px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  color: rgba(255,255,255,.4);
+.proc-card-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--accent);
 }
-.proc-list-time {
+.proc-card-time {
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: rgba(255,255,255,.5);
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
-.proc-list-time::before { content: ""; width: 6px; height: 6px; background: var(--accent); }
-.proc-list-title {
+.proc-card-time::before { content: ""; width: 6px; height: 6px; background: rgba(255,255,255,.3); }
+.proc-card-title {
+  position: relative;
   font-family: var(--display);
-  font-size: clamp(32px, 9vw, 46px);
+  font-size: clamp(30px, 8vw, 40px);
   font-weight: 500;
   letter-spacing: -0.03em;
   line-height: 1;
   margin-bottom: 14px;
   color: #F5F1EA;
 }
-.proc-list-desc {
+.proc-card-desc {
+  position: relative;
   color: rgba(255,255,255,.78);
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.55;
-  max-width: 52ch;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
+/* Paras · 2026-06-19: the "You receive" block on the mobile cards, upgraded from plain bordered
+   chips into a small deliverables MANIFEST — a framed header with an item count, then a checklist
+   with coral pixel-check marks. Scoped to .proc-card-deliv so the desktop .proc-display version
+   (which keeps the chip layout) is untouched. Rules sit after the shared .proc-deliv ones, so they
+   win the equal-specificity ties by source order. */
+.proc-card-deliv { position: relative; }
+.proc-card-deliv .proc-deliv-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,.16);
+}
+.proc-card-deliv .proc-deliv-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+.proc-card-deliv .proc-deliv-count::before { content: "\00d7"; opacity: .55; margin-right: 1px; }
+.proc-card-deliv ul { display: block; }              /* override the chip wrap-flex layout */
+.proc-card-deliv li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 2px;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: rgba(255,255,255,.92);
+}
+.proc-card-deliv li:last-child { border-bottom: 0; }
+/* coral pixel-check — a crisp square (brand) with a dark tick = "included / you get this" */
+.proc-check {
+  flex: none;
+  width: 16px; height: 16px;
+  background: var(--accent);
+  position: relative;
+}
+.proc-check::after {
+  content: "";
+  position: absolute;
+  left: 5.5px; top: 2px;
+  width: 3.5px; height: 7.5px;
+  border: solid #0A0A0A;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+/* pixel dots — square (on-brand), the active one elongates into an accent bar */
+.proc-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+.proc-dot {
+  width: 8px; height: 8px;
+  padding: 0; border: 0;
+  cursor: pointer;
+  background: rgba(255,255,255,.25);
+  transition: width .3s, background .3s;
+}
+.proc-dot.on { width: 22px; background: var(--accent); }
 
 /* Paras · 2026-06-19: the Process freeze shows the WHOLE stage at once (rail + display + strip).
    That stack was ~770px tall, so on shorter qualifying screens (≥800px tall) the bottom strip

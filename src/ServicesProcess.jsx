@@ -28,32 +28,35 @@ export function Services() {
     {
       num: '01',
       title: 'Brand Sites',
-      desc: 'A bespoke marketing site that earns attention. Custom design system, motion, and a CMS your team will actually use.',
-      tags: ['Strategy', 'Design', 'Webflow / Next', 'CMS'],
+      desc: 'A premium website that makes your brand look the part and earns trust from the very first second. Beautiful, fast, and simple for your team to keep up to date.',
+      tags: ['Strategy', 'Premium design', 'Easy to update'],
       icon: (a) => <ServiceIcon variant="brand" accent={a} />,
     },
     {
       num: '02',
-      title: 'Product & Marketing',
-      desc: 'Landing pages, pricing, docs, blog. The growth-critical surfaces — refined like the rest of your product should be.',
-      tags: ['Landing', 'Docs', 'A/B ready'],
+      title: 'Marketing Pages',
+      desc: 'The pages that bring you customers. Landing pages, pricing, and more, each one designed to turn visitors into real leads and sales.',
+      tags: ['Landing pages', 'Built to convert', 'Easy to edit'],
       icon: (a) => <ServiceIcon variant="product" accent={a} />,
     },
     {
       num: '03',
-      title: 'E-commerce',
-      desc: 'Storefronts that don’t look like everyone else’s. Shopify, custom checkout, the editorial touch your brand deserves.',
-      tags: ['Shopify', 'Custom', 'PDP / PLP'],
+      title: 'Online Stores',
+      desc: 'An online store that feels premium and is effortless to buy from, so more of your visitors turn into paying customers.',
+      tags: ['Easy checkout', 'Built to sell', 'Looks premium'],
       icon: (a) => <ServiceIcon variant="ecom" accent={a} />,
     },
     {
       num: '04',
-      title: 'Design Systems',
-      desc: 'Tokens, components, documentation. Built so your team can ship the next 100 pages without us in the room.',
-      tags: ['Tokens', 'Storybook', 'Figma'],
+      title: 'Built to Scale',
+      desc: 'A website built on simple, reusable pieces, so your team can add new pages quickly and everything stays perfectly on brand as you grow.',
+      tags: ['Reusable blocks', 'Always on brand', 'Grows with you'],
       icon: (a) => <ServiceIcon variant="system" accent={a} />,
     },
   ];
+  // Paras · 2026-06-19: which service is in focus. Drives the right-hand detail panel on desktop
+  // and the expanded accordion row on phones (same state, CSS reflows the layout per breakpoint).
+  const [active, setActive] = useState(0);
   return (
     <section id="services">
       <div className="shell">
@@ -62,24 +65,54 @@ export function Services() {
           <div>
             <h2 className="section-title">Four things, <em>done well</em>.</h2>
             <p className="section-sub" style={{ marginTop: 24 }}>
-              We don’t do everything. We do these — at a level most agencies pretend they can.
+              We don’t do everything. We do these few things, at a level most agencies only pretend they can.
             </p>
           </div>
         </div>
-        <div className="services-grid">
-          {items.map((it, i) => (
-            <div key={i} className="svc-card">
-              <div className="num">{it.num}</div>
-              <div>
-                <div className="icon">{it.icon('var(--accent)')}</div>
-                <h3>{it.title}</h3>
-                <p>{it.desc}</p>
+        {/* Paras · 2026-06-19: Services as an interactive showcase — the 4 service names listed on
+            the left, the focused one expanded into a detail panel on the right (echoes the desktop
+            Process single-display). On phones (CSS) the right panel is hidden and each row becomes a
+            tap-to-expand accordion, so the one set of markup serves both layouts. */}
+        <div className="svc-showcase">
+          <div className="svc-list">
+            {items.map((it, i) => (
+              <div className={`svc-row ${active === i ? 'on' : ''}`} key={i}>
+                <button
+                  className="svc-row-btn"
+                  aria-expanded={active === i}
+                  aria-controls={`svc-acc-${i}`}
+                  onClick={() => setActive(i)}
+                >
+                  <span className="svc-row-num">{it.num}</span>
+                  <span className="svc-row-title">{it.title}</span>
+                  <span className="svc-row-mark" aria-hidden></span>
+                </button>
+                {/* accordion detail — phones only; on desktop CSS hides this and the right panel shows */}
+                <div className="svc-acc" id={`svc-acc-${i}`}>
+                  <div className="svc-acc-inner">
+                    <div className="svc-acc-icon">{it.icon('var(--accent)')}</div>
+                    <p className="svc-acc-desc">{it.desc}</p>
+                    <div className="svc-tags">
+                      {it.tags.map((t, j) => <span key={j} className="svc-tag">{t}</span>)}
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="tags">
-                {it.tags.map((t, j) => <span key={j} className="tag">{t}</span>)}
+            ))}
+          </div>
+
+          {/* desktop detail panel — hidden on phones; cross-fades on switch (key={active}) */}
+          <div className="svc-panel" aria-live="polite">
+            <div className="svc-panel-inner" key={active}>
+              <div className="svc-panel-icon">{items[active].icon('var(--accent)')}</div>
+              <div className="svc-panel-meta">{items[active].num} / 0{items.length}</div>
+              <h3 className="svc-panel-title">{items[active].title}</h3>
+              <p className="svc-panel-desc">{items[active].desc}</p>
+              <div className="svc-tags">
+                {items[active].tags.map((t, j) => <span key={j} className="svc-tag">{t}</span>)}
               </div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </section>

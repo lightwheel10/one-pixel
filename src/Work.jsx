@@ -6,7 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export function Marquee() {
   const ref = useRef(null);
-  const items = ['Pixel-perfect since 2024', 'Design × Engineering', 'Brand → Web', 'Built to convert', 'Made in India'];
+  const items = ['Pixel perfect since 2024', 'Design × Engineering', 'Brand → Web', 'Built to convert', 'Made in India'];
 
   // Paras · 2026-06-18: GSAP-driven marquee that reacts to scroll velocity — it speeds up and
   // skews while you scroll, flips direction on scroll-up, and eases back to a steady glide when
@@ -99,7 +99,7 @@ export function Work() {
           <div>
             <h2 className="section-title">Sites we’ve <em>shipped</em>.</h2>
             <p className="section-sub" style={{ marginTop: 24 }}>
-              A small slice. Each project is a custom design system, a custom site — and a brand that looks sharper for it.
+              A small slice of our work. Every project is a premium website built from scratch, and a brand that looks sharper for it.
             </p>
           </div>
         </div>

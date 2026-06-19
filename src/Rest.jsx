@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 export function Testimonials() {
   const items = [
-    { quote: 'They didn’t just redesign our site — they reset what our brand could look like online.',           who: 'Naina Mehta',   role: 'Principal Broker, Mehta & Sons', av: 'NM' },
+    { quote: 'They didn’t just redesign our site, they reset what our brand could look like online.',           who: 'Naina Mehta',   role: 'Principal Broker, Mehta & Sons', av: 'NM' },
     { quote: 'Fastest, sharpest, calmest project I’ve ever shipped with an agency. We launched a week ahead.',   who: 'Rohan Khanna',  role: 'Head of Growth, Pravah Cloud',   av: 'RK' },
     { quote: 'Every detail was considered. Our conversion rate is up 38% three months in.',                      who: 'Ananya Patel',  role: 'Founder, Forest & Loom',         av: 'AP' },
   ];
@@ -37,12 +37,12 @@ export function Testimonials() {
 
 export function FAQ() {
   const qs = [
-    { q: 'How do you scope a project?', a: 'Every project starts with a 60-minute discovery call. We listen, understand the work ahead, and send a detailed proposal scoped to your reality — not a templated rate card. The first call is on us, with no commitment to take it further.' },
-    { q: 'How long does it take?', a: 'Marketing sites typically take 4–6 weeks. Larger brand-and-build engagements run 6–10 weeks. We start one new project per month and protect that pace fiercely.' },
-    { q: 'Do you work with our existing design or dev team?', a: 'Yes — we love embedded engagements. We can lead, support, or hand off. We’ve shipped alongside in-house teams from early-stage Bangalore startups to listed companies.' },
-    { q: 'What stack do you build on?', a: 'Webflow when speed matters and a non-engineer should be able to update copy. Next.js + Sanity / Contentful when the site has product surface area. We pick the right tool, not the trendy one.' },
-    { q: 'Do you offer ongoing care?', a: 'Yes. Every project includes 30 days of post-launch tuning. After that, we offer monthly retainers for design and engineering — most clients keep us on for 6–12 months.' },
-    { q: 'Why “OnePixel”?', a: 'Because the difference between average and exceptional is usually one pixel — repeated, obsessively, across every screen. That’s the bar.' },
+    { q: 'How do you scope a project?', a: 'Every project starts with a 60 minute discovery call. We listen, understand the work ahead, and send a detailed proposal built around your real needs, not a one size fits all price list. The first call is on us, with no pressure to take it further.' },
+    { q: 'How long does it take?', a: 'Most websites take 4 to 6 weeks. Bigger projects that include branding run 6 to 10 weeks. We take on one new project a month, so yours always gets our full attention.' },
+    { q: 'Can you work with our existing team?', a: 'Yes, we love working as part of your team. We can lead, support, or hand things over when we are done. We have worked alongside internal teams at everything from brand new startups to large public companies.' },
+    { q: 'What do you build websites with?', a: 'We choose the right technology for your needs, not whatever is trendy. The result is a website that loads fast, ranks well, and is easy for your team to update without calling a developer.' },
+    { q: 'Do you offer ongoing care?', a: 'Yes. Every project includes 30 days of fine tuning after launch. After that, we offer simple monthly plans for design and development, and most clients stay with us for 6 to 12 months.' },
+    { q: 'Why “OnePixel”?', a: 'Because the difference between average and exceptional is usually one pixel, repeated obsessively across every screen. That’s the bar we hold ourselves to.' },
   ];
   const [open, setOpen] = useState(0);
   return (
@@ -130,7 +130,7 @@ export function Contact() {
               </div>
             </div>
             <div className="contact-block">
-              <div className="label">Book a 30-min intro</div>
+              <div className="label">Book a 30 minute intro</div>
               <div className="big">
                 <a href="#">
                   cal.com/onepixel <span>↗</span>

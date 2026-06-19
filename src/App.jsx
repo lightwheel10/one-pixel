@@ -31,7 +31,7 @@ export default function App() {
     // reveals (Work.jsx, and the section-head effect below), so the IntersectionObserver
     // shouldn't also reveal them.
     const targets = document.querySelectorAll(
-      '.svc-card, .testimonial, .faq-item, .proc-display, .proc-strip, .proc-mobile, .hero-foot, .marquee'
+      '.svc-showcase, .testimonial, .faq-item, .proc-display, .proc-strip, .proc-mobile, .hero-foot, .marquee'
     );
     targets.forEach(t => t.classList.add('reveal'));
     const io = new IntersectionObserver((entries) => {

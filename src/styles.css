@@ -517,53 +517,119 @@ section { position: relative; padding: 120px 0; }
   .work-item .meta, .work-item .arr { display: none; }
 }
 
-/* ============ SERVICES ============ */
-.services-grid {
+/* ============ SERVICES (interactive showcase) ============ */
+/* Paras · 2026-06-19: a list of the 4 services (left) + a detail panel for the focused one (right);
+   click a name to switch, the panel cross-fades. Echoes the desktop Process single-display. On
+   phones the right panel is hidden and each row becomes a tap-to-expand accordion (same markup,
+   CSS reflow). All theme-token based so it adapts to light + dark. Replaces the old 2×2 grid. */
+.svc-showcase {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(32px, 5vw, 96px);
+  margin-top: 56px;
+  align-items: start;
 }
-@media (max-width: 800px) { .services-grid { grid-template-columns: 1fr; } }
-.svc-card {
-  background: var(--bg);
-  padding: 48px;
-  position: relative;
-  min-height: 320px;
+
+/* left — the selector list */
+.svc-list { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.svc-row { border-bottom: 1px solid var(--line); }
+.svc-row-btn {
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transition: background .3s;
-  overflow: hidden;
+  align-items: center;
+  gap: 20px;
+  padding: 28px 4px;
+  text-align: left;
+  color: var(--muted);
+  transition: color .3s, padding .3s;
 }
-.svc-card:hover { background: var(--paper); }
-.svc-card .icon {
-  width: 64px; height: 64px;
-  position: relative;
-  margin-bottom: 32px;
+.svc-row-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  transition: color .3s;
 }
-.svc-card h3 {
+.svc-row-title {
+  flex: 1;
   font-family: var(--display);
-  font-size: 32px;
+  font-size: clamp(24px, 3vw, 34px);
   font-weight: 500;
-  letter-spacing: -0.02em;
-  margin-bottom: 12px;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  transition: color .3s;
 }
-.svc-card p { color: var(--muted); max-width: 36ch; }
-.svc-card .num {
-  position: absolute; top: 24px; right: 28px;
-  font-family: var(--mono); font-size: 12px; color: var(--muted);
+.svc-row-mark {
+  flex: none;
+  width: 8px; height: 8px;
+  background: var(--line);          /* faint pixel square; fills accent when focused */
+  transition: background .3s, transform .3s;
 }
-.svc-card .tags {
-  display: flex; flex-wrap: wrap; gap: 8px;
-  margin-top: 24px;
+.svc-row-btn:hover { color: var(--ink); }
+.svc-row-btn:hover .svc-row-title { color: var(--ink); }
+.svc-row.on .svc-row-title { color: var(--ink); }
+.svc-row.on .svc-row-num { color: var(--accent); }
+.svc-row.on .svc-row-mark { background: var(--accent); }
+.svc-row.on .svc-row-btn { padding-left: 16px; }   /* subtle indent on the focused row */
+
+/* right — the detail panel (desktop) */
+.svc-panel {
+  position: sticky;
+  top: 100px;                       /* clears the fixed nav while scrolling the section */
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: clamp(32px, 4vw, 56px);
+  min-height: 360px;
 }
-.svc-card .tag {
+.svc-panel-icon { width: 84px; height: 84px; color: var(--ink); margin-bottom: 32px; }
+.svc-panel-meta {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+}
+.svc-panel-title {
+  font-family: var(--display); font-size: clamp(32px, 3.6vw, 44px);
+  font-weight: 500; letter-spacing: -0.03em; line-height: 1; margin-bottom: 20px;
+  color: var(--ink);
+}
+.svc-panel-desc {
+  color: var(--muted); font-size: 17px; line-height: 1.6; max-width: 42ch; margin-bottom: 28px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .svc-panel-inner { animation: svc-panel-in .45s cubic-bezier(.2,.7,.2,1); }
+}
+@keyframes svc-panel-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* tags — shared by panel + accordion */
+.svc-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.svc-tag {
   font-family: var(--mono); font-size: 11px;
   letter-spacing: 0.08em; text-transform: uppercase;
-  padding: 6px 10px;
+  padding: 7px 11px;
   border: 1px solid var(--line);
+  color: var(--muted);
+}
+
+/* accordion detail — collapsed; only rendered on phones (see media query) */
+.svc-acc { display: none; }
+.svc-acc-icon { width: 56px; height: 56px; color: var(--ink); margin-bottom: 20px; }
+.svc-acc-desc { color: var(--muted); font-size: 16px; line-height: 1.6; margin-bottom: 20px; }
+
+/* phones — hide the right panel, turn each row into a tap-to-expand accordion */
+@media (max-width: 800px) {
+  .svc-showcase { grid-template-columns: 1fr; gap: 0; margin-top: 40px; }
+  .svc-panel { display: none; }
+  .svc-row.on .svc-row-btn { padding-left: 4px; }   /* no indent shift on mobile */
+  .svc-acc {
+    display: grid;
+    grid-template-rows: 0fr;                          /* 0fr→1fr = smooth height accordion */
+    transition: grid-template-rows .4s cubic-bezier(.2,.7,.2,1);
+  }
+  .svc-row.on .svc-acc { grid-template-rows: 1fr; }
+  .svc-acc-inner { overflow: hidden; min-height: 0; }
+  .svc-row.on .svc-acc-inner { padding-bottom: 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .svc-acc { transition: none; }
 }
 
 /* ============ PROCESS (rich) ============ */
@@ -1237,12 +1303,13 @@ section { position: relative; padding: 120px 0; }
 
 /* Work item arrow nudge */
 
-/* Service card hover lift */
-.svc-card { transition: background .3s, transform .3s; }
-.svc-card:hover { transform: translateY(-2px); }
-.svc-card .icon svg rect { transition: opacity .3s, transform .3s; transform-box: fill-box; transform-origin: center; }
-.svc-card:hover .icon svg rect:nth-child(3n) { transform: translate(0.5px, -0.5px); }
-.svc-card:hover .icon svg rect:nth-child(5n) { opacity: 0.6; }
+/* Paras · 2026-06-19: subtle pixel-icon life on the Services detail panel (replaces the old
+   .svc-card hover effect; the 2×2 grid is gone). Hovering the panel nudges/dims a few pixels. */
+.svc-panel-icon svg rect, .svc-acc-icon svg rect {
+  transition: opacity .3s, transform .3s; transform-box: fill-box; transform-origin: center;
+}
+.svc-panel:hover .svc-panel-icon svg rect:nth-child(3n) { transform: translate(0.5px, -0.5px); }
+.svc-panel:hover .svc-panel-icon svg rect:nth-child(5n) { opacity: 0.6; }
 
 /* Marquee track gentle pulse */
 .marquee .star { animation: pix-flicker 4s steps(1) infinite; }

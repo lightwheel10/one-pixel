@@ -1096,10 +1096,25 @@ section { position: relative; padding: 120px 0; }
   opacity: 0.8;
   pointer-events: none;
 }
+/* phone-only bottom band — hidden on desktop, where the right-side dispersion shows instead */
+.hosting-band { display: none; }
+.hosting-band svg { display: block; width: 100%; height: auto; }
 @media (max-width: 700px) {
-  /* phones: text spans full width, so keep the field a faint texture pushed to the right edge
-     (dense core mostly off-screen) so the copy stays legible over it */
-  .hosting-pixels { width: 70vw; right: -22vw; opacity: 0.28; }
+  /* Paras · 2026-06-19: phone fix. The section had DOUBLE vertical padding (global section 80px +
+     .hosting-inner 72px), so the content floated in ~150px of dead space top and bottom. Zero the
+     section padding here and tighten the inner padding, hide the right-side dispersion (in portrait
+     it only smeared across the full-width copy and clipped at the edge), and show the bottom band
+     instead — the pixels now live below the CTA, never over the text. Desktop (> 700px) is untouched. */
+  .hosting { padding-top: 0; padding-bottom: 0; }
+  .hosting-inner { padding-top: 64px; padding-bottom: 30px; }
+  .hosting-pixels { display: none; }
+  .hosting-band { display: block; width: 100%; }
+  /* glow rises from the bottom-centre (behind the band) instead of off to the right */
+  .hosting {
+    background:
+      radial-gradient(130% 70% at 50% 100%, rgba(255,107,71,.18) 0%, rgba(255,107,71,.05) 42%, transparent 68%),
+      #0A0A0A;
+  }
 }
 .hosting-eyebrow {
   display: inline-flex;
@@ -1149,6 +1164,18 @@ section { position: relative; padding: 120px 0; }
 .hosting-cta:hover .arr { transform: translateX(3px); }
 @media (max-width: 700px) {
   .hosting-ghost { font-size: 64vw; right: -0.1em; }
+}
+
+/* Paras · 2026-06-19: pixel bleed across the hosting → testimonials seam. Mounted in #testimonials
+   (position:relative) and positioned to straddle the boundary — a negative top lifts it up into the
+   hosting banner, the rest falls into testimonials, so the pixels cross the seam and connect the
+   two sections. z-index keeps it above both section backgrounds. */
+.seam-bleed { position: absolute; z-index: 3; pointer-events: none; }
+.seam-bleed svg { display: block; }
+.seam-bleed-m { display: none; }   /* phone-only band; desktop has no crossover (reverted) */
+@media (max-width: 700px) {
+  /* phone: full-width band straddling the seam, continuing the hosting bottom band a little */
+  .seam-bleed-m { display: block; top: -14px; left: 0; right: 0; width: 100%; }
 }
 
 /* ============ TESTIMONIALS ============ */

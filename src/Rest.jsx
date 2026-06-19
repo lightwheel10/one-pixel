@@ -1,5 +1,34 @@
 import { useState } from 'react';
 
+// Paras · 2026-06-19: pixel "bleed" across the hosting → testimonials seam. Mounted in the
+// testimonials section (the hosting section clips with overflow:hidden, so it can't spill) and
+// positioned to straddle the boundary, so a few of the hosting banner's pixels cross into this
+// section and the two read as connected. Coral-led (+ a little mint, no cream) so the crossover
+// stays visible on the WHITE testimonials background in light mode.
+function SeamBleedBand() {
+  // phone: full-width band, dense at the top (the seam) fading down into testimonials
+  const W = 46, H = 7;
+  const cells = [];
+  let s = 53;
+  const rand = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const fromTop = y / (H - 1);                         // 0 at the seam → 1 at the bottom
+    if (rand() < Math.max(0, 0.8 - fromTop * 1.05)) {
+      const r = rand();
+      cells.push({ x, y, c: r < 0.78 ? '#FF6B47' : '#C7DDD8' });
+    }
+  }
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMin meet" style={{ width: '100%', height: 'auto', display: 'block' }}>
+      {cells.map((c, i) => (
+        <rect key={i} x={c.x} y={c.y} width="0.9" height="0.9" fill={c.c}
+          className={i % 3 === 0 ? 'pix-drift-a' : i % 3 === 1 ? 'pix-drift-b' : 'pix-drift-c'}
+          style={{ animationDelay: `${(i % 11) * 0.2}s` }} />
+      ))}
+    </svg>
+  );
+}
+
 export function Testimonials() {
   const items = [
     { quote: 'They didn’t just redesign our site, they reset what our brand could look like online.',           who: 'Naina Mehta',   role: 'Principal Broker, Mehta & Sons', av: 'NM' },
@@ -7,7 +36,9 @@ export function Testimonials() {
     { quote: 'Every detail was considered. Our conversion rate is up 38% three months in.',                      who: 'Ananya Patel',  role: 'Founder, Forest & Loom',         av: 'AP' },
   ];
   return (
-    <section id="testimonials" style={{ background: 'var(--paper)' }}>
+    <section id="testimonials" style={{ background: 'var(--paper)', position: 'relative' }}>
+      {/* phone only: pixel bleed from the hosting band above, straddling the seam (desktop reverted) */}
+      <div className="seam-bleed seam-bleed-m" aria-hidden><SeamBleedBand /></div>
       <div className="shell">
         <div className="section-head">
           <div><div className="section-num">[ 04 ] Words from clients</div></div>
@@ -109,6 +140,37 @@ function HostingPixels() {
   );
 }
 
+function HostingBandPixels() {
+  // Paras · 2026-06-19: phone-only variant of the dispersion — a full-width band that's dense at the
+  // bottom edge and fades upward, so on a narrow portrait screen the pixels live BELOW the copy
+  // (in what used to be dead padding) instead of smearing across the text. Same coral/cream/mint mix.
+  const W = 44, H = 12;
+  const cells = [];
+  let s = 29;
+  const rand = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      const fromBottom = (H - 1 - y) / (H - 1);              // 0 at the bottom row → 1 at the top
+      const density = Math.max(0, 0.95 - fromBottom * 1.25);  // dense at the bottom, fades upward
+      if (rand() < density) {
+        const r = rand();
+        const c = r < 0.6 ? '#FF6B47' : r < 0.82 ? '#F5F1EA' : '#C7DDD8';
+        cells.push({ x, y, c });
+      }
+    }
+  }
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMax meet" style={{ width: '100%', height: 'auto', display: 'block' }}>
+      {cells.map((c, i) => (
+        <rect key={i} x={c.x} y={c.y} width="0.9" height="0.9" fill={c.c}
+          className={i % 3 === 0 ? 'pix-drift-a' : i % 3 === 1 ? 'pix-drift-b' : 'pix-drift-c'}
+          style={{ animationDelay: `${(i % 11) * 0.2}s` }}
+        />
+      ))}
+    </svg>
+  );
+}
+
 export function Hosting() {
   // Paras · 2026-06-19: coral offer banner — 6 months of hosting on us. Hook plays on the Process
   // section's "live" theme. Sits between Process and Testimonials as the one bold accent moment.
@@ -132,6 +194,9 @@ export function Hosting() {
           Start a project <span className="arr" aria-hidden>→</span>
         </a>
       </div>
+      {/* phone-only: pixel dispersion as a full-width band along the bottom edge (CSS shows it
+          only < 700px, where the right-side .hosting-pixels is hidden) */}
+      <div className="hosting-band" aria-hidden><HostingBandPixels /></div>
     </section>
   );
 }

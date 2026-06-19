@@ -78,18 +78,52 @@ export function FAQ() {
   );
 }
 
+function HostingPixels() {
+  // Paras · 2026-06-19: brand pixel dispersion for the hosting banner — replaces the out-of-place
+  // ghost "6". A coral-led field, dense at the right edge and scattering toward the copy: the same
+  // OnePixel motif used in the hero + contact, so it reads as native identity, not a stray graphic.
+  const W = 36, H = 26;
+  const cells = [];
+  let s = 13;
+  const rand = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      const fromRight = (W - 1 - x) / (W - 1);             // 0 at right edge → 1 at far left
+      const density = Math.max(0, 0.92 - fromRight * 1.18); // dense right, fades out toward the copy
+      if (rand() < density) {
+        const r = rand();
+        const c = r < 0.6 ? '#FF6B47' : r < 0.82 ? '#F5F1EA' : '#C7DDD8';
+        cells.push({ x, y, c });
+      }
+    }
+  }
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%' }}>
+      {cells.map((c, i) => (
+        <rect key={i} x={c.x} y={c.y} width="0.9" height="0.9" fill={c.c}
+          className={i % 3 === 0 ? 'pix-drift-a' : i % 3 === 1 ? 'pix-drift-b' : 'pix-drift-c'}
+          style={{ animationDelay: `${(i % 11) * 0.2}s` }}
+        />
+      ))}
+    </svg>
+  );
+}
+
 export function Hosting() {
   // Paras · 2026-06-19: coral offer banner — 6 months of hosting on us. Hook plays on the Process
   // section's "live" theme. Sits between Process and Testimonials as the one bold accent moment.
   return (
     <section id="hosting" className="hosting">
+      {/* brand pixel dispersion sits behind the content (sibling of .hosting-inner, lower z-index) */}
+      <div className="hosting-pixels" aria-hidden><HostingPixels /></div>
       <div className="hosting-inner">
-        <span className="hosting-ghost" aria-hidden>6</span>
         <div className="hosting-eyebrow">
           <span className="hosting-pip" aria-hidden></span>
           Included with every project
         </div>
-        <h2 className="hosting-title">Go live. Stay live, on us for 6 months.</h2>
+        <h2 className="hosting-title">
+          Go live. Stay live, on us for <span className="hosting-hl">6 months</span>.
+        </h2>
         <p className="hosting-sub">
           Every site we build comes with fast, secure hosting, fully managed and free from day one.
           We keep you online, so you can focus on the business, not the bills.

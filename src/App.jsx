@@ -96,14 +96,18 @@ export default function App() {
     <>
       <Loader />
       <Nav dark={dark} onToggleTheme={() => setDark(d => !d)} />
-      <Hero />
-      <Marquee />
-      <Work />
-      <Services />
-      <Process />
-      <Testimonials />
-      <FAQ />
-      <Contact />
+      {/* Paras · 2026-06-19: <main> landmark wraps the page content (Nav/Loader stay outside) so
+          screen readers + crawlers have a clear primary-content region. */}
+      <main>
+        <Hero />
+        <Marquee />
+        <Work />
+        <Services />
+        <Process />
+        <Testimonials />
+        <FAQ />
+        <Contact />
+      </main>
     </>
   );
 }

@@ -107,9 +107,12 @@ export function Hero() {
       <div className="hero-grid" aria-hidden></div>
       <div className="shell" style={{ position: 'relative', zIndex: 2 }}>
         <h1 className="hero-title">
-          <span className="line">We design</span>
+          {/* Paras · 2026-06-19: explicit {' '} between the line spans — without them the h1's
+              text content reads "We designpremium websitesby pixel." to crawlers/screen readers.
+              Trailing spaces on block lines collapse, so there's no visual change. */}
+          <span className="line">We design{' '}</span>
           <span className="line">
-            <em>premium</em> websites
+            <em>premium</em> websites{' '}
           </span>
           {/* Paras: pixel block + “by pixel.” — layout moved to CSS (.hero-line-pix) so the
               block size and the gap before “by” can shrink on phones, where this line crowded. */}

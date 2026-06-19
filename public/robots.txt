@@ -1,0 +1,31 @@
+# OnePixel — Paras 2026-06-19
+# Open to all crawlers, with AI bots explicitly welcomed (so they read the site rather
+# than being blocked by a default-deny somewhere upstream). Update the Sitemap URL if the
+# production domain isn't onepixel.in.
+
+User-agent: *
+Allow: /
+
+# AI / LLM crawlers — explicitly allowed
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://onepixel.in/sitemap.xml

@@ -5,9 +5,68 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>OnePixel — Premium website design & development studio</title>
 <meta name="description" content="OnePixel is a small, opinionated studio building modern, polished websites for the brands India is building next."/>
+
+<!-- Paras · 2026-06-19: SEO + social/AI metadata. Base domain assumed https://onepixel.in (the
+     studio's contact email is hello@onepixel.in). If the live domain differs, update the URLs below
+     + sitemap.xml. og:image/apple-touch-icon are static PNGs generated from the brand mark. -->
+<link rel="canonical" href="https://onepixel.in/"/>
+<meta name="theme-color" content="#0A0A0A"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="OnePixel"/>
+<meta property="og:title" content="OnePixel — Premium website design & development studio"/>
+<meta property="og:description" content="A small, opinionated studio building modern websites for the brands India is building next."/>
+<meta property="og:url" content="https://onepixel.in/"/>
+<meta property="og:image" content="https://onepixel.in/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="OnePixel — we design premium websites."/>
+<meta property="og:locale" content="en_IN"/>
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="OnePixel — Premium website design & development studio"/>
+<meta name="twitter:description" content="A small, opinionated studio building modern websites for the brands India is building next."/>
+<meta name="twitter:image" content="https://onepixel.in/og-image.png"/>
+<meta name="twitter:image:alt" content="OnePixel — we design premium websites."/>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+<!-- Paras · 2026-06-19: static JSON-LD so crawlers + AI (which don't run our React) understand WHAT
+     OnePixel is without rendering the page. Organization + WebSite, linked by @id. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://onepixel.in/#org",
+      "name": "OnePixel",
+      "alternateName": "OnePixel Studio",
+      "url": "https://onepixel.in/",
+      "logo": "https://onepixel.in/favicon.svg",
+      "image": "https://onepixel.in/og-image.png",
+      "description": "A small, opinionated studio building modern websites for the brands India is building next.",
+      "email": "hello@onepixel.in",
+      "foundingDate": "2024",
+      "areaServed": "IN",
+      "knowsAbout": ["Web design", "Web development", "Brand design", "Design systems", "E-commerce"]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://onepixel.in/#website",
+      "url": "https://onepixel.in/",
+      "name": "OnePixel",
+      "description": "Premium website design & development studio.",
+      "inLanguage": "en",
+      "publisher": { "@id": "https://onepixel.in/#org" }
+    }
+  ]
+}
+</script>
 </head>
 <body>
 <div id="root"></div>

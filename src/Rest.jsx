@@ -57,11 +57,19 @@ export function FAQ() {
         <div className="faq-list">
           {qs.map((it, i) => (
             <div key={i} className={`faq-item ${open === i ? 'open' : ''}`}>
-              <button className="faq-q" onClick={() => setOpen(open === i ? -1 : i)}>
+              {/* Paras · 2026-06-19: accessible disclosure — aria-expanded tells AT open/closed,
+                  aria-controls links the button to its answer panel (id below). Attributes only,
+                  no visual or behaviour change. */}
+              <button
+                className="faq-q"
+                onClick={() => setOpen(open === i ? -1 : i)}
+                aria-expanded={open === i}
+                aria-controls={`faq-a-${i}`}
+              >
                 <span><span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)', marginRight: 24, letterSpacing: '0.1em' }}>0{i + 1}</span>{it.q}</span>
                 <span className="toggle"></span>
               </button>
-              <div className="faq-a">{it.a}</div>
+              <div className="faq-a" id={`faq-a-${i}`}>{it.a}</div>
             </div>
           ))}
         </div>

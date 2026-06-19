@@ -7,7 +7,7 @@ import { Nav } from './Nav.jsx';
 import { Hero } from './Hero.jsx';
 import { Marquee, Work } from './Work.jsx';
 import { Services, Process } from './ServicesProcess.jsx';
-import { Testimonials, FAQ, Contact } from './Rest.jsx';
+import { Testimonials, FAQ, Contact, Hosting } from './Rest.jsx';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -31,7 +31,7 @@ export default function App() {
     // reveals (Work.jsx, and the section-head effect below), so the IntersectionObserver
     // shouldn't also reveal them.
     const targets = document.querySelectorAll(
-      '.svc-showcase, .testimonial, .faq-item, .proc-display, .proc-strip, .proc-mobile, .hero-foot, .marquee'
+      '.svc-showcase, .testimonial, .faq-item, .proc-display, .proc-strip, .proc-mobile, .hosting-inner, .hero-foot, .marquee'
     );
     targets.forEach(t => t.classList.add('reveal'));
     const io = new IntersectionObserver((entries) => {
@@ -104,6 +104,7 @@ export default function App() {
         <Work />
         <Services />
         <Process />
+        <Hosting />
         <Testimonials />
         <FAQ />
         <Contact />

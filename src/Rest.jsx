@@ -78,6 +78,30 @@ export function FAQ() {
   );
 }
 
+export function Hosting() {
+  // Paras · 2026-06-19: coral offer banner — 6 months of hosting on us. Hook plays on the Process
+  // section's "live" theme. Sits between Process and Testimonials as the one bold accent moment.
+  return (
+    <section id="hosting" className="hosting">
+      <div className="hosting-inner">
+        <span className="hosting-ghost" aria-hidden>6</span>
+        <div className="hosting-eyebrow">
+          <span className="hosting-pip" aria-hidden></span>
+          Included with every project
+        </div>
+        <h2 className="hosting-title">Go live. Stay live, on us for 6 months.</h2>
+        <p className="hosting-sub">
+          Every site we build comes with fast, secure hosting, fully managed and free from day one.
+          We keep you online, so you can focus on the business, not the bills.
+        </p>
+        <a href="#contact" className="hosting-cta">
+          Start a project <span className="arr" aria-hidden>→</span>
+        </a>
+      </div>
+    </section>
+  );
+}
+
 function ContactPixels() {
   const cells = [];
   const W = 60, H = 40;

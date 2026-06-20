@@ -1722,7 +1722,25 @@ body.paper { --bg: #ffffff; --paper: #f7f4ed; }
 .sf-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 460px) { .sf-row2 { grid-template-columns: 1fr; gap: 0; } }
 .sf-consent { display: flex; align-items: flex-start; gap: 10px; margin: 18px 0 24px; cursor: pointer; }
-.sf-consent input { width: 18px; height: 18px; margin-top: 1px; accent-color: var(--accent); flex: none; }
+/* Paras · 2026-06-20: custom checkbox. The native control was invisible on the dark panel in
+   dark-mode browsers (appearance:auto + no border + transparent fill). appearance:none + our own
+   bordered box fixes it in every browser and theme. */
+.sf-consent input {
+  appearance: none; -webkit-appearance: none;
+  width: 20px; height: 20px; margin-top: 1px; flex: none; cursor: pointer;
+  border: 1.5px solid rgba(255,255,255,.45);
+  background: rgba(255,255,255,.05);
+  display: inline-grid; place-content: center;
+  transition: background .15s, border-color .15s;
+}
+.sf-consent input:hover { border-color: rgba(255,255,255,.7); }
+.sf-consent input:checked { background: var(--accent); border-color: var(--accent); }
+.sf-consent input:checked::after {
+  content: ""; width: 10px; height: 5.5px;
+  border-left: 2px solid #0A0A0A; border-bottom: 2px solid #0A0A0A;
+  transform: rotate(-45deg) translateY(-1px);
+}
+.sf-consent input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .sf-consent span { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.5; }
 .sf-error { color: var(--accent); font-size: 14px; line-height: 1.45; margin: 0 0 16px; }
 

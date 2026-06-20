@@ -7,9 +7,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 // at the VPS later; the WhatsApp link is the live channel for now. Fixed dark palette like .contact
 // / .process so it reads premium in both light and dark themes.
 
-// TODO(Paras): replace with OnePixel's real WhatsApp number — country code + number, digits only
-// (e.g. '919876543210'). Until then the hand-off opens a placeholder chat.
-const WHATSAPP_NUMBER = '910000000000';
+// OnePixel's WhatsApp Business number (country code + number, digits only). +91 63070 22880,
+// connected via the WhatsApp Business account, is the live hand-off channel for every lead.
+const WHATSAPP_NUMBER = '916307022880';
 
 // TODO(Paras): once the VPS endpoint is live, set this URL and submitLead() will POST every lead to
 // it (in addition to the WhatsApp hand-off). Empty for now, so we just log.

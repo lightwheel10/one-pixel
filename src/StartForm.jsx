@@ -82,7 +82,7 @@ const PACKAGES = {
 };
 const ORDER = ['launch', 'growth', 'flagship'];
 
-const EMPTY = { goal: '', products: '', stage: '', timeline: '', name: '', whatsapp: '', email: '', business: '', consent: false };
+const EMPTY = { goal: '', products: '', stage: '', timeline: '', name: '', whatsapp: '', email: '', business: '', consent: true };
 
 function labelOf(list, id) { const f = list.find((o) => o.id === id); return f ? f.label : ''; }
 

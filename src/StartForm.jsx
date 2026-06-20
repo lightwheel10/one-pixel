@@ -136,6 +136,14 @@ async function submitLead(payload) {
   } catch (e) { /* swallow */ }
 }
 
+// Paras · 2026-06-20: Meta Pixel event helper. fbq is defined by the base code in the page <head>;
+// guard it so the form keeps working if the pixel is blocked, not yet loaded, or absent in dev.
+function track(event, params) {
+  if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+    try { window.fbq('track', event, params); } catch (e) { /* swallow */ }
+  }
+}
+
 function trapFocus(e, panel) {
   if (!panel) return;
   const f = panel.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])');
@@ -247,6 +255,7 @@ export function StartForm() {
         name: a.name, whatsapp: a.whatsapp, email: a.email, business: a.business,
         at: new Date().toISOString(),
       });
+      track('Lead', { content_name: PACKAGES[tier].name, content_category: 'website-form' });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stepId, open]);
@@ -387,7 +396,7 @@ export function StartForm() {
 
         <PackageCard tier={selTier} isRec={isRec} ecom={ecom} />
 
-        <a className="sf-wa" href={link} target="_blank" rel="noopener noreferrer"><WaIcon /> Continue on WhatsApp</a>
+        <a className="sf-wa" href={link} target="_blank" rel="noopener noreferrer" onClick={() => track('Contact')}><WaIcon /> Continue on WhatsApp</a>
         <p className="sf-fineprint">No payment now. We confirm everything on chat first.</p>
 
         <div className="sf-others">

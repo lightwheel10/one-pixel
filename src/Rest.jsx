@@ -69,7 +69,7 @@ export function Testimonials() {
 
 export function FAQ() {
   const qs = [
-    { q: 'How do you scope a project?', a: 'Every project starts with a 60 minute discovery call. We listen, understand the work ahead, and send a detailed proposal built around your real needs, not a one size fits all price list. The first call is on us, with no pressure to take it further.' },
+    { q: 'How do you scope a project?', a: 'Every project starts with a 30 minute discovery call. We listen, understand the work ahead, and send a detailed proposal built around your real needs, not a one size fits all price list. The first call is on us, with no pressure to take it further.' },
     { q: 'How long does it take?', a: 'Most websites take 4 to 6 weeks. Bigger projects that include branding run 6 to 10 weeks. We take on one new project a month, so yours always gets our full attention.' },
     { q: 'Can you work with our existing team?', a: 'Yes, we love working as part of your team. We can lead, support, or hand things over when we are done. We have worked alongside internal teams at everything from brand new startups to large public companies.' },
     { q: 'What do you build websites with?', a: 'We choose the right technology for your needs, not whatever is trendy. The result is a website that loads fast, ranks well, and is easy for your team to update without calling a developer.' },
@@ -254,25 +254,17 @@ export function Contact() {
               </div>
             </div>
             <div className="contact-block">
-              <div className="label">Book a 30 minute intro</div>
+              <div className="label">Call us · for new projects</div>
               <div className="big">
-                <a href="#">
-                  cal.com/onepixel <span>↗</span>
+                <a href="tel:+919876543210">
+                  +91 98765 43210 <span>↗</span>
                 </a>
               </div>
             </div>
             <div className="contact-block">
               <div className="label">Currently</div>
               <div className="big" style={{ color: 'var(--accent)' }}>
-                Booking June 2026 →
-              </div>
-            </div>
-            <div className="contact-block">
-              <div className="label">Elsewhere</div>
-              <div className="big" style={{ display: 'flex', gap: 24, fontSize: 22 }}>
-                <a href="#">Twitter</a>
-                <a href="#">Instagram</a>
-                <a href="#">LinkedIn</a>
+                Booking July 2026 →
               </div>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { openStartForm } from './StartForm.jsx';
 
 function SunIcon({ small }) {
   const s = small ? 13 : 15;
@@ -90,7 +91,7 @@ export function Nav({ dark, onToggleTheme }) {
       </div>
       <div className="nav-right">
         <ThemeToggle dark={dark} onToggle={onToggleTheme} />
-        <a href="#contact" className="nav-cta">
+        <a href="#contact" className="nav-cta" onClick={(e) => { e.preventDefault(); openStartForm(); }}>
           Start a project <span className="arr">→</span>
         </a>
         {/* Paras: hamburger — CSS shows it only < 700px; toggles the dropdown below. */}
@@ -112,7 +113,7 @@ export function Nav({ dark, onToggleTheme }) {
         <a href="#services">Services</a>
         <a href="#process">Process</a>
         <a href="#faq">FAQ</a>
-        <a href="#contact" className="nav-mobile-cta">Start a project <span className="arr">→</span></a>
+        <a href="#contact" className="nav-mobile-cta" onClick={(e) => { e.preventDefault(); openStartForm(); }}>Start a project <span className="arr">→</span></a>
       </div>
     </nav>
   );

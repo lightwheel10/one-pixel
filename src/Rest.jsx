@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { openStartForm } from './StartForm.jsx';
 
 // Paras · 2026-06-19: pixel "bleed" across the hosting → testimonials seam. Mounted in the
 // testimonials section (the hosting section clips with overflow:hidden, so it can't spill) and
@@ -190,7 +191,7 @@ export function Hosting() {
           Every site we build comes with fast, secure hosting, fully managed and free from day one.
           We keep you online, so you can focus on the business, not the bills.
         </p>
-        <a href="#contact" className="hosting-cta">
+        <a href="#contact" className="hosting-cta" onClick={(e) => { e.preventDefault(); openStartForm(); }}>
           Start a project <span className="arr" aria-hidden>→</span>
         </a>
       </div>

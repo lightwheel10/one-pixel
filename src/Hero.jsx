@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { openStartForm } from './StartForm.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -128,7 +129,7 @@ export function Hero() {
           </p>
           <div className="hero-cta-wrap">
             {/* Paras · 2026-06-19: CTA text unified with the nav ("Start a project") so every CTA reads the same. */}
-            <a href="#contact" className="btn btn-primary">
+            <a href="#contact" className="btn btn-primary" onClick={(e) => { e.preventDefault(); openStartForm(); }}>
               <span className="pix"></span> Start a project
             </a>
           </div>

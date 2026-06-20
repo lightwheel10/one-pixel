@@ -8,6 +8,7 @@ import { Hero } from './Hero.jsx';
 import { Marquee, Work } from './Work.jsx';
 import { Services, Process } from './ServicesProcess.jsx';
 import { Testimonials, FAQ, Contact, Hosting } from './Rest.jsx';
+import { StartForm } from './StartForm.jsx';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -96,6 +97,9 @@ export default function App() {
     <>
       <Loader />
       <Nav dark={dark} onToggleTheme={() => setDark(d => !d)} />
+      {/* Paras · 2026-06-20: the "Start a project" qualifying overlay. Mounted once, outside <main>;
+          every CTA opens it via openStartForm() (a custom event), so the CTAs stay prop-free. */}
+      <StartForm />
       {/* Paras · 2026-06-19: <main> landmark wraps the page content (Nav/Loader stay outside) so
           screen readers + crawlers have a clear primary-content region. */}
       <main>

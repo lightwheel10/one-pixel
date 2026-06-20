@@ -10,6 +10,7 @@ export default defineConfig({
       input: {
         index: resolve(__dirname, 'index.html'),
         halcyon: resolve(__dirname, 'case-studies/halcyon/index.html'),
+        privacy: resolve(__dirname, 'privacy/index.html'),
       },
     },
   },

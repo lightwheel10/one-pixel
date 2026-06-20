@@ -205,11 +205,12 @@ export function StartForm() {
   const [stepId, setStepId] = useState('goal');
   const [a, setA] = useState(EMPTY);
   const [chosen, setChosen] = useState(null); // plan the user picked at the result, overrides the recommendation
+  const [err, setErr] = useState(''); // contact-step validation message
   const panelRef = useRef(null);
   const reduce = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   useEffect(() => {
-    const onOpen = () => { setA(EMPTY); setChosen(null); setStepId('goal'); setOpen(true); };
+    const onOpen = () => { setA(EMPTY); setChosen(null); setErr(''); setStepId('goal'); setOpen(true); };
     window.addEventListener('onepixel:start', onOpen);
     return () => window.removeEventListener('onepixel:start', onOpen);
   }, []);
@@ -274,11 +275,7 @@ export function StartForm() {
     if (reduce) advance(); else setTimeout(advance, 220);
   };
 
-  const restart = () => { setA(EMPTY); setChosen(null); setStepId('goal'); };
-
-  const phoneOk = a.whatsapp.replace(/\D/g, '').length >= 10;
-  const emailOk = /^\S+@\S+\.\S+$/.test(a.email);
-  const contactValid = a.name.trim() !== '' && phoneOk && emailOk && a.consent;
+  const restart = () => { setA(EMPTY); setChosen(null); setErr(''); setStepId('goal'); };
 
   let bodyEl;
   if (stepId === 'goal') {
@@ -315,40 +312,59 @@ export function StartForm() {
       </div>
     );
   } else if (stepId === 'contact') {
+    // Paras · 2026-06-20: inputs are UNCONTROLLED (defaultValue + onBlur sync). Mobile autofill often
+    // fills the field without firing React's onChange, so a controlled value would stay empty (and a
+    // disabled submit button would never enable). We read the LIVE field values on submit instead, so
+    // autofilled or typed values are always captured, then validate the trimmed values.
+    const sync = (k) => (e) => setA((s) => ({ ...s, [k]: e.target.value }));
+    const onSubmit = (e) => {
+      e.preventDefault();
+      const f = e.currentTarget;
+      const v = {
+        name: f.querySelector('#sf-name').value.trim(),
+        whatsapp: f.querySelector('#sf-wa').value.trim(),
+        email: f.querySelector('#sf-email').value.trim(),
+        business: f.querySelector('#sf-biz').value.trim(),
+        consent: f.querySelector('#sf-consent').checked,
+      };
+      if (!v.name) return setErr('Please add your name.');
+      if (v.whatsapp.replace(/\D/g, '').length < 10) return setErr('Please add a valid WhatsApp number, with country code.');
+      if (!/^\S+@\S+\.\S+$/.test(v.email)) return setErr('Please add a valid email address.');
+      if (!v.consent) return setErr('Please tick the box so we can get back to you.');
+      setErr('');
+      setA((s) => ({ ...s, ...v }));
+      next();
+    };
     bodyEl = (
       <div className="sf-step">
         <div className="sf-step-meta">Last step</div>
         <h3 className="sf-step-title">Where should we reach you?</h3>
         <p className="sf-step-sub">We will send your recommendation and follow up on WhatsApp, usually within a few hours.</p>
-        <form onSubmit={(e) => { e.preventDefault(); if (contactValid) next(); }}>
+        <form noValidate onSubmit={onSubmit}>
           <div className="sf-field">
             <label htmlFor="sf-name">Your name</label>
-            <input id="sf-name" value={a.name} autoComplete="name" placeholder="e.g. Aarav Sharma"
-              onChange={(e) => setA((s) => ({ ...s, name: e.target.value }))} />
+            <input id="sf-name" defaultValue={a.name} autoComplete="name" placeholder="e.g. Aarav Sharma" onBlur={sync('name')} />
           </div>
           <div className="sf-row2">
             <div className="sf-field">
               <label htmlFor="sf-wa">WhatsApp number</label>
-              <input id="sf-wa" type="tel" inputMode="tel" value={a.whatsapp} autoComplete="tel" placeholder="+91 98765 43210"
-                onChange={(e) => setA((s) => ({ ...s, whatsapp: e.target.value }))} />
+              <input id="sf-wa" type="tel" inputMode="tel" defaultValue={a.whatsapp} autoComplete="tel" placeholder="+91 98765 43210" onBlur={sync('whatsapp')} />
             </div>
             <div className="sf-field">
               <label htmlFor="sf-email">Email</label>
-              <input id="sf-email" type="email" value={a.email} autoComplete="email" placeholder="you@business.com"
-                onChange={(e) => setA((s) => ({ ...s, email: e.target.value }))} />
+              <input id="sf-email" type="email" inputMode="email" autoCapitalize="off" autoCorrect="off" spellCheck={false} defaultValue={a.email} autoComplete="email" placeholder="you@business.com" onBlur={sync('email')} />
             </div>
           </div>
           <div className="sf-field">
             <label htmlFor="sf-biz">Business name <span className="sf-opt-soft">(optional)</span></label>
-            <input id="sf-biz" value={a.business} autoComplete="organization" placeholder="Your company"
-              onChange={(e) => setA((s) => ({ ...s, business: e.target.value }))} />
+            <input id="sf-biz" defaultValue={a.business} autoComplete="organization" placeholder="Your company" onBlur={sync('business')} />
           </div>
           <label className="sf-consent">
-            <input type="checkbox" checked={a.consent}
-              onChange={(e) => setA((s) => ({ ...s, consent: e.target.checked }))} />
+            <input id="sf-consent" type="checkbox" defaultChecked={a.consent} />
             <span>I would like OnePixel to contact me about my project on WhatsApp or email.</span>
           </label>
-          <button type="submit" className="sf-submit" disabled={!contactValid}>See my recommendation →</button>
+          {err && <div className="sf-error" role="alert">{err}</div>}
+          <button type="submit" className="sf-submit">See my recommendation →</button>
         </form>
       </div>
     );

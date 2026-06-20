@@ -1724,6 +1724,7 @@ body.paper { --bg: #ffffff; --paper: #f7f4ed; }
 .sf-consent { display: flex; align-items: flex-start; gap: 10px; margin: 18px 0 24px; cursor: pointer; }
 .sf-consent input { width: 18px; height: 18px; margin-top: 1px; accent-color: var(--accent); flex: none; }
 .sf-consent span { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.5; }
+.sf-error { color: var(--accent); font-size: 14px; line-height: 1.45; margin: 0 0 16px; }
 
 /* primary actions */
 .sf-submit, .sf-wa {

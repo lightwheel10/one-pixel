@@ -1,7 +1,7 @@
 import { Loader } from '../../src/Loader.jsx';
 import CustomCursor from './CustomCursor.jsx';
 import { TopBar, Nav, Hero, Marquee, FeaturedEstate, PropertiesIndex } from './home.jsx';
-import { HudsonMap, Family, Journal, Contact, Footer } from './deep.jsx';
+import { HudsonMap, Family, Journal, Contact, Office, Footer } from './deep.jsx';
 
 export default function App() {
   return (
@@ -18,6 +18,7 @@ export default function App() {
       <Family />
       <Journal />
       <Contact />
+      <Office />
       <Footer />
     </>
   );

@@ -1,5 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { HC_PHOTOS } from './photos.js';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function HudsonMap() {
   const [active, setActive] = useState(1);
@@ -24,7 +28,7 @@ export function HudsonMap() {
           <div>
             <h2 className="hc-section-title">A small map<br />of <em>where we work.</em></h2>
             <p className="hc-section-sub">
-              We work along the Western Ghats, between Bombay and Mahabaleshwar — a four-hour corridor we’ve walked, drawn, and revisited for sixty-two years. Hover a town to see what we’ve placed there.
+              We work along the Western Ghats, the corridor between Bombay and Mahabaleshwar. We have walked, drawn, and revisited it for sixty two years. Hover a town to see what we have placed there.
             </p>
           </div>
         </div>
@@ -111,15 +115,15 @@ export function Family() {
       n: 'I',
       name: 'Aditya Mehta',
       em: 'Aditya',
-      role: 'Founder · 1962 — 2001',
-      bio: 'Opened a one-room office on Hill Road, Bandra, with a typewriter, a phone, and a list of seventeen names. The list was, he insisted, the only inventory worth keeping.',
+      role: 'Founder · 1962 to 2001',
+      bio: 'Opened a small office on Hill Road, Bandra, with a typewriter, a phone, and a list of seventeen names. The list, he insisted, was the only inventory worth keeping.',
       img: HC_PHOTOS.fam1,
     },
     {
       n: 'II',
       name: 'Anjali Mehta',
       em: 'Anjali',
-      role: 'Principal · 1989 — present',
+      role: 'Principal · 1989 to present',
       bio: 'Joined her father out of St. Xavier’s. Listed our first estate in The Bombay Times in 1992. Still walks every property with a measuring tape and a notebook.',
       img: HC_PHOTOS.fam2,
     },
@@ -127,7 +131,7 @@ export function Family() {
       n: 'III',
       name: 'Naina Mehta',
       em: 'Naina',
-      role: 'Principal Broker · 2014 — present',
+      role: 'Principal Broker · 2014 to present',
       bio: 'Third name on the door. Trained as an architect before returning to the office in 2014. Answers her own phone.',
       img: HC_PHOTOS.fam3,
     },
@@ -140,7 +144,7 @@ export function Family() {
           <div>
             <h2 className="hc-section-title">Three names<br />on <em>the door.</em></h2>
             <p className="hc-section-sub">
-              We have grown deliberately — by one Halcyon every generation. Every listing is read, walked, and signed by one of us. Every closing has a Halcyon at the table.
+              We have grown slowly, by one Mehta a generation. Every listing is read, walked, and signed by one of us. Every closing has a Mehta at the table.
             </p>
           </div>
         </div>
@@ -161,7 +165,7 @@ export function Family() {
 
         <div className="hc-pullquote">
           <q>My grandfather sold houses with a handshake. My mother insisted on knowing every neighbour before she ever knocked. The work hasn’t changed much.</q>
-          <div className="attr">— Naina Mehta · Principal Broker · 2024</div>
+          <div className="attr">Naina Mehta · Principal Broker · 2024</div>
         </div>
       </div>
     </section>
@@ -173,13 +177,13 @@ export function Journal() {
     {
       cat: 'Notebook', date: 'Mar MMXXVI',
       title: <>On the <em>quiet bungalows</em> of Bandra</>,
-      blurb: 'A walking essay through Hill Road’s thirteen pre-Independence bungalows — and the families that have, against all odds, kept them.',
+      blurb: 'A walking essay through Hill Road’s thirteen bungalows from before Independence, and the families who have kept them against all odds.',
       img: HC_PHOTOS.journal1,
     },
     {
       cat: 'Field Note', date: 'Feb MMXXVI',
       title: <>The <em>second walk</em></>,
-      blurb: 'Why we visit every property at least twice — once at sunrise, once at dusk — before we agree to list it. A method, briefly.',
+      blurb: 'Why we visit every property at least twice, once at sunrise and once at dusk, before we agree to list it. A method, briefly.',
       img: HC_PHOTOS.journal2,
     },
     {
@@ -237,7 +241,7 @@ export function Contact() {
           <div>
             <h2 className="hc-section-title">Begin <em>quietly.</em></h2>
             <p className="hc-section-sub" style={{ color: 'rgba(242,239,234,0.7)' }}>
-              Whether you are considering selling, looking for a particular kind of house, or simply curious about a property in the Valley — write us. A Mehta will read it personally and reply within two days.
+              Whether you are considering selling, looking for a particular kind of house, or simply curious about a property in the Valley, write us. A Mehta will read it personally and reply within two days.
             </p>
           </div>
         </div>
@@ -279,29 +283,54 @@ export function Contact() {
             </div>
             <button type="submit" className="hc-submit">
               {submitted
-                ? '✓ Sent — we’ll reply within two days'
+                ? '✓ Sent. We’ll reply within two days'
                 : <>Send introduction <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" strokeWidth="1" /></svg></>}
             </button>
           </form>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-          <aside className="hc-contact-aside">
-            <div className="item">
-              <div className="label">Office</div>
-              <div className="value"><em>14 Hill Road</em><div className="value-sub">Bandra (W), 400050</div></div>
+// Paras · 2026-06-23: the office/visit details, lifted out of the Contact section (which is now
+// form-only) into their own cream band below it. Each cell reveals on scroll via GSAP (stagger
+// up + fade). Reduced-motion shows the final state immediately.
+export function Office() {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const ctx = gsap.context(() => {
+      gsap.from('.hc-office-reveal', {
+        y: 24, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1,
+        scrollTrigger: { trigger: ref.current, start: 'top 80%' },
+      });
+    }, ref);
+    return () => ctx.revert();
+  }, []);
+
+  const items = [
+    { label: 'Office',    value: '14 Hill Road',          sub: 'Bandra (W), 400050' },
+    { label: 'Telephone', value: '+91 22 2640 0162',      sub: 'Monday to Saturday · 10am to 6pm IST', href: 'tel:+912226400162' },
+    { label: 'Write',     value: 'naina@mehtaandsons.in', sub: 'Personally read · reply within two days', href: 'mailto:naina@mehtaandsons.in' },
+    { label: 'Visiting',  value: 'By appointment',        sub: 'Chai is offered. Always.' },
+  ];
+
+  return (
+    <section className="hc-office" id="visit" ref={ref}>
+      <div className="hc-shell">
+        <div className="hc-office-eyebrow hc-office-reveal">The Office</div>
+        <div className="hc-office-grid">
+          {items.map((it, i) => (
+            <div className="hc-office-item hc-office-reveal" key={i}>
+              <div className="hc-office-label">{it.label}</div>
+              <div className="hc-office-value">
+                {it.href ? <a href={it.href}>{it.value}</a> : it.value}
+              </div>
+              <div className="hc-office-sub">{it.sub}</div>
             </div>
-            <div className="item">
-              <div className="label">Telephone</div>
-              <div className="value"><em>+91 22 2640 0162</em><div className="value-sub">Mon–Sat · 10am to 6pm IST</div></div>
-            </div>
-            <div className="item">
-              <div className="label">Naina</div>
-              <div className="value"><em>naina@mehtaandsons.in</em><div className="value-sub">Personally read · two-day reply</div></div>
-            </div>
-            <div className="item">
-              <div className="label">Visiting</div>
-              <div className="value"><em>By appointment</em><div className="value-sub">Chai is offered. Always.</div></div>
-            </div>
-          </aside>
+          ))}
         </div>
       </div>
     </section>
@@ -312,43 +341,19 @@ export function Footer() {
   return (
     <footer className="hc-footer">
       <div className="hc-shell">
-        <div className="hc-footer-top">
-          <div>
-            <div className="hc-footer-mark">Mehta<br />&amp; Sons.</div>
-            <p>A family-run real-estate office representing private estates and quiet houses across the Western Ghats. Established 1962.</p>
-          </div>
-          <div>
-            <h4>Browse</h4>
-            <ul>
-              <li><a href="#properties">Homes</a></li>
-              <li><a href="#properties">Estates</a></li>
-              <li><a href="#properties">Land</a></li>
-              <li><a href="#properties">Recently placed</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4>The Office</h4>
-            <ul>
-              <li><a href="#family">The family</a></li>
-              <li><a href="#journal">Journal</a></li>
-              <li><a href="#map">The Valley</a></li>
-              <li><a href="#contact">Introduce yourself</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4>Visit</h4>
-            <ul>
-              <li>14 Hill Road</li>
-              <li>Bandra (W), 400050</li>
-              <li>+91 22 2640 0162</li>
-              <li>By appointment</li>
-            </ul>
-          </div>
+        <div className="hc-footer-mark">Mehta <span className="amp">&amp;</span> Sons</div>
+        <div className="hc-footer-row">
+          <p className="hc-footer-essence">
+            Private estates and quiet houses across the Western Ghats, kept by one family since MCMLXII.
+          </p>
+          <a href="#contact" className="hc-footer-cta">
+            Begin an introduction
+            <svg width="16" height="11" viewBox="0 0 14 10" fill="none" aria-hidden="true"><path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" strokeWidth="1" /></svg>
+          </a>
         </div>
         <div className="hc-footer-bottom">
-          <div>© MCMLXII — MMXXVI · Mehta &amp; Sons · MahaRERA registered</div>
-          <div>An independent, family-owned office</div>
-          <div>Site by <a href="/">OnePixel Studio</a></div>
+          <span>Est. MCMLXII · © MMXXVI · Mehta &amp; Sons · MahaRERA registered</span>
+          <span>Site by <a href="/">OnePixel Studio</a></span>
         </div>
       </div>
     </footer>

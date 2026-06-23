@@ -4,11 +4,8 @@ import { HC_PHOTOS } from './photos.js';
 export function TopBar() {
   return (
     <div className="hc-topbar">
-      <span><span className="dot"></span>Established 1962 · Bandra, Bombay</span>
-      <span style={{ display: 'flex', gap: 24 }}>
-        <span>Maharashtra</span>
-        <a href="/">← Back to OnePixel</a>
-      </span>
+      <span className="hc-topbar-note">A real company website · the data shown is placeholder</span>
+      <a href="/">← Back to OnePixel</a>
     </div>
   );
 }
@@ -71,7 +68,7 @@ export function Hero() {
         </h1>
         <div className="hc-hero-aside">
           <p>
-            Mehta &amp; Sons is a third-generation family office representing private estates and quiet houses across the Western Ghats. We list few properties, considered carefully, and carry each from valuation to closing — by hand.
+            Mehta &amp; Sons is a family office, now in its third generation. We represent a handful of private estates and quiet houses across the Western Ghats, and carry each one from valuation to closing by hand.
           </p>
         </div>
       </div>
@@ -116,9 +113,9 @@ export function FeaturedEstate() {
             </div>
           </div>
           <div className="hc-featured-content">
-            <div className="hc-mono">№ MS-0428 · Lonavala, MH</div>
+            <div className="hc-mono">№ MS 0428 · Lonavala, MH</div>
             <h2><em>Sahyadri</em> House</h2>
-            <div className="subtitle">A late-nineteenth-century manor on twelve quiet acres</div>
+            <div className="subtitle">A late nineteenth century manor on twelve quiet acres</div>
             <p className="blurb">
               Built in 1894 for a Bombay textile merchant and held by a single family until last year, Sahyadri House is a study in restraint: laterite stone, Mangalore tiles, and wide teak floors, set against the Western Ghats. Aditya Mehta walked the property in 1969. His granddaughter walked it again last week.
             </p>
@@ -129,7 +126,7 @@ export function FeaturedEstate() {
               <div className="hc-spec"><div className="v">1894</div><div className="l">Built</div></div>
             </div>
             <div className="hc-featured-cta">
-              <a href="./property.html" className="hc-link">
+              <a href="#contact" className="hc-link">
                 View the estate
                 <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" strokeWidth="1" /></svg>
               </a>
@@ -170,7 +167,7 @@ export function PropertiesIndex() {
           <div>
             <h2 className="hc-section-title">Currently <em>on offer.</em></h2>
             <p className="hc-section-sub">
-              We list few properties — usually four or five at any time — chosen for their character, their grounds, or their place in the city’s long memory. The full archive is available on request.
+              We list few properties, usually four or five at a time, chosen for their character, their grounds, or their place in the city’s long memory. The full archive is available on request.
             </p>
           </div>
         </div>
@@ -184,7 +181,7 @@ export function PropertiesIndex() {
 
         <div className="hc-prop-index">
           {visible.map((p) => (
-            <a key={p.idx} className="hc-prop-row" href={p.featured ? './property.html' : '#'}>
+            <a key={p.idx} className="hc-prop-row" href={p.featured ? '#contact' : '#'}>
               <div className="idx">№ {p.idx}</div>
               <div className="thumb"><img src={p.img} alt={p.name} loading="lazy" /></div>
               <div className="name"><em>{p.name}</em></div>

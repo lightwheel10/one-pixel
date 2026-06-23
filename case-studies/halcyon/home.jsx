@@ -28,7 +28,7 @@ export function Nav() {
       </div>
       <a href="#top" className="hc-mark">
         <span className="name">Mehta &amp; Sons</span>
-        <span className="est">Bombay · Est. MCMLXII</span>
+        <span className="est">Bombay · Est. 1962</span>
       </a>
       <div className="hc-nav-right">
         <span className="hc-nav-meta">+91 22 2640 0162</span>
@@ -51,14 +51,14 @@ export function Hero() {
         <div className="hc-hero-overlay"></div>
         <div className="hc-hero-meta">
           <div className="line">
-            <span>Featured Estate №. XII</span>
+            <span>Featured Estate № 12</span>
             <span className="sep"></span>
             <span>Sahyadri House</span>
             <span className="sep"></span>
             <span>Lonavala, MH</span>
           </div>
         </div>
-        <div className="hc-hero-counter">Spring · MMXXVI</div>
+        <div className="hc-hero-counter">Spring · 2026</div>
       </div>
 
       <div className="hc-hero-title-wrap">
@@ -102,7 +102,7 @@ export function FeaturedEstate() {
   return (
     <section className="hc-featured" id="featured">
       <div className="hc-shell">
-        <div className="hc-featured-tag">Estate of the Season · Spring MMXXVI</div>
+        <div className="hc-featured-tag">Estate of the Season · Spring 2026</div>
         <div className="hc-featured-grid">
           <div className="hc-featured-img-stack">
             <div className="main">
@@ -142,14 +142,14 @@ export function FeaturedEstate() {
 export function PropertiesIndex() {
   const [filter, setFilter] = useState('all');
   const props = [
-    { idx: 'I',    img: HC_PHOTOS.prop1, name: 'Riverbend',     mod: 'Cottage',   loc: 'Bandra (W)',     beds: '3 BD · 2 BA · 1,840 SF', year: '1948', price: '₹8.5 Cr',       cat: 'home' },
-    { idx: 'II',   img: HC_PHOTOS.prop2, name: 'Sahyadri House', mod: 'Manor',    loc: 'Lonavala',       beds: '5 BD · 4 BA · 3,210 SF', year: '1894', price: '₹28.5 Cr',      cat: 'estate', featured: true },
-    { idx: 'III',  img: HC_PHOTOS.prop3, name: 'Mill Lane',     mod: 'Loft',      loc: 'Bandra (W)',     beds: '2 BD · 2 BA · 1,210 SF', year: '1925', price: '₹6.8 Cr',       cat: 'home' },
-    { idx: 'IV',   img: HC_PHOTOS.prop4, name: 'The Crest',     mod: 'Estate',    loc: 'Khandala',       beds: '6 BD · 5 BA · 4,800 SF', year: '1908', price: '₹17.5 Cr',      cat: 'estate' },
-    { idx: 'V',    img: HC_PHOTOS.prop5, name: 'The Hutments',  mod: 'Restored',  loc: 'Karjat',         beds: '4 BD · 3 BA · 2,640 SF', year: '1894', price: 'Sold · ₹7.2 Cr', cat: 'sold' },
-    { idx: 'VI',   img: HC_PHOTOS.prop6, name: 'Brindavan',     mod: 'Cottage',   loc: 'Walkeshwar',     beds: '3 BD · 2 BA · 1,990 SF', year: '1907', price: '₹11 Cr',         cat: 'home' },
-    { idx: 'VII',  img: HC_PHOTOS.prop7, name: 'Aspinwall',     mod: 'Estate',    loc: 'Mahabaleshwar',  beds: '7 BD · 6 BA · 6,200 SF', year: '1888', price: '₹38 Cr',         cat: 'estate' },
-    { idx: 'VIII', img: HC_PHOTOS.prop8, name: 'The Banyan',    mod: 'Farmhouse', loc: 'Alibag',         beds: '4 BD · 3 BA · 3,100 SF', year: '1898', price: 'Sold · ₹11 Cr',  cat: 'sold' },
+    { idx: '1',    img: HC_PHOTOS.prop1, name: 'Riverbend',     mod: 'Cottage',   loc: 'Bandra (W)',     beds: '3 BD · 2 BA · 1,840 SF', year: '1948', price: '₹8.5 Cr',       cat: 'home' },
+    { idx: '2',   img: HC_PHOTOS.prop2, name: 'Sahyadri House', mod: 'Manor',    loc: 'Lonavala',       beds: '5 BD · 4 BA · 3,210 SF', year: '1894', price: '₹28.5 Cr',      cat: 'estate', featured: true },
+    { idx: '3',  img: HC_PHOTOS.prop3, name: 'Mill Lane',     mod: 'Loft',      loc: 'Bandra (W)',     beds: '2 BD · 2 BA · 1,210 SF', year: '1925', price: '₹6.8 Cr',       cat: 'home' },
+    { idx: '4',   img: HC_PHOTOS.prop4, name: 'The Crest',     mod: 'Estate',    loc: 'Khandala',       beds: '6 BD · 5 BA · 4,800 SF', year: '1908', price: '₹17.5 Cr',      cat: 'estate' },
+    { idx: '5',    img: HC_PHOTOS.prop5, name: 'The Hutments',  mod: 'Restored',  loc: 'Karjat',         beds: '4 BD · 3 BA · 2,640 SF', year: '1894', price: 'Sold · ₹7.2 Cr', cat: 'sold' },
+    { idx: '6',   img: HC_PHOTOS.prop6, name: 'Brindavan',     mod: 'Cottage',   loc: 'Walkeshwar',     beds: '3 BD · 2 BA · 1,990 SF', year: '1907', price: '₹11 Cr',         cat: 'home' },
+    { idx: '7',  img: HC_PHOTOS.prop7, name: 'Aspinwall',     mod: 'Estate',    loc: 'Mahabaleshwar',  beds: '7 BD · 6 BA · 6,200 SF', year: '1888', price: '₹38 Cr',         cat: 'estate' },
+    { idx: '8', img: HC_PHOTOS.prop8, name: 'The Banyan',    mod: 'Farmhouse', loc: 'Alibag',         beds: '4 BD · 3 BA · 3,100 SF', year: '1898', price: 'Sold · ₹11 Cr',  cat: 'sold' },
   ];
   const visible = filter === 'all' ? props : props.filter(p => p.cat === filter);
   const filters = [

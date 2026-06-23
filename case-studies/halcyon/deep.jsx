@@ -69,7 +69,7 @@ export function HudsonMap() {
               <polygon points="0,-25 -4,0 0,-5 4,0" fill="#6B4423" />
             </g>
             <text x="20" y="30" fontFamily="JetBrains Mono" fontSize="10" letterSpacing="3" fill="#8C857A">WESTERN GHATS · MH</text>
-            <text x="20" y="580" fontFamily="JetBrains Mono" fontSize="10" letterSpacing="2" fill="#8C857A">SCALE: 1:200,000 · MMXXVI</text>
+            <text x="20" y="580" fontFamily="JetBrains Mono" fontSize="10" letterSpacing="2" fill="#8C857A">SCALE: 1:200,000 · 2026</text>
           </svg>
 
           {pins.map((p, i) => (
@@ -112,7 +112,7 @@ export function HudsonMap() {
 export function Family() {
   const members = [
     {
-      n: 'I',
+      n: '1',
       name: 'Aditya Mehta',
       em: 'Aditya',
       role: 'Founder · 1962 to 2001',
@@ -120,7 +120,7 @@ export function Family() {
       img: HC_PHOTOS.fam1,
     },
     {
-      n: 'II',
+      n: '2',
       name: 'Anjali Mehta',
       em: 'Anjali',
       role: 'Principal · 1989 to present',
@@ -128,7 +128,7 @@ export function Family() {
       img: HC_PHOTOS.fam2,
     },
     {
-      n: 'III',
+      n: '3',
       name: 'Naina Mehta',
       em: 'Naina',
       role: 'Principal Broker · 2014 to present',
@@ -175,19 +175,19 @@ export function Family() {
 export function Journal() {
   const items = [
     {
-      cat: 'Notebook', date: 'Mar MMXXVI',
+      cat: 'Notebook', date: 'Mar 2026',
       title: <>On the <em>quiet bungalows</em> of Bandra</>,
       blurb: 'A walking essay through Hill Road’s thirteen bungalows from before Independence, and the families who have kept them against all odds.',
       img: HC_PHOTOS.journal1,
     },
     {
-      cat: 'Field Note', date: 'Feb MMXXVI',
+      cat: 'Field Note', date: 'Feb 2026',
       title: <>The <em>second walk</em></>,
       blurb: 'Why we visit every property at least twice, once at sunrise and once at dusk, before we agree to list it. A method, briefly.',
       img: HC_PHOTOS.journal2,
     },
     {
-      cat: 'Letter', date: 'Jan MMXXVI',
+      cat: 'Letter', date: 'Jan 2026',
       title: <>A note on <em>old Mangalore tile</em></>,
       blurb: 'On the small heartbreak of a 1908 verandah, the slow art of restoration, and what we think a buyer ought to know.',
       img: HC_PHOTOS.journal3,
@@ -344,7 +344,7 @@ export function Footer() {
         <div className="hc-footer-mark">Mehta <span className="amp">&amp;</span> Sons</div>
         <div className="hc-footer-row">
           <p className="hc-footer-essence">
-            Private estates and quiet houses across the Western Ghats, kept by one family since MCMLXII.
+            Private estates and quiet houses across the Western Ghats, kept by one family since 1962.
           </p>
           <a href="#contact" className="hc-footer-cta">
             Begin an introduction
@@ -352,7 +352,7 @@ export function Footer() {
           </a>
         </div>
         <div className="hc-footer-bottom">
-          <span>Est. MCMLXII · © MMXXVI · Mehta &amp; Sons · MahaRERA registered</span>
+          <span>Est. 1962 · © 2026 · Mehta &amp; Sons · MahaRERA registered</span>
           <span>Site by <a href="/">OnePixel Studio</a></span>
         </div>
       </div>

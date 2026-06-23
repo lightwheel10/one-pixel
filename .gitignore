@@ -4,4 +4,5 @@ dist
 .DS_Store
 *.log
 _design
+marketing
 .claude/settings.local.json

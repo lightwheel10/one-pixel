@@ -277,7 +277,6 @@ export function Contact() {
         <div>© 2026 OnePixel Studio · Made one pixel at a time</div>
         <div className="footer-links">
           <a href="/privacy/">Privacy</a>
-          <a href="#">Imprint</a>
           <a href="#top">Back to top ↑</a>
         </div>
       </div>

@@ -256,8 +256,8 @@ export function Contact() {
             <div className="contact-block">
               <div className="label">Call us · for new projects</div>
               <div className="big">
-                <a href="tel:+919876543210">
-                  +91 98765 43210 <span>↗</span>
+                <a href="tel:+916307022880">
+                  +91 63070 22880 <span>↗</span>
                 </a>
               </div>
             </div>

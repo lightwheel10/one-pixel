@@ -76,12 +76,12 @@ export function Work() {
 
   const items = [
     { num: '01', name: 'Mehta & Sons',     domain: 'mehta-sons.in',      meta: ['Family Office', 'Brand + Site', '2026'], kind: 'editorial',  href: '/case-studies/halcyon/', live: true, preview: '/work/mehta-sons-full.jpg' },
-    { num: '02', name: 'Sahyadri & Co',    domain: 'sahyadri.co',        meta: ['Tax + Advisory', 'Brand + Site', '2026'], kind: 'saas',       preview: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1280&h=2400&q=80&auto=format&fit=crop' },
-    { num: '03', name: 'Forest & Loom',    domain: 'forestandloom.com',  meta: ['D2C Textiles', 'Shopify', '2025'],        kind: 'ecommerce',  preview: 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=1280&h=2400&q=80&auto=format&fit=crop' },
-    { num: '04', name: 'Sangam Type Co',   domain: 'sangamtype.co',      meta: ['Type Foundry', 'Design + Dev', '2025'],   kind: 'type',       preview: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1280&h=2400&q=80&auto=format&fit=crop' },
-    { num: '05', name: 'Pravah Cloud',     domain: 'pravah.cloud',       meta: ['B2B SaaS', 'Site + Docs', '2025'],        kind: 'saas',       preview: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1280&h=2400&q=80&auto=format&fit=crop' },
-    { num: '06', name: 'Coast & Co',       domain: 'coastandco.in',      meta: ['Boutique Hotels', 'CMS', '2024'],         kind: 'editorial',  preview: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1280&h=2400&q=80&auto=format&fit=crop' },
-    { num: '07', name: 'Karya Industries', domain: 'karya.industries',   meta: ['Industrial', 'Site', '2024'],             kind: 'structured', preview: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1280&h=2400&q=80&auto=format&fit=crop' },
+    { num: '02', name: 'Sahyadri & Co',    domain: 'sahyadri.co',        meta: ['Tax + Advisory', 'Brand + Site', '2026'], kind: 'saas',       preview: '/work/sahyadri-placeholder.jpg' },
+    { num: '03', name: 'Forest & Loom',    domain: 'forestandloom.com',  meta: ['D2C Textiles', 'Shopify', '2025'],        kind: 'ecommerce',  preview: '/work/forest-loom-placeholder.jpg' },
+    { num: '04', name: 'Sangam Type Co',   domain: 'sangamtype.co',      meta: ['Type Foundry', 'Design + Dev', '2025'],   kind: 'type',       preview: '/work/sangam-type-placeholder.jpg' },
+    { num: '05', name: 'Pravah Cloud',     domain: 'pravah.cloud',       meta: ['B2B SaaS', 'Site + Docs', '2025'],        kind: 'saas',       preview: '/work/pravah-cloud-placeholder.jpg' },
+    { num: '06', name: 'Coast & Co',       domain: 'coastandco.in',      meta: ['Boutique Hotels', 'CMS', '2024'],         kind: 'editorial',  preview: '/work/coast-co-placeholder.jpg' },
+    { num: '07', name: 'Karya Industries', domain: 'karya.industries',   meta: ['Industrial', 'Site', '2024'],             kind: 'structured', preview: '/work/karya-industries-placeholder.jpg' },
   ];
 
   return (

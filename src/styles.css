@@ -534,7 +534,7 @@ body.dark .work-bar { background: #181818; }
   height: auto;
   min-height: 100%;
   display: block;
-  transition: transform 32s linear;
+  transition: transform 24.6s linear;
   will-change: transform;
 }
 .work-card:hover .work-shot,

@@ -285,7 +285,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: non
 /* ============ FEATURED ESTATE ============ */
 .hc-featured {
   background: var(--hc-paper-warm);
-  margin: 0 calc(var(--hc-gutter) * -1);
+  margin: 0;
   padding: 144px var(--hc-gutter);
   position: relative;
 }
@@ -497,7 +497,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: non
 /* ============ MAP ============ */
 .hc-map {
   background: var(--hc-paper-warm);
-  margin: 0 calc(var(--hc-gutter) * -1);
+  margin: 0;
   padding: 144px var(--hc-gutter);
 }
 .hc-map-frame {
@@ -708,7 +708,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: non
 .hc-contact {
   background: var(--hc-ink);
   color: var(--hc-paper);
-  margin: 0 calc(var(--hc-gutter) * -1);
+  margin: 0;
   padding: 144px var(--hc-gutter);
   position: relative;
 }
@@ -804,7 +804,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: non
 .hc-footer {
   background: var(--hc-paper-warm);
   padding: 96px var(--hc-gutter) 32px;
-  margin: 0 calc(var(--hc-gutter) * -1);
+  margin: 0;
 }
 .hc-footer-top {
   display: grid;
@@ -910,7 +910,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: non
   overflow: hidden;
   white-space: nowrap;
   padding: 18px 0;
-  margin: 0 calc(var(--hc-gutter) * -1);
+  margin: 0;
   background: var(--hc-paper);
 }
 .hc-marquee-track {

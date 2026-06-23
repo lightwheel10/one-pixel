@@ -464,9 +464,9 @@ section { position: relative; padding: 120px 0; }
 }
 
 /* ============ WORK (site gallery) ============ */
-/* Paras · 2026-06-19: portfolio as a gallery of browser-framed site previews. Each frame holds a
-   generated SiteMock (brand-art "screenshot"), so the section reads like real shipped sites without
-   faking screenshots. 2-up grid → 1-up on phones. */
+/* Paras · 2026-06-23: portfolio as a gallery of browser-framed image previews.
+   Real case studies use captured site images; unfinished cards can use temporary remote imagery.
+   2-up grid → 1-up on phones. */
 .work-gallery {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -489,9 +489,8 @@ section { position: relative; padding: 120px 0; }
 .work-bar {
   display: flex; align-items: center; gap: 10px;
   padding: 11px 14px;
-  /* Paras · 2026-06-19: a dedicated browser-chrome tone, NOT var(--bg). var(--bg) matched the cream
-     editorial/struct mocks in light mode (and the dark saas/type mocks in dark mode), so the bar
-     melted into the "screenshot". This grey is distinct from every mock bg in both themes. */
+  /* Paras · 2026-06-19: a dedicated browser-chrome tone, not var(--bg), so the bar
+     stays distinct from the preview image in both themes. */
   background: #DCD7CE;
   border-bottom: 1px solid var(--line);
 }
@@ -512,7 +511,7 @@ body.dark .work-bar { background: #181818; }
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .work-bar-sp { width: 39px; flex: none; }   /* == dots width (3×9 + 2×6 gap) so the url pill is truly centred */
-/* the "screenshot" viewport — a query container so mocks scale with the frame */
+/* the preview viewport — a query container so the image animation can use frame units */
 .work-screen {
   position: relative;
   aspect-ratio: 16 / 10;
@@ -520,10 +519,74 @@ body.dark .work-bar { background: #181818; }
   overflow: hidden;
   background: #fff;
 }
-.mk { transition: transform .6s cubic-bezier(.2,.7,.2,1); }
-/* subtle zoom on hover — SCALE (not translate), so the screen's bg never peeks under the mock
-   (a translate revealed a white strip below the dark mocks). overflow:hidden clips the growth. */
-.work-card:hover .mk { transform: scale(1.03); }
+/* Real shipped-site preview. The image is a tall full-page capture, clipped by the 16:10
+   browser frame; hover/focus scrolls it behind the fixed CTA. */
+.work-shot-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #0A0A0A;
+}
+.work-shot {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  display: block;
+  transition: transform 32s linear;
+  will-change: transform;
+}
+.work-card:hover .work-shot,
+.work-card:focus-visible .work-shot {
+  transform: translateY(calc(-100% + 100cqh));
+}
+@supports not (height: 1cqh) {
+  .work-card:hover .work-shot,
+  .work-card:focus-visible .work-shot {
+    transform: translateY(-91.4%);
+  }
+}
+.work-shot-wrap::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 38%;
+  background: linear-gradient(to top, rgba(10,10,10,.5), transparent);
+  pointer-events: none;
+}
+.work-preview-cta {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(14px, 4cqh, 24px);
+  z-index: 2;
+  opacity: 0;
+  transform: translate(-50%, 8px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 112px;
+  min-height: 38px;
+  padding: 0 18px;
+  background: #F5F1EA;
+  color: #0A0A0A;
+  box-shadow: 0 14px 34px rgba(0,0,0,.26);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  line-height: 1;
+  text-transform: uppercase;
+  pointer-events: auto;
+  transition: opacity .25s, background .25s, transform .25s;
+}
+.work-card:hover .work-preview-cta,
+.work-card:focus-visible .work-preview-cta {
+  opacity: 1;
+  transform: translate(-50%, -2px);
+}
+.work-preview-cta:hover {
+  background: var(--accent);
+}
 
 /* caption under each frame */
 .work-foot {
@@ -552,62 +615,13 @@ body.dark .work-bar { background: #181818; }
   font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
 }
 
-/* ---- generated site mocks (fixed palettes, like varied real sites) ---- */
-.mk { position: absolute; inset: 0; display: flex; flex-direction: column; padding: 5.5cqw; gap: 4cqh; }
-.mk-nav { display: flex; align-items: center; justify-content: space-between; flex: none; }
-.mk-logo { width: 12cqw; height: 5cqh; border-radius: 1cqh; }
-.mk-logo-ink { background: #0A0A0A; }
-.mk-logo-cream { background: #F5F1EA; }
-.mk-nav-r { display: inline-flex; align-items: center; gap: 3cqw; }
-.mk-nav-r i { width: 6.5cqw; height: 1.8cqh; border-radius: 1cqh; background: rgba(10,10,10,.3); }
-.mk-nav-r .mk-i-l { background: rgba(245,241,234,.4); }
-.mk-mono i { border-radius: 0; }
-.mk-dot { width: 3.4cqh; height: 3.4cqh; border-radius: 999px; background: #FF6B47; }
-.mk-pill { width: 12cqw; height: 4.2cqh; border-radius: 999px; background: #FF6B47; }
-.mk-line { display: block; height: 2.2cqh; border-radius: 1cqh; background: rgba(10,10,10,.18); }
-.mk-line-l { background: rgba(245,241,234,.24); }
-.mk-coral { background: #FF6B47; }
-.mk-h { display: block; height: 4.6cqh; border-radius: 1cqh; background: #0A0A0A; }
-.mk-h-cream { background: #F5F1EA; }
-.mk-h-coral { background: #FF6B47; }
-.mk-sub { display: block; height: 2.2cqh; border-radius: 1cqh; background: rgba(245,241,234,.4); margin-top: 1cqh; }
-.mk-btn { display: block; width: 22cqw; height: 6cqh; border-radius: 1.5cqh; background: #FF6B47; margin-top: 2cqh; }
-.mk-tag { display: block; width: 18cqw; height: 4cqh; border-radius: 999px; background: #C7DDD8; margin-top: 1cqh; }
-
-.mk-editorial { background: #F5F1EA; }
-.mk-edi { display: flex; gap: 5cqw; flex: 1; min-height: 0; }
-.mk-edi-copy { display: flex; flex-direction: column; gap: 2.6cqh; flex: 1; justify-content: center; }
-.mk-edi-img { width: 38%; border-radius: 1.5cqh; background: linear-gradient(155deg, #0A0A0A, #34302b); }
-
-.mk-ecom { background: #ffffff; }
-.mk-prodgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3.4cqw; flex: 1; min-height: 0; }
-.mk-prod { display: flex; flex-direction: column; gap: 1.3cqh; min-height: 0; }
-.mk-prod-img { width: 100%; flex: 1; border-radius: 1cqh; background: #ECE8E0; }
-
-.mk-saas { background: #0A0A0A; }
-.mk-hero { display: flex; flex-direction: column; gap: 2cqh; }
-.mk-feats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3cqw; margin-top: auto; }
-.mk-feat { border: 1px solid rgba(245,241,234,.16); border-radius: 1.5cqh; padding: 2.6cqw; display: flex; flex-direction: column; gap: 1.4cqh; }
-.mk-sq { width: 6cqw; height: 6cqw; border-radius: 1cqh; background: #FF6B47; }
-
-.mk-typef { background: #0A0A0A; }
-.mk-typebig {
-  flex: 1; display: flex; align-items: center; justify-content: center;
-  font-family: var(--display); font-weight: 500; font-size: 44cqh; line-height: 1;
-  color: #F5F1EA; letter-spacing: -0.04em;
-}
-.mk-typerow { display: flex; gap: 2.6cqw; flex: none; }
-.mk-typerow span { height: 2.6cqh; flex: 1; border-radius: 1cqh; background: rgba(245,241,234,.3); }
-.mk-typerow span:nth-child(2) { background: #FF6B47; }
-
-.mk-struct { background: #EDEAE3; }
-.mk-modgrid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 1fr; gap: 2.6cqw; flex: 1; min-height: 0; }
-.mk-mod { border: 1px solid rgba(10,10,10,.22); border-radius: 1cqh; }
-.mk-mod-on { background: #FF6B47; border-color: #FF6B47; }
-
 @media (prefers-reduced-motion: reduce) {
-  .work-browser, .mk, .work-arr { transition: none; }
-  .work-card:hover .work-browser, .work-card:hover .mk { transform: none; }
+  .work-browser, .work-shot, .work-preview-cta, .work-arr { transition: none; }
+  .work-card:hover .work-browser,
+  .work-card:hover .work-shot,
+  .work-card:hover .work-preview-cta {
+    transform: none;
+  }
 }
 
 /* ============ SERVICES (interactive showcase) ============ */

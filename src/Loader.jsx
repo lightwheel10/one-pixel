@@ -19,6 +19,7 @@ export function Loader({ duration = 9000, mark = 'OnePixel' }) {
     const unmount = setTimeout(() => {
       setMounted(false);
       document.body.style.overflow = prevOverflow;
+      document.dispatchEvent(new CustomEvent('onepixel:loader-complete'));
     }, 9000 * scale);
 
     return () => {

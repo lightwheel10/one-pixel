@@ -1322,10 +1322,17 @@ body.dark .work-bar { background: #181818; }
 }
 .testimonial .who .av {
   width: 36px; height: 36px;
+  flex: 0 0 36px;
   background: var(--ink); color: var(--bg);
   display: grid; place-items: center;
   font-family: var(--display); font-size: 14px;
   letter-spacing: 0;
+  overflow: hidden;
+}
+.testimonial .who .av img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* ============ FAQ ============ */
@@ -1380,16 +1387,40 @@ body.dark .work-bar { background: #181818; }
   margin: 0 auto;
   position: relative;
   z-index: 2;
+  container-type: inline-size;
 }
 .contact h2 {
   font-family: var(--display);
-  font-size: clamp(56px, 11vw, 180px);
+  font-size: clamp(32px, 10cqi, 160px);
   line-height: 0.88;
   letter-spacing: -0.04em;
   font-weight: 500;
   margin-bottom: 64px;
 }
 .contact h2 em { font-style: italic; font-family: 'Instrument Serif', serif; color: var(--accent); font-weight: 400; }
+.contact-heading-line {
+  display: block;
+  white-space: nowrap;
+}
+.contact-typewriter {
+  display: grid;
+  width: fit-content;
+}
+.contact-typewriter-size,
+.contact-typewriter-live {
+  grid-area: 1 / 1;
+}
+.contact-typewriter-size {
+  visibility: hidden;
+  pointer-events: none;
+}
+.contact-typewriter-live {
+  display: flex;
+  align-items: baseline;
+}
+.contact-typewriter-live em {
+  display: inline-block;
+}
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

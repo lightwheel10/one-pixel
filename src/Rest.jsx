@@ -1,5 +1,9 @@
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { openStartForm } from './StartForm.jsx';
+
+gsap.registerPlugin(ScrollTrigger);
 
 // Paras · 2026-06-19: pixel "bleed" across the hosting → testimonials seam. Mounted in the
 // testimonials section (the hosting section clips with overflow:hidden, so it can't spill) and
@@ -32,9 +36,9 @@ function SeamBleedBand() {
 
 export function Testimonials() {
   const items = [
-    { quote: 'They didn’t just redesign our site, they reset what our brand could look like online.',           who: 'Naina Mehta',   role: 'Principal Broker, Mehta & Sons', av: 'NM' },
-    { quote: 'Fastest, sharpest, calmest project I’ve ever shipped with an agency. We launched a week ahead.',   who: 'Rohan Khanna',  role: 'Head of Growth, Pravah Cloud',   av: 'RK' },
-    { quote: 'Every detail was considered. Our conversion rate is up 38% three months in.',                      who: 'Ananya Patel',  role: 'Founder, Forest & Loom',         av: 'AP' },
+    { quote: 'They didn’t just redesign our site, they reset what our brand could look like online.',           who: 'Naina Mehta',   role: 'Principal Broker, Aangan Estates', av: 'NM', image: '/testimonials/naina-mehta.jpg' },
+    { quote: 'Fastest, sharpest, calmest project I’ve ever shipped with an agency. We launched a week ahead.',   who: 'Rohan Khanna',  role: 'Head of Growth, Setu Labs',         av: 'RK', image: '/testimonials/rohan-khanna.jpg' },
+    { quote: 'Every detail was considered. Our conversion rate is up 38% three months in.',                      who: 'Ananya Patel',  role: 'Founder, Karigar Living',           av: 'AP', image: '/testimonials/ananya-patel.jpg' },
   ];
   return (
     <section id="testimonials" style={{ background: 'var(--paper)', position: 'relative' }}>
@@ -53,7 +57,11 @@ export function Testimonials() {
               <div className="mark">“</div>
               <blockquote>{t.quote}</blockquote>
               <div className="who">
-                <div className="av">{t.av}</div>
+                <div className="av">
+                  {t.image
+                    ? <img src={t.image} alt="" width="36" height="36" loading="lazy" decoding="async" />
+                    : t.av}
+                </div>
                 <div>
                   <div style={{ color: 'var(--ink)', textTransform: 'none', fontFamily: 'var(--display)', fontSize: 14, letterSpacing: '-0.01em', fontWeight: 500 }}>{t.who}</div>
                   <div style={{ color: 'var(--muted)', marginTop: 2 }}>{t.role}</div>
@@ -71,7 +79,6 @@ export function FAQ() {
   const qs = [
     { q: 'How do you scope a project?', a: 'Every project starts with a 30 minute discovery call. We listen, understand the work ahead, and send a detailed proposal built around your real needs, not a one size fits all price list. The first call is on us, with no pressure to take it further.' },
     { q: 'How long does it take?', a: 'Most websites take 4 to 6 weeks. Bigger projects that include branding run 6 to 10 weeks. We take on one new project a month, so yours always gets our full attention.' },
-    { q: 'Can you work with our existing team?', a: 'Yes, we love working as part of your team. We can lead, support, or hand things over when we are done. We have worked alongside internal teams at everything from brand new startups to large public companies.' },
     { q: 'What do you build websites with?', a: 'We choose the right technology for your needs, not whatever is trendy. The result is a website that loads fast, ranks well, and is easy for your team to update without calling a developer.' },
     { q: 'Do you offer ongoing care?', a: 'Yes. Every project includes 30 days of fine tuning after launch. After that, we offer simple monthly plans for design and development, and most clients stay with us for 6 to 12 months.' },
     { q: 'Why “OnePixel”?', a: 'Because the difference between average and exceptional is usually one pixel, repeated obsessively across every screen. That’s the bar we hold ourselves to.' },
@@ -233,16 +240,91 @@ function ContactPixels() {
 }
 
 export function Contact() {
+  const sectionRef = useRef(null);
+  const headingRef = useRef(null);
+  const exceptionalMaskRef = useRef(null);
+  const exceptionalRef = useRef(null);
+  const exceptionalDotRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    const heading = headingRef.current;
+    const mask = exceptionalMaskRef.current;
+    const word = exceptionalRef.current;
+    const dot = exceptionalDotRef.current;
+    if (!section || !heading || !mask || !word || !dot) return;
+
+    const finalWord = 'exceptional';
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) {
+      word.textContent = finalWord;
+      return;
+    }
+
+    let ctx;
+    const initTypewriter = () => {
+      if (ctx) return;
+
+      ctx = gsap.context(() => {
+        const typing = { characters: 0 };
+        word.textContent = '';
+        gsap.set(dot, { autoAlpha: 0 });
+
+        const timeline = gsap.timeline({ paused: true })
+          .fromTo(heading,
+            { y: 48, autoAlpha: 0 },
+            { y: 0, autoAlpha: 1, duration: 0.9, ease: 'power3.out' }
+          )
+          .to(typing, {
+            characters: finalWord.length,
+            duration: 1.9,
+            ease: 'none',
+            onUpdate: () => {
+              word.textContent = finalWord.slice(0, Math.floor(typing.characters));
+            },
+          }, '+=0.12')
+          .to(dot, { autoAlpha: 1, duration: 0.16 });
+
+        ScrollTrigger.create({
+          trigger: heading,
+          start: 'top 86%',
+          once: true,
+          onEnter: () => timeline.play(),
+        });
+      }, section);
+
+      ScrollTrigger.refresh();
+    };
+
+    if (document.querySelector('.loader')) {
+      document.addEventListener('onepixel:loader-complete', initTypewriter, { once: true });
+    } else {
+      initTypewriter();
+    }
+
+    return () => {
+      document.removeEventListener('onepixel:loader-complete', initTypewriter);
+      ctx?.revert();
+    };
+  }, []);
+
   return (
-    <section id="contact" style={{ padding: 0 }}>
+    <section ref={sectionRef} id="contact" style={{ padding: 0 }}>
       <div className="contact">
         <div className="contact-inner">
           <div className="section-num" style={{ color: 'rgba(255,255,255,.5)', marginBottom: 32 }}>
             <span style={{ background: 'var(--accent)', width: 28, height: 1, marginRight: 12 }}></span>
             [ 06 ] Start a project
           </div>
-          <h2>
-            Let’s build<br />something <em>good</em>.
+          <h2 ref={headingRef}>
+            <span className="contact-heading-line">Let’s build something</span>
+            <span ref={exceptionalMaskRef} className="contact-typewriter" aria-label="exceptional.">
+              <span className="contact-typewriter-size" aria-hidden="true">exceptional.</span>
+              <span className="contact-typewriter-live" aria-hidden="true">
+                <em ref={exceptionalRef}>exceptional</em>
+                <span ref={exceptionalDotRef}>.</span>
+              </span>
+            </span>
           </h2>
           <div className="contact-grid">
             <div className="contact-block">

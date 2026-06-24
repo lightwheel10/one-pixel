@@ -203,7 +203,13 @@ function PackageCard({ tier, isRec, ecom }) {
         ))}
       </ul>
       {ecom && <div className="sf-pkg-addon">+ Online store with secure payments, quoted to fit your needs.</div>}
-      <div className="sf-pkg-host"><span aria-hidden>✓</span> 6 months hosting + SSL included</div>
+      {/* Paras · 2026-06-24: the "included with every project" guarantees. The 14-day post-launch
+          care line matches the FAQ + Process copy ("included with every project"), so it shows on
+          every tier, not just one — keeping the package cards consistent with the rest of the site. */}
+      <div className="sf-pkg-host">
+        <span><span aria-hidden>✓</span> 14 days of post-launch care included</span>
+        <span><span aria-hidden>✓</span> 6 months hosting + SSL included</span>
+      </div>
     </div>
   );
 }

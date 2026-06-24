@@ -165,14 +165,15 @@ function ProcPixels({ step }) {
 
 export function Process() {
   const steps = [
-    { n: '01', t: 'Discovery',      tag: 'Listen', d: 'A 30 minute call. We dig into your business, your audience, and the metric that actually matters. No pitch deck.', time: 'Week 1',     deliverables: ['Kickoff brief', 'Audience map', 'Success metric'], visual: '/process/discovery-signal-funnel.png' },
-    { n: '02', t: 'Direction',      tag: 'Decide', d: 'Two visual directions, one strategy. We pick a path together in a single review. No fourteen rounds of revisions.', time: 'Week 1', deliverables: ['Two directions', 'Moodboard', 'Site map'], visual: '/process/direction-homepage-review.png' },
-    { n: '03', t: 'Build',          tag: 'Make',   d: 'Design and engineering happen in parallel. Weekly demos in your live staging URL. Not slides, not PDFs.',           time: 'Week 1 to 2', deliverables: ['Live staging', 'Weekly demos', 'CMS handoff'], visual: '/process/build-assembly.png' },
-    { n: '04', t: 'Launch + Care',  tag: 'Ship',   d: 'We ship the site, monitor it, and stick around. 14 days of tuning after launch is included with every project.',     time: 'Week 3 →',   deliverables: ['Launch day', '14 days of care', 'Retainer optional'], visual: '/process/launch-care-abstract.png' },
+    { n: '01', t: 'Discovery',      tag: 'Listen', d: 'A 30 minute call. We dig into your business, your audience, and the metric that actually matters. No pitch deck.', time: 'Week 1',     deliverables: ['Project brief', 'Your main goal', 'What we need from you'], visual: '/process/discovery-signal-funnel.png' },
+    { n: '02', t: 'Direction',      tag: 'Decide', d: 'One strong homepage design and a clear plan. We agree the look together in a single review, no fourteen rounds of revisions.', time: 'Week 1', deliverables: ['Homepage design', 'Colours and fonts', 'Page plan'], visual: '/process/direction-homepage-review.png' },
+    { n: '03', t: 'Build',          tag: 'Make',   d: 'Design and build happen together. You follow along on a live preview link and get updates on WhatsApp, not slides or PDFs.',           time: 'Week 1 to 2', deliverables: ['Live preview link', 'Updates on WhatsApp', 'Final review round'], visual: '/process/build-assembly.png' },
+    { n: '04', t: 'Launch + Care',  tag: 'Ship',   d: 'We ship the site, monitor it, and stick around. 14 days of tuning after launch is included with every project.',     time: 'Week 3 →',   deliverables: ['Launch day', 'Google setup', '14 days of care'], visual: '/process/launch-care-abstract.png' },
   ];
   const [active, setActive] = useState(0);
   const ref = useRef(null);
   const fillRef = useRef(null);
+  const triggerRef = useRef(null);
 
   // Paras · 2026-06-19: mobile Process is a swipe carousel (horizontal scroll-snap). activeCard
   // tracks which card is centered so the pixel dots below reflect it; a dot tap scrolls to its card.
@@ -190,7 +191,20 @@ export function Process() {
     if (animate) gsap.to(el, { width: pct + '%', duration: 0.5, ease: 'power2.out' });
     else el.style.width = pct + '%';
   };
-  const goTo = (i) => { setActive(i); setFill((i / (steps.length - 1)) * 100, true); };
+  const goTo = (i) => {
+    const progress = i / (steps.length - 1);
+    setActive(i);
+    setFill(progress * 100, true);
+
+    const trigger = triggerRef.current;
+    if (!trigger) return;
+
+    // Paras · 2026-06-24: sync phase clicks to pin progress so scrolling resumes from the selected step.
+    const target = trigger.start + (trigger.end - trigger.start) * progress;
+    const pinnedTarget = Math.min(trigger.end - 1, Math.max(trigger.start + 1, target));
+    window.scrollTo({ top: pinnedTarget, behavior: 'auto' });
+    ScrollTrigger.update();
+  };
 
   useEffect(() => { setFill((active / (steps.length - 1)) * 100, false); }, []); // initial fill
 
@@ -241,7 +255,7 @@ export function Process() {
     mm.add('(min-width: 901px) and (min-height: 800px)', () => {
       if (reduce()) return;
       const stage = ref.current.querySelector('.proc-stage');
-      ScrollTrigger.create({
+      const trigger = ScrollTrigger.create({
         trigger: stage,
         pin: stage,
         // Paras · 2026-06-19: pin 10px higher (96 → 86) so the bottom strip (Discovery / Direction /
@@ -251,6 +265,10 @@ export function Process() {
         anticipatePin: 1,
         onUpdate: onScroll,
       });
+      triggerRef.current = trigger;
+      return () => {
+        if (triggerRef.current === trigger) triggerRef.current = null;
+      };
     });
 
     // Paras · 2026-06-24: refresh after the loader restores scrolling so pin bounds use settled layout.
@@ -276,6 +294,7 @@ export function Process() {
       cancelAnimationFrame(firstFrame);
       cancelAnimationFrame(secondFrame);
       mm.revert();
+      triggerRef.current = null;
     };
   }, []);
 

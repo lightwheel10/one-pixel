@@ -66,7 +66,7 @@ export function Services() {
     <section id="services">
       <div className="shell">
         <div className="section-head">
-          <div><div className="section-num">[ 02 ] Services</div></div>
+          <div><div className="section-num">Services</div></div>
           <div className="services-heading">
             <h2 className="section-title services-title">Four things, <em>done well</em>.</h2>
             <p className="section-sub" style={{ marginTop: 24 }}>
@@ -303,7 +303,7 @@ export function Process() {
       <div className="process">
         <div className="shell">
           <div className="section-head">
-            <div><div className="section-num">[ 03 ] Process</div></div>
+            <div><div className="section-num">Process</div></div>
             <div>
               <h2 className="section-title">From kickoff to <em>live</em> in 2 to 3 weeks.</h2>
               <p className="section-sub" style={{ marginTop: 24 }}>

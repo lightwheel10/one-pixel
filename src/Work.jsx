@@ -89,7 +89,7 @@ export function Work() {
       <div className="shell">
         <div className="section-head">
           <div>
-            <div className="section-num">[ 01 ] Selected Work</div>
+            <div className="section-num">Selected Work</div>
           </div>
           <div>
             <h2 className="section-title">Sites we’ve <em>shipped</em>.</h2>
@@ -119,7 +119,6 @@ export function Work() {
               </div>
               <div className="work-foot">
                 <div className="work-name">
-                  <span className="work-num">{it.num}</span>
                   {it.name}
                 </div>
                 <span className="work-arr" aria-hidden>↗</span>

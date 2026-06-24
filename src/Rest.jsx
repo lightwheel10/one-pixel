@@ -46,7 +46,7 @@ export function Testimonials() {
       <div className="seam-bleed seam-bleed-m" aria-hidden><SeamBleedBand /></div>
       <div className="shell">
         <div className="section-head">
-          <div><div className="section-num">[ 04 ] Words from clients</div></div>
+          <div><div className="section-num">Words from clients</div></div>
           <div>
             <h2 className="section-title">Trusted by founders <em>who care</em>.</h2>
           </div>
@@ -88,7 +88,7 @@ export function FAQ() {
     <section id="faq">
       <div className="shell">
         <div className="section-head">
-          <div><div className="section-num">[ 05 ] FAQ</div></div>
+          <div><div className="section-num">FAQ</div></div>
           <div>
             <h2 className="section-title">The <em>short</em> version.</h2>
           </div>
@@ -105,7 +105,7 @@ export function FAQ() {
                 aria-expanded={open === i}
                 aria-controls={`faq-a-${i}`}
               >
-                <span><span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)', marginRight: 24, letterSpacing: '0.1em' }}>0{i + 1}</span>{it.q}</span>
+                <span>{it.q}</span>
                 <span className="toggle"></span>
               </button>
               <div className="faq-a" id={`faq-a-${i}`}>{it.a}</div>
@@ -327,7 +327,7 @@ export function Contact() {
         <div className="contact-inner">
           <div className="section-num" style={{ color: 'rgba(255,255,255,.5)', marginBottom: 32 }}>
             <span style={{ background: 'var(--accent)', width: 28, height: 1, marginRight: 12 }}></span>
-            [ 06 ] Start a project
+            Start a project
           </div>
           <h2 ref={headingRef}>
             <span className="contact-heading-line">Let’s build something</span>

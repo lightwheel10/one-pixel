@@ -43,37 +43,110 @@ export function Nav() {
 }
 
 export function Hero() {
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const id = requestAnimationFrame(() => setInView(true));
-    return () => cancelAnimationFrame(id);
-  }, []);
-  return (
-    <section className="hc-hero" id="top">
-      <div className={`hc-hero-image ${inView ? 'in' : ''}`}>
-        <img src={HC_PHOTOS.hero} alt="Sahyadri estate at dusk" />
-        <div className="hc-hero-overlay"></div>
-        <div className="hc-hero-meta">
-          <div className="line">
-            <span>Featured Estate № 12</span>
-            <span className="sep"></span>
-            <span>Sahyadri House</span>
-            <span className="sep"></span>
-            <span>Lonavala, MH</span>
-          </div>
-        </div>
-        <div className="hc-hero-counter">Spring · 2026</div>
-      </div>
+  const ref = useRef(null);
 
-      <div className="hc-hero-title-wrap">
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    let played = false;
+    let onMove;
+
+    const ctx = gsap.context(() => {
+      gsap.set('.hc-hero-bg', { scale: 1.14 });
+      gsap.set('.hc-hero-line .in', { yPercent: 120 });
+      gsap.set('.hc-hero-mark, .hc-hero-eyebrow, .hc-hero-cue, .hc-hero-foot > *', { opacity: 0, y: 18 });
+      gsap.set('.hc-hero-rule, .hc-hero-kept-rule', { scaleX: 0 });
+
+      if (!reduce) {
+        // scroll parallax: backdrop drifts, content lifts + fades as the hero leaves
+        gsap.to('.hc-hero-bg', {
+          yPercent: 9, ease: 'none',
+          scrollTrigger: { trigger: ref.current, start: 'top top', end: 'bottom top', scrub: true },
+        });
+        gsap.to('.hc-hero-inner', {
+          yPercent: -6, autoAlpha: 0.2, ease: 'none',
+          scrollTrigger: { trigger: ref.current, start: 'top top', end: 'bottom top', scrub: true },
+        });
+        // cursor parallax: backdrop and headline drift oppositely for depth (desktop)
+        if (fine) {
+          const bgX = gsap.quickTo('.hc-hero-bg', 'x', { duration: 1.1, ease: 'power3' });
+          const bgY = gsap.quickTo('.hc-hero-bg', 'y', { duration: 1.1, ease: 'power3' });
+          const ttlX = gsap.quickTo('.hc-hero-title', 'x', { duration: 1.2, ease: 'power3' });
+          const ttlY = gsap.quickTo('.hc-hero-title', 'y', { duration: 1.2, ease: 'power3' });
+          onMove = (e) => {
+            const px = e.clientX / window.innerWidth - 0.5;
+            const py = e.clientY / window.innerHeight - 0.5;
+            bgX(px * 24); bgY(py * 16);
+            ttlX(px * -16); ttlY(py * -10);
+          };
+          window.addEventListener('mousemove', onMove);
+        }
+      }
+    }, ref);
+
+    const play = () => {
+      if (played) return;
+      played = true;
+      ctx.add(() => {
+        if (reduce) {
+          gsap.set('.hc-hero-bg', { scale: 1.04 });
+          gsap.set('.hc-hero-line .in', { yPercent: 0 });
+          gsap.set('.hc-hero-mark, .hc-hero-eyebrow, .hc-hero-cue, .hc-hero-foot > *', { opacity: 1, y: 0 });
+          gsap.set('.hc-hero-rule, .hc-hero-kept-rule', { scaleX: 1 });
+          return;
+        }
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+        tl.to('.hc-hero-bg', { scale: 1.04, duration: 1.9, ease: 'power2.out' }, 0)
+          .to('.hc-hero-rule', { scaleX: 1, duration: 1.0, stagger: 0.12 }, 0.15)
+          .to('.hc-hero-mark, .hc-hero-eyebrow', { opacity: 1, y: 0, duration: 0.7, stagger: 0.1 }, 0.2)
+          .to('.hc-hero-line .in', { yPercent: 0, duration: 1.15, stagger: 0.14 }, 0.4)
+          .to('.hc-hero-kept-rule', { scaleX: 1, duration: 0.8 }, 1.3)
+          .to('.hc-hero-foot > *', { opacity: 1, y: 0, duration: 0.8, stagger: 0.14 }, 1.05)
+          .to('.hc-hero-cue', { opacity: 1, y: 0, duration: 0.7 }, 1.35);
+      });
+    };
+
+    // The loader locks scroll for ~2.5s; reveal the hero as it lifts.
+    document.addEventListener('onepixel:loader-complete', play, { once: true });
+    const fb = setTimeout(play, 2800);
+
+    return () => {
+      clearTimeout(fb);
+      document.removeEventListener('onepixel:loader-complete', play);
+      if (onMove) window.removeEventListener('mousemove', onMove);
+      ctx.revert();
+    };
+  }, []);
+
+  return (
+    <section className="hc-hero" id="top" ref={ref}>
+      <div className="hc-hero-bg" aria-hidden="true">
+        <img src={HC_PHOTOS.heroland} alt="" />
+      </div>
+      <div className="hc-hero-scrim" aria-hidden="true"></div>
+
+      <div className="hc-hero-inner">
+        <div className="hc-hero-top">
+          <span className="hc-hero-mark">Mehta &amp; Sons</span>
+          <span className="hc-hero-rule"></span>
+          <span className="hc-hero-eyebrow">Est. 1962 · Western Ghats</span>
+        </div>
+
         <h1 className="hc-hero-title">
-          A house, after all,<br />
-          is something <em>kept.</em>
+          <span className="hc-hero-line"><span className="in">A house, after all,</span></span>
+          <span className="hc-hero-line"><span className="in">is something <em>kept<i className="hc-hero-kept-rule" aria-hidden="true"></i></em>.</span></span>
         </h1>
-        <div className="hc-hero-aside">
-          <p>
-            Mehta &amp; Sons is a family office, now in its third generation. We represent a handful of private estates and quiet houses across the Western Ghats, and carry each one from valuation to closing by hand.
-          </p>
+
+        <div className="hc-hero-bottom">
+          <div className="hc-hero-foot">
+            <p className="hc-hero-note">A family office in its third generation. We carry every house from valuation to closing by hand.</p>
+            <p className="hc-hero-detail">A handful of estates, quietly on offer.<br />Bandra to Mahabaleshwar.</p>
+          </div>
+          <div className="hc-hero-base">
+            <span className="hc-hero-rule"></span>
+            <span className="hc-hero-cue">Scroll ↓</span>
+          </div>
         </div>
       </div>
     </section>
@@ -161,9 +234,9 @@ export function PropertiesIndex() {
   const gridRef = useRef(null);
   const fine = useRef(false);
   const props = [
-    { idx: '1',    img: HC_PHOTOS.prop1, name: 'Riverbend',     mod: 'Cottage',   loc: 'Bandra (W)',     beds: '3 BD · 2 BA · 1,840 SF', year: '1948', price: '₹8.5 Cr',       cat: 'home' },
-    { idx: '2',   img: HC_PHOTOS.prop2, name: 'Sahyadri House', mod: 'Manor',    loc: 'Lonavala',       beds: '5 BD · 4 BA · 3,210 SF', year: '1894', price: '₹28.5 Cr',      cat: 'estate', featured: true },
-    { idx: '3',  img: HC_PHOTOS.prop3, name: 'Mill Lane',     mod: 'Loft',      loc: 'Bandra (W)',     beds: '2 BD · 2 BA · 1,210 SF', year: '1925', price: '₹6.8 Cr',       cat: 'home' },
+    { idx: '1', images: HC_PHOTOS.prop1, name: 'Riverbend',     mod: 'Cottage',   loc: 'Bandra (W)',     beds: '3 BD · 2 BA · 1,840 SF', year: '1948', price: '₹8.5 Cr',       cat: 'home' },
+    { idx: '2', images: HC_PHOTOS.prop2, name: 'Sahyadri House', mod: 'Manor',    loc: 'Lonavala',       beds: '5 BD · 4 BA · 3,210 SF', year: '1894', price: '₹28.5 Cr',      cat: 'estate' },
+    { idx: '3', images: HC_PHOTOS.prop3, name: 'Mill Lane',     mod: 'Residence', loc: 'Bandra (W)',     beds: '2 BD · 2 BA · 1,210 SF', year: '2026', price: '₹6.8 Cr',       cat: 'home' },
     { idx: '4',   img: HC_PHOTOS.prop4, name: 'The Crest',     mod: 'Estate',    loc: 'Khandala',       beds: '6 BD · 5 BA · 4,800 SF', year: '1908', price: '₹17.5 Cr',      cat: 'estate' },
     { idx: '5',    img: HC_PHOTOS.prop5, name: 'The Hutments',  mod: 'Restored',  loc: 'Karjat',         beds: '4 BD · 3 BA · 2,640 SF', year: '1894', price: 'Sold · ₹7.2 Cr', cat: 'sold' },
     { idx: '6',   img: HC_PHOTOS.prop6, name: 'Brindavan',     mod: 'Cottage',   loc: 'Walkeshwar',     beds: '3 BD · 2 BA · 1,990 SF', year: '1907', price: '₹11 Cr',         cat: 'home' },
@@ -242,12 +315,26 @@ export function PropertiesIndex() {
           {visible.map((p) => (
             <a
               key={p.idx}
-              className={`hc-folio${p.featured ? ' featured' : ''}${p.cat === 'sold' ? ' sold' : ''}`}
-              href={p.featured ? '#contact' : '#'}
+              className={`hc-folio${p.cat === 'sold' ? ' sold' : ''}`}
+              href="#"
             >
               <div className="hc-folio-card" onMouseMove={onTilt} onMouseLeave={onTiltReset}>
-                <div className="hc-folio-photo">
-                  <img src={p.img} alt={p.name} loading="lazy" />
+                <div className={`hc-folio-photo${p.images?.length > 1 ? ' hc-folio-photo-gallery' : ''}`}>
+                  {(p.images || [p.img]).map((src, imageIndex) => (
+                    <img
+                      key={src}
+                      src={src}
+                      alt={imageIndex === 0 ? p.name : ''}
+                      aria-hidden={imageIndex > 0}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ))}
+                  {p.images?.length > 1 && (
+                    <span className="hc-folio-gallery-dots" aria-hidden="true">
+                      {p.images.map((src) => <i key={src}></i>)}
+                    </span>
+                  )}
                   {p.cat === 'sold' && <span className="hc-folio-tag">Placed</span>}
                 </div>
                 <div className="hc-folio-body">

@@ -303,6 +303,7 @@ export function Process() {
                 </ul>
               </div>
             </div>
+            {/* Phase artwork is intentionally decorative; the adjacent copy carries the meaning. */}
             <div className="proc-pixels" key={`visual-${active}`} aria-hidden>
               {steps[active].visual
                 ? <img className="proc-artifact" src={steps[active].visual} alt="" decoding="async" />

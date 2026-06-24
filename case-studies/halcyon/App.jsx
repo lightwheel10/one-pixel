@@ -1,6 +1,6 @@
 import { Loader } from '../../src/Loader.jsx';
 import { TopBar, Nav, Hero, Marquee, FeaturedEstate, Interlude, PropertiesIndex } from './home.jsx';
-import { History, Family, Journal, Contact, Office, Footer } from './deep.jsx';
+import { History, Family, Testimonials, Contact, Office, Footer } from './deep.jsx';
 
 export default function App() {
   return (
@@ -15,7 +15,7 @@ export default function App() {
       <PropertiesIndex />
       <History />
       <Family />
-      <Journal />
+      <Testimonials />
       <Contact />
       <Office />
       <Footer />

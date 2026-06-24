@@ -21,47 +21,71 @@ export function History() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const mm = gsap.matchMedia();
-    // Desktop + motion: pin the reel and travel it sideways.
+    const HOLD = 0.14; // share of the scroll spent settling on the final beat before release
+
+    // Desktop + motion: pin the reel, travel it sideways, then hold on the last beat.
     mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
       const reel = reelRef.current;
       const track = trackRef.current;
       const fill = reel.querySelector('.hc-rec-fill');
       const panels = gsap.utils.toArray(track.querySelectorAll('.hc-rec-panel'));
+      const last = panels.length - 1;
+      const lastStage = panels[last].querySelector('.hc-rec-stage');
       reel.classList.add('is-reel');
       const dist = () => Math.max(0, track.scrollWidth - window.innerWidth);
 
-      // The reel itself: pinned, travels sideways with scroll.
-      const scroller = gsap.to(track, {
-        x: () => -dist(),
-        ease: 'none',
+      let activeIdx = -1;
+      const setActive = (idx) => {
+        if (idx === activeIdx) return;
+        if (activeIdx >= 0) panels[activeIdx].classList.remove('is-active');
+        panels[idx].classList.add('is-active');
+        activeIdx = idx;
+      };
+
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: reel,
           start: 'top top',
-          end: () => '+=' + dist(),
+          end: () => '+=' + Math.round(dist() * (1 + HOLD)),
           pin: true,
-          scrub: 1,
+          pinSpacing: true,
+          anticipatePin: 1,
+          scrub: 0.5,
           invalidateOnRefresh: true,
-          onUpdate: (self) => { if (fill) fill.style.transform = `scaleX(${self.progress})`; },
+          onUpdate: (self) => {
+            // travel runs over the first 1/(1+HOLD) of the scroll, then holds.
+            const travel = Math.min(1, self.progress * (1 + HOLD));
+            if (fill) fill.style.transform = `scaleX(${travel})`;
+            // the beat sitting at screen-centre is pure geometry — no edge cases.
+            setActive(Math.round(travel * last));
+          },
         },
       });
+      tl.to(track, { x: () => -dist(), ease: 'none', duration: 1 });
+      // The dwell is a real (scrubbed) motion, not an empty gap — so scrolling
+      // through it responds in BOTH directions and reverse never hits a dead zone.
+      tl.fromTo(lastStage, { scale: 1 }, { scale: 1.1, ease: 'none', duration: HOLD });
 
-      // As each panel crosses the centre of the screen, light it up.
-      const triggers = panels.map((panel) =>
-        ScrollTrigger.create({
-          trigger: panel,
-          containerAnimation: scroller,
-          start: 'left center',
-          end: 'right center',
-          onToggle: (self) => panel.classList.toggle('is-active', self.isActive),
-        })
-      );
+      setActive(0);
 
       return () => {
-        triggers.forEach((t) => t.kill());
+        if (tl.scrollTrigger) tl.scrollTrigger.kill();
+        tl.kill();
+        if (activeIdx >= 0) panels[activeIdx].classList.remove('is-active');
         reel.classList.remove('is-reel');
       };
     });
-    return () => mm.revert();
+
+    // The loader locks body scroll for ~2.5s and the big display font loads late;
+    // recompute every trigger once both have settled so the pin geometry is correct.
+    const refresh = () => ScrollTrigger.refresh();
+    document.addEventListener('onepixel:loader-complete', refresh);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh);
+
+    return () => {
+      document.removeEventListener('onepixel:loader-complete', refresh);
+      mm.revert();
+    };
   }, []);
 
   return (
@@ -85,9 +109,12 @@ export function History() {
               <span className="hc-rec-kicker">{b.kicker}</span>
               <div className="hc-rec-stage">
                 {b.img && (
-                  <div className="hc-rec-img"><img src={b.img} alt={b.alt} loading="lazy" /></div>
+                  <div className="hc-rec-img">
+                    <img className="full" src={b.img} alt={b.alt} loading="lazy" />
+                    <img className="tone" src={b.img} alt="" aria-hidden="true" loading="lazy" />
+                  </div>
                 )}
-                <span className="hc-rec-year">{b.year}</span>
+                <span className="hc-rec-year" data-year={b.year}>{b.year}</span>
               </div>
               <p className="hc-rec-event">{b.text}</p>
             </article>
@@ -167,57 +194,53 @@ export function Family() {
   );
 }
 
-export function Journal() {
-  const items = [
-    {
-      cat: 'Notebook', date: 'Mar 2026',
-      title: <>On the <em>quiet bungalows</em> of Bandra</>,
-      blurb: 'A walking essay through Hill Road’s thirteen bungalows from before Independence, and the families who have kept them against all odds.',
-      img: HC_PHOTOS.journal1,
-    },
-    {
-      cat: 'Field Note', date: 'Feb 2026',
-      title: <>The <em>second walk</em></>,
-      blurb: 'Why we visit every property at least twice, once at sunrise and once at dusk, before we agree to list it. A method, briefly.',
-      img: HC_PHOTOS.journal2,
-    },
-    {
-      cat: 'Letter', date: 'Jan 2026',
-      title: <>A note on <em>old Mangalore tile</em></>,
-      blurb: 'On the small heartbreak of a 1908 verandah, the slow art of restoration, and what we think a buyer ought to know.',
-      img: HC_PHOTOS.journal3,
-    },
-  ];
+export function Testimonials() {
+  const ref = useRef(null);
+  const featured = {
+    quote: 'We had walked past Brindavan for years. Naina knew the house before we did, and waited until we were ready for it.',
+    who: 'The Kapoors', where: 'Brindavan, Walkeshwar', year: '2019', img: HC_PHOTOS.prop6,
+  };
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const ctx = gsap.context(() => {
+      gsap.from('.hc-tm-reveal', {
+        y: 32,
+        opacity: 0,
+        duration: 0.85,
+        ease: 'power3.out',
+        stagger: 0.14,
+        scrollTrigger: { trigger: ref.current, start: 'top 72%' },
+      });
+    }, ref);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="hc-section" id="journal" style={{ paddingBottom: 96 }}>
+    <section className="hc-section" id="clients" ref={ref} style={{ paddingBottom: 96 }}>
       <div className="hc-shell">
         <div className="hc-section-head">
-          <div className="hc-section-num">№ 05<span>The Journal</span></div>
+          <div className="hc-section-num">№ 05<span>The Clients</span></div>
           <div>
-            <h2 className="hc-section-title">Notes from <em>the desk.</em></h2>
+            <h2 className="hc-section-title">In good <em>company.</em></h2>
             <p className="hc-section-sub">
-              We keep a small journal of essays, field notes, and letters about the houses we sell, the towns we work in, and the slow architecture of the Valley.
+              Most of our work arrives by introduction. A few words from the families whose houses we have kept.
             </p>
           </div>
         </div>
 
-        <div className="hc-journal-grid">
-          {items.map((it, i) => (
-            <a key={i} className="hc-journal-item" href="#">
-              <div className="hc-journal-img">
-                <img src={it.img} alt="" loading="lazy" />
-              </div>
-              <div className="hc-journal-meta">
-                <span>{it.cat}</span>
-                <span className="sep"></span>
-                <span>{it.date}</span>
-              </div>
-              <h3 className="hc-journal-title">{it.title}</h3>
-              <p className="hc-journal-blurb">{it.blurb}</p>
-              <span className="hc-mono" style={{ color: 'var(--hc-ink)', borderBottom: '1px solid currentColor', paddingBottom: 4, alignSelf: 'flex-start' }}>Read essay →</span>
-            </a>
-          ))}
-        </div>
+        <figure className="hc-tm-lead hc-tm-reveal">
+          <div className="hc-tm-lead-img"><img src={featured.img} alt="Brindavan, Walkeshwar" loading="lazy" /></div>
+          <div className="hc-tm-lead-body">
+            <span className="hc-tm-mark" aria-hidden="true">“</span>
+            <blockquote className="hc-tm-quote">{featured.quote}</blockquote>
+            <figcaption className="hc-tm-by">
+              <span className="hc-tm-sign">{featured.who}</span>
+              <span className="hc-tm-meta">{featured.where} · {featured.year}</span>
+            </figcaption>
+          </div>
+        </figure>
       </div>
     </section>
   );

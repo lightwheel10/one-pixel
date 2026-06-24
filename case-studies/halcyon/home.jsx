@@ -27,7 +27,7 @@ export function Nav() {
         <div className="hc-nav-links">
           <a href="#properties">Properties</a>
           <a href="#family">The Family</a>
-          <a href="#journal">Journal</a>
+          <a href="#clients">Clients</a>
         </div>
       </div>
       <a href="#top" className="hc-mark">

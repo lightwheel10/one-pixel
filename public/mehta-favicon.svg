@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <!-- Mehta & Sons monogram: heritage serif M on ink, with the house terracotta rule. -->
+  <rect width="24" height="24" rx="4" fill="#1A1814"/>
+  <text x="12" y="16.6" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic" font-weight="500" fill="#F2EFEA" text-anchor="middle">M</text>
+  <rect x="8.5" y="18.6" width="7" height="1" fill="#6B4423"/>
+</svg>

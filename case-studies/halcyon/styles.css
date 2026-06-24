@@ -22,7 +22,8 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+/* NB: no `scroll-behavior: smooth` here — it conflicts with GSAP ScrollTrigger
+   pinning (causes jumpy entry/exit on the pinned "Record" reel). */
 body {
   background: var(--hc-paper);
   color: var(--hc-ink);
@@ -33,6 +34,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: 'ss01', 'cv11';
   padding-top: var(--hc-topbar-h);
+  /* Chrome anchors scroll to content above the viewport; when the pinned reel
+     releases, its spacer collapses and that anchoring causes a jump at the exit. */
+  overflow-anchor: none;
 }
 ::selection { background: var(--hc-ink); color: var(--hc-paper); }
 img { display: block; max-width: 100%; }
@@ -632,6 +636,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--hc-stone);
   margin-bottom: 16px;
+  transition: color .4s ease;
 }
 .hc-rec-kicker::before { content: ''; width: 20px; height: 1px; background: var(--hc-accent); }
 
@@ -646,28 +651,39 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   -webkit-text-stroke: 1px rgba(26, 24, 20, 0.26);
   margin-left: -3px;
   transform-origin: left center;
-  transition: color .5s ease, -webkit-text-stroke-color .5s ease, transform .5s cubic-bezier(.2, .7, .2, 1);
+  transition: transform .5s cubic-bezier(.2, .7, .2, 1);
 }
+.hc-rec-year::after { /* solid fill, crossfaded in on active — opacity only, no repaint of the stroked text */
+  content: attr(data-year);
+  position: absolute; left: 0; top: 0;
+  color: var(--hc-ink);
+  -webkit-text-stroke: 0;
+  opacity: 0;
+  transition: opacity .5s ease;
+  pointer-events: none;
+}
+.hc-rec-panel.now .hc-rec-year::after { color: var(--hc-accent); }
 .hc-rec-img {
+  position: relative;
   margin-top: 16px; width: 100%; max-width: 360px;
   aspect-ratio: 16 / 10; overflow: hidden;
   border: 1px solid var(--hc-line);
 }
 .hc-rec-img img {
+  position: absolute; inset: 0;
   width: 100%; height: 100%; object-fit: cover;
-  filter: grayscale(0.5) sepia(0.3) contrast(1.02) brightness(1.0);
-  transition: filter .6s ease, transform .6s ease;
+}
+.hc-rec-img .tone { /* toned copy sits above the colour copy and fades out on active */
+  filter: grayscale(0.5) sepia(0.3) contrast(1.02);
+  opacity: 1;
+  transition: opacity .55s ease;
 }
 
-/* the year crossing the centre of the screen comes alive */
-.hc-rec-panel.is-active .hc-rec-year {
-  color: var(--hc-ink);
-  -webkit-text-stroke-color: transparent;
-  transform: scale(1.05);
-}
+/* the year crossing the centre of the screen comes alive — opacity + transform only (GPU, no repaint) */
+.hc-rec-panel.is-active .hc-rec-year { transform: scale(1.05); }
+.hc-rec-panel.is-active .hc-rec-year::after { opacity: 1; }
 .hc-rec-panel.is-active .hc-rec-kicker { color: var(--hc-ink); }
-.hc-rec-panel.is-active .hc-rec-img img { filter: grayscale(0) sepia(0) contrast(1.03) brightness(1.02); }
-.hc-rec-panel.now.is-active .hc-rec-year { color: var(--hc-accent); }
+.hc-rec-panel.is-active .hc-rec-img .tone { opacity: 0; }
 .hc-rec-panel.now.is-active .hc-rec-kicker { color: var(--hc-accent); }
 .hc-rec-event {
   font-family: var(--hc-display);
@@ -693,7 +709,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* ---- desktop reel: JS adds .is-reel after confirming motion is welcome ---- */
 .hc-record-reel.is-reel { height: 100vh; overflow: hidden; }
-.hc-record-reel.is-reel .hc-record-track { display: flex; height: 100vh; align-items: stretch; will-change: transform; }
+.hc-record-reel.is-reel .hc-record-track {
+  display: flex; height: 100vh; align-items: stretch; will-change: transform;
+  /* half-viewport spacers so the first and last beats can reach screen centre */
+  padding: 0 calc((100vw - clamp(460px, 56vw, 720px)) / 2);
+}
 .hc-record-reel.is-reel .hc-rec-panel {
   flex: 0 0 auto;
   width: clamp(460px, 56vw, 720px);
@@ -804,51 +824,53 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   color: var(--hc-stone);
 }
 
-/* ============ JOURNAL ============ */
-.hc-journal-grid {
+/* ============ TESTIMONIALS — the clients ============ */
+.hc-tm-lead {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 48px;
-  margin-top: 32px;
+  grid-template-columns: 0.82fr 1fr;
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+  margin-top: 8px;
 }
-@media (max-width: 900px) { .hc-journal-grid { grid-template-columns: 1fr; gap: 64px; } }
-.hc-journal-item { display: flex; flex-direction: column; }
-.hc-journal-img {
-  aspect-ratio: 4/3;
-  background: var(--hc-bone);
-  overflow: hidden;
-  margin-bottom: 24px;
-}
-.hc-journal-img img {
+@media (max-width: 860px) { .hc-tm-lead { grid-template-columns: 1fr; gap: 32px; } }
+.hc-tm-lead-img { aspect-ratio: 4 / 5; overflow: hidden; background: var(--hc-bone); }
+.hc-tm-lead-img img {
   width: 100%; height: 100%; object-fit: cover;
-  transition: transform 1.4s cubic-bezier(.2,.7,.2,1);
+  filter: grayscale(0.5) sepia(0.28) contrast(1.02);
+  transition: transform 1.6s cubic-bezier(.2, .7, .2, 1);
 }
-.hc-journal-item:hover .hc-journal-img img { transform: scale(1.04); }
-.hc-journal-meta {
-  font-family: var(--hc-mono);
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--hc-stone);
-  display: flex; gap: 12px;
-  margin-bottom: 12px;
-}
-.hc-journal-meta .sep { width: 16px; height: 1px; background: currentColor; align-self: center; }
-.hc-journal-title {
+.hc-tm-lead:hover .hc-tm-lead-img img { transform: scale(1.05); }
+
+.hc-tm-lead-body { position: relative; }
+.hc-tm-mark {
+  position: absolute; top: -0.46em; left: -0.06em;
   font-family: var(--hc-display);
-  font-size: 28px;
-  letter-spacing: -0.015em;
-  line-height: 1.1;
-  color: var(--hc-ink);
-  margin-bottom: 12px;
+  font-size: clamp(96px, 11vw, 180px);
+  line-height: 1;
+  color: var(--hc-bone);
+  z-index: 0;
 }
-.hc-journal-title em { font-style: italic; }
-.hc-journal-blurb {
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--hc-ink-soft);
-  max-width: 38ch;
-  margin-bottom: 16px;
+.hc-tm-quote {
+  position: relative; z-index: 1;
+  font-family: var(--hc-display);
+  font-weight: 400;
+  font-size: clamp(26px, 3vw, 44px);
+  line-height: 1.24;
+  letter-spacing: -0.015em;
+  color: var(--hc-ink);
+}
+.hc-tm-by { margin-top: 28px; display: flex; flex-direction: column; gap: 8px; }
+.hc-tm-sign {
+  font-family: var(--hc-display);
+  font-style: italic; font-weight: 500;
+  font-size: clamp(22px, 2vw, 30px);
+  letter-spacing: -0.01em;
+  color: var(--hc-ink);
+}
+.hc-tm-meta {
+  font-family: var(--hc-mono);
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--hc-stone);
 }
 
 /* ============ CONTACT ============ */

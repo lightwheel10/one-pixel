@@ -446,7 +446,7 @@ section { position: relative; padding: 120px 0; }
   color: var(--bg);
 }
 .marquee-track {
-  display: flex; gap: 64px;
+  display: flex; gap: 0;
   white-space: nowrap;
   animation: scroll 40s linear infinite;
   font-family: var(--display);
@@ -458,6 +458,11 @@ section { position: relative; padding: 120px 0; }
 }
 .marquee-track.js-marquee { animation: none; will-change: transform; }
 .marquee-track span { display: inline-flex; align-items: center; gap: 64px; }
+/* Paras · 2026-06-24: seamless-loop fix. The two copies must total exactly 2x one repeat so a -50%
+   move (GSAP xPercent + the CSS fallback) lands copy 2 exactly where copy 1 began. The 64px between
+   copies therefore lives as trailing padding on each copy (with the track gap removed), instead of a
+   flex gap between them — a track gap made the width 2c+64, so -50% fell 32px short and the loop jumped. */
+.marquee-track > span { padding-right: 64px; }
 .marquee-track .star { color: var(--accent); }
 @keyframes scroll {
   to { transform: translateX(-50%); }
@@ -1607,12 +1612,17 @@ body.dark .svc-panel-art {
 /* Work item arrow nudge */
 
 /* Paras · 2026-06-19: subtle pixel-icon life on the Services detail panel (replaces the old
-   .svc-card hover effect; the 2×2 grid is gone). Hovering the panel nudges/dims a few pixels. */
+   .svc-card hover effect; the 2×2 grid is gone).
+   Paras · 2026-06-24: reversed — the icon now rests in the "broken" state (a few pixels nudged/dimmed)
+   and reassembles to its clean shape on hover, instead of breaking on hover. Default-broken is scoped
+   to .svc-panel-icon (desktop) only, so the mobile .svc-acc-icon stays whole — it has no hover to reform it. */
 .svc-panel-icon svg rect, .svc-acc-icon svg rect {
   transition: opacity .3s, transform .3s; transform-box: fill-box; transform-origin: center;
 }
-.svc-panel:hover .svc-panel-icon svg rect:nth-child(3n) { transform: translate(0.5px, -0.5px); }
-.svc-panel:hover .svc-panel-icon svg rect:nth-child(5n) { opacity: 0.6; }
+.svc-panel-icon svg rect:nth-child(3n) { transform: translate(0.5px, -0.5px); }
+.svc-panel-icon svg rect:nth-child(5n) { opacity: 0.6; }
+.svc-panel:hover .svc-panel-icon svg rect:nth-child(3n) { transform: translate(0, 0); }
+.svc-panel:hover .svc-panel-icon svg rect:nth-child(5n) { opacity: 1; }
 
 /* Marquee track gentle pulse */
 .marquee .star { animation: pix-flicker 4s steps(1) infinite; }

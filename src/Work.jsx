@@ -94,7 +94,7 @@ export function Work() {
           <div>
             <h2 className="section-title">Sites we’ve <em>shipped</em>.</h2>
             <p className="section-sub" style={{ marginTop: 24 }}>
-              A small slice of our work. Every project is a premium website built from scratch, and a brand that looks sharper for it.
+              A small slice of our work.
             </p>
           </div>
         </div>

@@ -30,6 +30,7 @@ export function Services() {
       title: 'Brand Sites',
       desc: 'A premium website that makes your brand look the part and earns trust from the very first second. Beautiful, fast, and simple for your team to keep up to date.',
       tags: ['Strategy', 'Premium design', 'Easy to update'],
+      art: '/services/brand-sites-bg.jpg',
       icon: (a) => <ServiceIcon variant="brand" accent={a} />,
     },
     {
@@ -37,6 +38,8 @@ export function Services() {
       title: 'Marketing Pages',
       desc: 'The pages that bring you customers. Landing pages, pricing, and more, each one designed to turn visitors into real leads and sales.',
       tags: ['Landing pages', 'Built to convert', 'Easy to edit'],
+      art: '/services/marketing-pages-bg.jpg',
+      artPosition: 'center top',
       icon: (a) => <ServiceIcon variant="product" accent={a} />,
     },
     {
@@ -44,6 +47,7 @@ export function Services() {
       title: 'Online Stores',
       desc: 'An online store that feels premium and is effortless to buy from, so more of your visitors turn into paying customers.',
       tags: ['Easy checkout', 'Built to sell', 'Looks premium'],
+      art: '/services/online-stores-bg.jpg',
       icon: (a) => <ServiceIcon variant="ecom" accent={a} />,
     },
     {
@@ -51,6 +55,7 @@ export function Services() {
       title: 'Built to Scale',
       desc: 'A website built on simple, reusable pieces, so your team can add new pages quickly and everything stays perfectly on brand as you grow.',
       tags: ['Reusable blocks', 'Always on brand', 'Grows with you'],
+      art: '/services/built-to-scale-bg.jpg',
       icon: (a) => <ServiceIcon variant="system" accent={a} />,
     },
   ];
@@ -62,8 +67,8 @@ export function Services() {
       <div className="shell">
         <div className="section-head">
           <div><div className="section-num">[ 02 ] Services</div></div>
-          <div>
-            <h2 className="section-title">Four things, <em>done well</em>.</h2>
+          <div className="services-heading">
+            <h2 className="section-title services-title">Four things, <em>done well</em>.</h2>
             <p className="section-sub" style={{ marginTop: 24 }}>
               We don’t do everything. We do these few things, at a level most agencies only pretend they can.
             </p>
@@ -102,10 +107,20 @@ export function Services() {
           </div>
 
           {/* desktop detail panel — hidden on phones; cross-fades on switch (key={active}) */}
-          <div className="svc-panel" aria-live="polite">
+          <div className={`svc-panel ${items[active].art ? 'has-art' : ''}`} aria-live="polite">
+            {items[active].art && (
+              <img
+                key={items[active].art}
+                className="svc-panel-art"
+                src={items[active].art}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                style={{ objectPosition: items[active].artPosition || 'center' }}
+              />
+            )}
             <div className="svc-panel-inner" key={active}>
               <div className="svc-panel-icon">{items[active].icon('var(--accent)')}</div>
-              <div className="svc-panel-meta">{items[active].num} / 0{items.length}</div>
               <h3 className="svc-panel-title">{items[active].title}</h3>
               <p className="svc-panel-desc">{items[active].desc}</p>
               <div className="svc-tags">

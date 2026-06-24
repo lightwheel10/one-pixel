@@ -5,104 +5,99 @@ import { HC_PHOTOS } from './photos.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function HudsonMap() {
-  const [active, setActive] = useState(1);
-  const pins = [
-    { x: 38, y: 18, label: 'Mahabaleshwar', props: 3 },
-    { x: 42, y: 26, label: 'Panchgani',     props: 2, featured: true },
-    { x: 46, y: 36, label: 'Pune',          props: 1 },
-    { x: 44, y: 46, label: 'Khandala',      props: 2 },
-    { x: 52, y: 56, label: 'Lonavala',      props: 4, featured: true },
-    { x: 50, y: 64, label: 'Bandra',        props: 5, featured: true, home: true },
-    { x: 56, y: 70, label: 'Alibag',        props: 3, featured: true },
-    { x: 38, y: 72, label: 'Karjat',        props: 2 },
-    { x: 30, y: 50, label: 'Matheran',      props: 2 },
-    { x: 64, y: 80, label: 'Khopoli',       props: 1 },
+export function History() {
+  const reelRef = useRef(null);
+  const trackRef = useRef(null);
+  const beats = [
+    { year: '1962', kicker: 'The beginning',      text: 'A one room office opens on Hill Road, Bandra.', img: HC_PHOTOS.hero, alt: 'Bombay, around the founding' },
+    { year: '1971', kicker: 'Into the hills',      text: 'The first house beyond the city changes hands, in Lonavala.' },
+    { year: '1989', kicker: 'A second name',       text: 'Anjali Mehta joins. The office becomes a partnership of two.', img: HC_PHOTOS.featuredMain, alt: 'An early estate' },
+    { year: '1996', kicker: 'The corridor widens', text: 'A second desk opens for the hill estates, Khandala to Mahabaleshwar.' },
+    { year: '2001', kicker: 'The chair passes',    text: 'Anjali takes the principal’s chair.' },
+    { year: '2014', kicker: 'A third name',        text: 'Naina Mehta returns as the third generation.', img: HC_PHOTOS.featuredDetail, alt: 'A room in a kept house' },
+    { year: '2026', kicker: 'Today',               text: 'Three names on the door. One corridor. Still by appointment.', now: true },
   ];
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mm = gsap.matchMedia();
+    // Desktop + motion: pin the reel and travel it sideways.
+    mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
+      const reel = reelRef.current;
+      const track = trackRef.current;
+      const fill = reel.querySelector('.hc-rec-fill');
+      const panels = gsap.utils.toArray(track.querySelectorAll('.hc-rec-panel'));
+      reel.classList.add('is-reel');
+      const dist = () => Math.max(0, track.scrollWidth - window.innerWidth);
+
+      // The reel itself: pinned, travels sideways with scroll.
+      const scroller = gsap.to(track, {
+        x: () => -dist(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: reel,
+          start: 'top top',
+          end: () => '+=' + dist(),
+          pin: true,
+          scrub: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => { if (fill) fill.style.transform = `scaleX(${self.progress})`; },
+        },
+      });
+
+      // As each panel crosses the centre of the screen, light it up.
+      const triggers = panels.map((panel) =>
+        ScrollTrigger.create({
+          trigger: panel,
+          containerAnimation: scroller,
+          start: 'left center',
+          end: 'right center',
+          onToggle: (self) => panel.classList.toggle('is-active', self.isActive),
+        })
+      );
+
+      return () => {
+        triggers.forEach((t) => t.kill());
+        reel.classList.remove('is-reel');
+      };
+    });
+    return () => mm.revert();
+  }, []);
+
   return (
-    <section className="hc-map" id="map">
+    <section className="hc-record" id="history">
       <div className="hc-shell">
         <div className="hc-section-head">
-          <div className="hc-section-num">№ 03<span>The Valley</span></div>
+          <div className="hc-section-num">№ 03<span>The Record</span></div>
           <div>
-            <h2 className="hc-section-title">A small map<br />of <em>where we work.</em></h2>
+            <h2 className="hc-section-title">Sixty two <em>years.</em></h2>
             <p className="hc-section-sub">
-              We work along the Western Ghats, the corridor between Bombay and Mahabaleshwar. We have walked, drawn, and revisited it for sixty two years. Hover a town to see what we have placed there.
+              One office, one road, one corridor of hills. A short record of the years between, and the few moments worth keeping.
             </p>
           </div>
         </div>
+      </div>
 
-        <div className="hc-map-frame">
-          <svg className="hc-map-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <pattern id="hcGrid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1A18140A" strokeWidth="1" />
-              </pattern>
-              <pattern id="hcDots" x="0" y="0" width="14" height="14" patternUnits="userSpaceOnUse">
-                <circle cx="2" cy="2" r="0.6" fill="#1A18141A" />
-              </pattern>
-            </defs>
-            <rect width="1000" height="600" fill="#EAE5DC" />
-            <rect width="1000" height="600" fill="url(#hcDots)" />
-            <rect width="1000" height="600" fill="url(#hcGrid)" opacity="0.5" />
-            <path
-              d="M 460 0 Q 430 80 470 160 Q 510 240 480 320 Q 450 400 510 480 Q 560 540 540 600"
-              fill="none"
-              stroke="#8C857A"
-              strokeWidth="14"
-              strokeLinecap="round"
-              opacity="0.3"
-            />
-            <path
-              d="M 460 0 Q 430 80 470 160 Q 510 240 480 320 Q 450 400 510 480 Q 560 540 540 600"
-              fill="none"
-              stroke="#1A1814"
-              strokeWidth="1"
-              opacity="0.4"
-            />
-            <g transform="translate(900, 80)" opacity="0.4">
-              <circle cx="0" cy="0" r="36" fill="none" stroke="#1A1814" />
-              <line x1="0" y1="-30" x2="0" y2="30" stroke="#1A1814" strokeWidth="0.5" />
-              <line x1="-30" y1="0" x2="30" y2="0" stroke="#1A1814" strokeWidth="0.5" />
-              <text x="0" y="-40" textAnchor="middle" fontFamily="Inter" fontSize="10" letterSpacing="2" fill="#1A1814">N</text>
-              <polygon points="0,-25 -4,0 0,-5 4,0" fill="#6B4423" />
-            </g>
-            <text x="20" y="30" fontFamily="JetBrains Mono" fontSize="10" letterSpacing="3" fill="#8C857A">WESTERN GHATS · MH</text>
-            <text x="20" y="580" fontFamily="JetBrains Mono" fontSize="10" letterSpacing="2" fill="#8C857A">SCALE: 1:200,000 · 2026</text>
-          </svg>
-
-          {pins.map((p, i) => (
-            <button
-              key={i}
-              className={`hc-pin ${p.featured ? 'featured' : ''} ${active === i ? 'active' : ''}`}
-              style={{ left: `${p.x}%`, top: `${p.y}%` }}
-              onMouseEnter={() => setActive(i)}
-              onClick={() => setActive(i)}
-              aria-label={`${p.label}, ${p.props} properties`}
-            >
-              <span className="label">{p.label} · {p.props} {p.props === 1 ? 'home' : 'homes'}</span>
-            </button>
+      <div className="hc-record-reel" ref={reelRef}>
+        <div className="hc-record-track" ref={trackRef}>
+          {beats.map((b) => (
+            <article key={b.year} className={`hc-rec-panel${b.now ? ' now' : ''}`}>
+              <span className="hc-rec-kicker">{b.kicker}</span>
+              <div className="hc-rec-stage">
+                {b.img && (
+                  <div className="hc-rec-img"><img src={b.img} alt={b.alt} loading="lazy" /></div>
+                )}
+                <span className="hc-rec-year">{b.year}</span>
+              </div>
+              <p className="hc-rec-event">{b.text}</p>
+            </article>
           ))}
         </div>
 
-        <div className="hc-map-legend">
-          <div>
-            <div className="v">62</div>
-            <div className="l">Years in the Valley</div>
-          </div>
-          <div>
-            <div className="v"><em>3</em></div>
-            <div className="l">Generations of Mehtas</div>
-          </div>
-          <div>
-            <div className="v">1,142</div>
-            <div className="l">Houses placed</div>
-          </div>
-          <div>
-            <div className="v">94<em>%</em></div>
-            <div className="l">Sold above asking</div>
-          </div>
+        <div className="hc-record-progress" aria-hidden="true">
+          <span className="hc-rec-plabel">1962</span>
+          <div className="hc-rec-pbar"><div className="hc-rec-fill"></div></div>
+          <span className="hc-rec-plabel">2026</span>
         </div>
       </div>
     </section>

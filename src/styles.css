@@ -629,6 +629,13 @@ body.dark .work-bar { background: #181818; }
    click a name to switch, the panel cross-fades. Echoes the desktop Process single-display. On
    phones the right panel is hidden and each row becomes a tap-to-expand accordion (same markup,
    CSS reflow). All theme-token based so it adapts to light + dark. Replaces the old 2×2 grid. */
+.services-heading {
+  container-type: inline-size;
+}
+.services-title {
+  font-size: clamp(32px, 10.3cqi, 88px);
+  white-space: nowrap;
+}
 .svc-showcase {
   display: grid;
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
@@ -687,12 +694,42 @@ body.dark .work-bar { background: #181818; }
   background: var(--paper);
   padding: clamp(32px, 4vw, 56px);
   min-height: 360px;
+  overflow: hidden;
+  isolation: isolate;
+}
+.svc-panel-art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.26;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.svc-panel.has-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    105deg,
+    var(--paper) 0%,
+    color-mix(in srgb, var(--paper) 96%, transparent) 48%,
+    color-mix(in srgb, var(--paper) 48%, transparent) 100%
+  );
+  pointer-events: none;
+}
+.svc-panel-inner {
+  position: relative;
+  z-index: 2;
+}
+body.dark .svc-panel-art {
+  opacity: 0.88;
+  mix-blend-mode: normal;
 }
 .svc-panel-icon { width: 84px; height: 84px; color: var(--ink); margin-bottom: 32px; }
-.svc-panel-meta {
-  font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
-}
 .svc-panel-title {
   font-family: var(--display); font-size: clamp(32px, 3.6vw, 44px);
   font-weight: 500; letter-spacing: -0.03em; line-height: 1; margin-bottom: 20px;

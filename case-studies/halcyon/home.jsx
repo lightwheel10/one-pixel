@@ -1,5 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useLayoutEffect } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { HC_PHOTOS } from './photos.js';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function TopBar() {
   return (
@@ -139,8 +143,23 @@ export function FeaturedEstate() {
   );
 }
 
+export function Interlude() {
+  return (
+    <section className="hc-interlude">
+      <img src={HC_PHOTOS.interlude} alt="Mist over the Western Ghats" loading="lazy" />
+      <div className="hc-interlude-overlay" aria-hidden="true"></div>
+      <div className="hc-interlude-caption">
+        <span className="hc-interlude-line" aria-hidden="true"></span>
+        The corridor we keep · Bombay to Mahabaleshwar
+      </div>
+    </section>
+  );
+}
+
 export function PropertiesIndex() {
   const [filter, setFilter] = useState('all');
+  const gridRef = useRef(null);
+  const fine = useRef(false);
   const props = [
     { idx: '1',    img: HC_PHOTOS.prop1, name: 'Riverbend',     mod: 'Cottage',   loc: 'Bandra (W)',     beds: '3 BD · 2 BA · 1,840 SF', year: '1948', price: '₹8.5 Cr',       cat: 'home' },
     { idx: '2',   img: HC_PHOTOS.prop2, name: 'Sahyadri House', mod: 'Manor',    loc: 'Lonavala',       beds: '5 BD · 4 BA · 3,210 SF', year: '1894', price: '₹28.5 Cr',      cat: 'estate', featured: true },
@@ -158,6 +177,46 @@ export function PropertiesIndex() {
     { v: 'estate', l: 'Estates' },
     { v: 'sold',   l: 'Recently Placed' },
   ];
+
+  // Tilt only where a real cursor can hover and motion is welcome.
+  useEffect(() => {
+    fine.current =
+      window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }, []);
+
+  // Cards settle out of depth as the grid scrolls in; re-runs on filter change.
+  useLayoutEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const ctx = gsap.context(() => {
+      gsap.from('.hc-folio', {
+        z: -140,
+        rotateX: 8,
+        y: 28,
+        opacity: 0,
+        duration: 0.85,
+        ease: 'power3.out',
+        stagger: 0.08,
+        scrollTrigger: { trigger: gridRef.current, start: 'top 82%' },
+      });
+    }, gridRef);
+    return () => ctx.revert();
+  }, [filter]);
+
+  const onTilt = (e) => {
+    if (!fine.current) return;
+    const card = e.currentTarget;
+    const r = card.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    card.style.setProperty('--ry', `${px * 10}deg`);
+    card.style.setProperty('--rx', `${-py * 8}deg`);
+  };
+  const onTiltReset = (e) => {
+    e.currentTarget.style.setProperty('--ry', '0deg');
+    e.currentTarget.style.setProperty('--rx', '0deg');
+  };
 
   return (
     <section className="hc-section" id="properties">
@@ -179,18 +238,34 @@ export function PropertiesIndex() {
           <span className="count">{visible.length} of {props.length}</span>
         </div>
 
-        <div className="hc-prop-index">
+        <div className="hc-prop-grid" ref={gridRef}>
           {visible.map((p) => (
-            <a key={p.idx} className="hc-prop-row" href={p.featured ? '#contact' : '#'}>
-              <div className="idx">№ {p.idx}</div>
-              <div className="thumb"><img src={p.img} alt={p.name} loading="lazy" /></div>
-              <div className="name"><em>{p.name}</em></div>
-              <div className="meta-cell">{p.mod} · {p.loc}</div>
-              <div className="meta-cell">{p.beds}</div>
-              <div className="meta-cell">Built {p.year}</div>
-              <div className="price-cell">{p.price}</div>
-              <div className="arr">
-                <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" strokeWidth="1" /></svg>
+            <a
+              key={p.idx}
+              className={`hc-folio${p.featured ? ' featured' : ''}${p.cat === 'sold' ? ' sold' : ''}`}
+              href={p.featured ? '#contact' : '#'}
+            >
+              <div className="hc-folio-card" onMouseMove={onTilt} onMouseLeave={onTiltReset}>
+                <div className="hc-folio-photo">
+                  <img src={p.img} alt={p.name} loading="lazy" />
+                  {p.cat === 'sold' && <span className="hc-folio-tag">Placed</span>}
+                </div>
+                <div className="hc-folio-body">
+                  <div className="hc-folio-top">
+                    <span className="hc-folio-idx">№ {p.idx}</span>
+                    <span className="hc-folio-meta">{p.mod} · {p.loc}</span>
+                  </div>
+                  <h3 className="hc-folio-name"><em>{p.name}</em></h3>
+                  <div className="hc-folio-spec">{p.beds}</div>
+                  <div className="hc-folio-foot">
+                    <span className="hc-folio-year">Built {p.year}</span>
+                    <span className="hc-folio-price">{p.price}</span>
+                  </div>
+                  <span className="hc-folio-link">
+                    View the estate
+                    <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" strokeWidth="1" /></svg>
+                  </span>
+                </div>
               </div>
             </a>
           ))}

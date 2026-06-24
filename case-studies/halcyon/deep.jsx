@@ -9,12 +9,12 @@ export function History() {
   const reelRef = useRef(null);
   const trackRef = useRef(null);
   const beats = [
-    { year: '1962', kicker: 'The beginning',      text: 'A one room office opens on Hill Road, Bandra.', img: HC_PHOTOS.hero, alt: 'Bombay, around the founding' },
+    { year: '1962', kicker: 'The beginning',      text: 'A one room office opens on Hill Road, Bandra.', img: HC_PHOTOS.record1962, alt: 'The original Hill Road office in 1962' },
     { year: '1971', kicker: 'Into the hills',      text: 'The first house beyond the city changes hands, in Lonavala.' },
-    { year: '1989', kicker: 'A second name',       text: 'Anjali Mehta joins. The office becomes a partnership of two.', img: HC_PHOTOS.featuredMain, alt: 'An early estate' },
+    { year: '1989', kicker: 'A second name',       text: 'Anjali Mehta joins. The office becomes a partnership of two.', img: HC_PHOTOS.record1989, alt: 'Aditya and Anjali reviewing an estate plan in 1989' },
     { year: '1996', kicker: 'The corridor widens', text: 'A second desk opens for the hill estates, Khandala to Mahabaleshwar.' },
     { year: '2001', kicker: 'The chair passes',    text: 'Anjali takes the principal’s chair.' },
-    { year: '2014', kicker: 'A third name',        text: 'Naina Mehta returns as the third generation.', img: HC_PHOTOS.featuredDetail, alt: 'A room in a kept house' },
+    { year: '2014', kicker: 'A third name',        text: 'Naina Mehta returns as the third generation.', img: HC_PHOTOS.record2014, alt: 'Naina at the family office in 2014' },
     { year: '2026', kicker: 'Today',               text: 'Three names on the door. One corridor. Still by appointment.', now: true },
   ];
 
@@ -92,7 +92,7 @@ export function History() {
     <section className="hc-record" id="history">
       <div className="hc-shell">
         <div className="hc-section-head">
-          <div className="hc-section-num">№ 03<span>The Record</span></div>
+          <div className="hc-section-num"><span>The Record</span></div>
           <div>
             <h2 className="hc-section-title">Sixty two <em>years.</em></h2>
             <p className="hc-section-sub">
@@ -162,7 +162,7 @@ export function Family() {
     <section className="hc-section" id="family">
       <div className="hc-shell">
         <div className="hc-section-head">
-          <div className="hc-section-num">№ 04<span>The Family</span></div>
+          <div className="hc-section-num"><span>The Family</span></div>
           <div>
             <h2 className="hc-section-title">Three names<br />on <em>the door.</em></h2>
             <p className="hc-section-sub">
@@ -175,7 +175,6 @@ export function Family() {
           {members.map((m, i) => (
             <div key={i} className="hc-family-member">
               <div className="hc-family-portrait">
-                <div className="num">№ {m.n}</div>
                 <img src={m.img} alt={m.name} />
               </div>
               <div className="hc-family-name"><em>{m.em}</em>{m.name.slice(m.em.length)}</div>
@@ -198,7 +197,7 @@ export function Testimonials() {
   const ref = useRef(null);
   const featured = {
     quote: 'We had walked past Brindavan for years. Naina knew the house before we did, and waited until we were ready for it.',
-    who: 'The Kapoors', where: 'Brindavan, Walkeshwar', year: '2019', img: HC_PHOTOS.prop6,
+    who: 'The Kapoors', where: 'Brindavan, Walkeshwar', year: '2019', img: HC_PHOTOS.testimonialBrindavan,
   };
 
   useEffect(() => {
@@ -221,7 +220,7 @@ export function Testimonials() {
     <section className="hc-section" id="clients" ref={ref} style={{ paddingBottom: 96 }}>
       <div className="hc-shell">
         <div className="hc-section-head">
-          <div className="hc-section-num">№ 05<span>The Clients</span></div>
+          <div className="hc-section-num"><span>The Clients</span></div>
           <div>
             <h2 className="hc-section-title">In good <em>company.</em></h2>
             <p className="hc-section-sub">
@@ -253,7 +252,6 @@ export function Contact() {
       <div className="hc-shell">
         <div className="hc-section-head" style={{ marginBottom: 64 }}>
           <div className="hc-section-num">
-            <span style={{ color: 'rgba(242,239,234,0.5)' }}>№ 06</span>
             <span style={{ color: 'rgba(242,239,234,0.85)' }}>An Introduction</span>
           </div>
           <div>

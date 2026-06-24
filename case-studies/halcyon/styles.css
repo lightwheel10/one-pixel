@@ -44,7 +44,6 @@ a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
 
 .hc-shell { max-width: var(--hc-max); margin: 0 auto; padding: 0 var(--hc-gutter); }
-.hc-shell-narrow { max-width: 1080px; margin: 0 auto; padding: 0 var(--hc-gutter); }
 
 /* ============ TYPE PRIMITIVES ============ */
 .hc-mono {
@@ -54,16 +53,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   text-transform: uppercase;
   color: var(--hc-stone);
 }
-.hc-mono-ink { color: var(--hc-ink-soft); }
-
-.hc-display {
-  font-family: var(--hc-display);
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 0.95;
-  color: var(--hc-ink);
-}
-.hc-display em { font-style: italic; font-weight: 400; }
 
 
 /* ============ TOP BAR ============ */
@@ -466,7 +455,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hc-folio-photo img {
   width: 100%; height: 100%;
   object-fit: cover;
-  transition: transform .7s cubic-bezier(.16, .84, .32, 1), opacity .8s ease;
+  transition: transform .7s cubic-bezier(.16, .84, .32, 1), opacity .6s ease;
 }
 .hc-folio:hover .hc-folio-photo img { transform: scale(1.05); }
 
@@ -475,6 +464,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   inset: 0;
   opacity: 0;
 }
+.hc-folio-photo-gallery { touch-action: pan-y; }
 .hc-folio-photo-gallery img:first-child { opacity: 1; }
 
 @media (hover: hover) and (pointer: fine) {
@@ -486,17 +476,17 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .hc-folio:hover .hc-folio-photo-gallery img:nth-child(4) { animation-delay: -1.8s; }
 
   .hc-folio:hover .hc-folio-gallery-dots { opacity: 1; }
-  .hc-folio:hover .hc-folio-gallery-dots i {
+  .hc-folio:hover .hc-folio-gallery-dots button::after {
     animation: hc-folio-gallery-dot 7.2s linear infinite;
   }
-  .hc-folio:hover .hc-folio-gallery-dots i:nth-child(2) { animation-delay: -5.4s; }
-  .hc-folio:hover .hc-folio-gallery-dots i:nth-child(3) { animation-delay: -3.6s; }
-  .hc-folio:hover .hc-folio-gallery-dots i:nth-child(4) { animation-delay: -1.8s; }
+  .hc-folio:hover .hc-folio-gallery-dots button:nth-child(2)::after { animation-delay: -5.4s; }
+  .hc-folio:hover .hc-folio-gallery-dots button:nth-child(3)::after { animation-delay: -3.6s; }
+  .hc-folio:hover .hc-folio-gallery-dots button:nth-child(4)::after { animation-delay: -1.8s; }
 }
 
 @keyframes hc-folio-gallery {
-  0%, 20% { opacity: 1; }
-  25%, 95% { opacity: 0; }
+  0%, 16.67% { opacity: 1; }
+  25%, 91.67% { opacity: 0; }
   100% { opacity: 1; }
 }
 
@@ -515,19 +505,30 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   transform: translateX(-50%);
   transition: opacity .3s ease;
 }
-.hc-folio-gallery-dots i {
+.hc-folio-gallery-dots button {
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+}
+.hc-folio-gallery-dots button::after {
+  content: '';
   width: 5px;
   height: 5px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.5);
 }
+.hc-folio-gallery-dots button:focus-visible {
+  outline: 1px solid var(--hc-paper);
+  outline-offset: 1px;
+}
 
 @keyframes hc-folio-gallery-dot {
-  0%, 20% {
+  0%, 16.67% {
     background: var(--hc-paper);
     transform: scale(1.35);
   }
-  25%, 95% {
+  25%, 91.67% {
     background: rgba(255, 255, 255, 0.5);
     transform: scale(1);
   }
@@ -560,11 +561,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   display: flex; justify-content: space-between; align-items: baseline;
   gap: 12px;
   margin-bottom: 12px;
-}
-.hc-folio-idx {
-  font-family: var(--hc-mono);
-  font-size: 10px; letter-spacing: 0.18em;
-  color: var(--hc-stone);
 }
 .hc-folio-meta {
   font-family: var(--hc-mono);
@@ -624,16 +620,32 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hc-folio:hover .hc-folio-link svg { transform: translateX(4px); }
 
 /* touch / no-hover: keep the affordance visible, drop the depth play */
-@media (hover: none) {
+@media (hover: none), (pointer: coarse) {
   .hc-folio-link { opacity: 1; transform: none; }
   .hc-folio:hover .hc-folio-body { transform: none; }
+  .hc-folio-photo-gallery img:first-child { opacity: 0; }
+  .hc-folio-photo-gallery img.is-touch-active { opacity: 1; }
+  .hc-folio-gallery-dots {
+    opacity: 1;
+    gap: 2px;
+  }
+  .hc-folio-gallery-dots button.is-active::after {
+    background: var(--hc-paper);
+    transform: scale(1.35);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .hc-folio-card, .hc-folio-body, .hc-folio-photo img, .hc-folio-link { transition: none; }
   .hc-folio:hover .hc-folio-body { transform: none; }
   .hc-folio:hover .hc-folio-photo img { transform: none; }
   .hc-folio:hover .hc-folio-photo-gallery img { animation: none; }
-  .hc-folio-gallery-dots { display: none; }
+  .hc-folio-photo-gallery img:first-child { opacity: 0; }
+  .hc-folio-photo-gallery img.is-touch-active { opacity: 1; }
+  .hc-folio:hover .hc-folio-gallery-dots { opacity: 1; }
+  .hc-folio-gallery-dots button.is-active::after {
+    background: var(--hc-paper);
+    transform: scale(1.35);
+  }
 }
 
 .hc-prop-filter {
@@ -756,6 +768,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 @media (max-width: 560px) {
   .hc-rec-year { font-size: clamp(62px, 22vw, 116px); }
   .hc-rec-event { max-width: none; }
+}
+
+@media (max-width: 860px) {
+  .hc-rec-img {
+    width: min(100%, 320px);
+    max-width: none;
+    aspect-ratio: 4 / 5;
+  }
 }
 
 /* ---- desktop reel: JS adds .is-reel after confirming motion is welcome ---- */
@@ -1114,51 +1134,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .hc-footer-cta:hover { gap: 10px; }
 }
 
-/* ============ DETAIL FIGURE (letterpress numerals) ============ */
-.hc-letterpress {
-  font-family: var(--hc-display);
-  font-size: clamp(120px, 18vw, 280px);
-  letter-spacing: -0.04em;
-  line-height: 0.85;
-  color: var(--hc-ink);
-  font-weight: 400;
-}
-.hc-letterpress em { font-style: italic; color: var(--hc-accent); }
 
-/* ============ INDEX CARD (archival) ============ */
-.hc-card {
-  background: var(--hc-paper);
-  border: 1px solid var(--hc-line);
-  padding: 24px;
-  position: relative;
-  font-family: var(--hc-body);
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--hc-ink-soft);
-}
-.hc-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 24px; right: 24px;
-  height: 1px;
-  background: repeating-linear-gradient(to right, var(--hc-stone-light) 0, var(--hc-stone-light) 4px, transparent 4px, transparent 8px);
-  opacity: 0.4;
-}
-.hc-card .card-num {
-  font-family: var(--hc-mono);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--hc-stone);
-  margin-bottom: 8px;
-}
-.hc-card .card-title {
-  font-family: var(--hc-display);
-  font-size: 22px;
-  font-style: italic;
-  color: var(--hc-ink);
-  margin-bottom: 8px;
-}
 
 /* ============ MARQUEE (subtle, optional) ============ */
 .hc-marquee {
@@ -1186,10 +1162,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   to { transform: translateX(-50%); }
 }
 
-/* ============ SCROLL PARALLAX ============ */
-.hc-parallax-img {
-  will-change: transform;
-}
 
 /* ============ ONEPIXEL TRANSITION LOADER ============ */
 /* Ported from the main OnePixel site. The case-study page boots with the

@@ -36,6 +36,12 @@ export const HC_PHOTOS = {
   fam2: '/case-studies/halcyon/anjali-mehta.webp',
   fam3: '/case-studies/halcyon/naina-mehta.webp',
 
+  record1962: '/case-studies/halcyon/record-1962.webp',
+  record1989: '/case-studies/halcyon/record-1989.webp',
+  record2014: '/case-studies/halcyon/record-2014.webp',
+
+  testimonialBrindavan: '/case-studies/halcyon/testimonial-brindavan.webp',
+
   journal1: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200&q=80&auto=format&fit=crop',
   journal2: 'https://images.unsplash.com/photo-1513185158878-8d8c2a2a3da3?w=1200&q=80&auto=format&fit=crop',
   journal3: 'https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?w=1200&q=80&auto=format&fit=crop',

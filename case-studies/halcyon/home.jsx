@@ -190,7 +190,7 @@ export function FeaturedEstate() {
             </div>
           </div>
           <div className="hc-featured-content">
-            <div className="hc-mono">№ MS 0428 · Lonavala, MH</div>
+            <div className="hc-mono">Lonavala, MH</div>
             <h2><em>Sahyadri</em> House</h2>
             <div className="subtitle">A late nineteenth century manor on twelve quiet acres</div>
             <p className="blurb">
@@ -226,6 +226,61 @@ export function Interlude() {
         The corridor we keep · Bombay to Mahabaleshwar
       </div>
     </section>
+  );
+}
+
+function PropertyGallery({ property }) {
+  const images = property.images || [property.img];
+  const [active, setActive] = useState(0);
+  const touchStartX = useRef(null);
+  const hasGallery = images.length > 1;
+
+  const selectImage = (index) => setActive((index + images.length) % images.length);
+  const onTouchStart = (e) => {
+    touchStartX.current = e.touches[0]?.clientX ?? null;
+  };
+  const onTouchEnd = (e) => {
+    if (touchStartX.current === null || !hasGallery) return;
+    const endX = e.changedTouches[0]?.clientX ?? touchStartX.current;
+    const distance = endX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(distance) < 36) return;
+    selectImage(active + (distance < 0 ? 1 : -1));
+  };
+
+  return (
+    <div
+      className={`hc-folio-photo${hasGallery ? ' hc-folio-photo-gallery' : ''}`}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      {images.map((src, imageIndex) => (
+        <img
+          key={src}
+          className={imageIndex === active ? 'is-touch-active' : ''}
+          src={src}
+          alt={imageIndex === 0 ? property.name : ''}
+          aria-hidden={imageIndex > 0}
+          loading="lazy"
+          decoding="async"
+        />
+      ))}
+      {hasGallery && (
+        <span className="hc-folio-gallery-dots" aria-label={`${property.name} image gallery`}>
+          {images.map((src, imageIndex) => (
+            <button
+              key={src}
+              type="button"
+              className={imageIndex === active ? 'is-active' : ''}
+              aria-label={`Show image ${imageIndex + 1} of ${images.length}`}
+              aria-pressed={imageIndex === active}
+              onClick={() => selectImage(imageIndex)}
+            ></button>
+          ))}
+        </span>
+      )}
+      {property.cat === 'sold' && <span className="hc-folio-tag">Placed</span>}
+    </div>
   );
 }
 
@@ -295,7 +350,7 @@ export function PropertiesIndex() {
     <section className="hc-section" id="properties">
       <div className="hc-shell">
         <div className="hc-section-head">
-          <div className="hc-section-num">№ 02<span>The Index</span></div>
+          <div className="hc-section-num"><span>The Index</span></div>
           <div>
             <h2 className="hc-section-title">Currently <em>on offer.</em></h2>
             <p className="hc-section-sub">
@@ -313,33 +368,14 @@ export function PropertiesIndex() {
 
         <div className="hc-prop-grid" ref={gridRef}>
           {visible.map((p) => (
-            <a
+            <article
               key={p.idx}
               className={`hc-folio${p.cat === 'sold' ? ' sold' : ''}`}
-              href="#"
             >
               <div className="hc-folio-card" onMouseMove={onTilt} onMouseLeave={onTiltReset}>
-                <div className={`hc-folio-photo${p.images?.length > 1 ? ' hc-folio-photo-gallery' : ''}`}>
-                  {(p.images || [p.img]).map((src, imageIndex) => (
-                    <img
-                      key={src}
-                      src={src}
-                      alt={imageIndex === 0 ? p.name : ''}
-                      aria-hidden={imageIndex > 0}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ))}
-                  {p.images?.length > 1 && (
-                    <span className="hc-folio-gallery-dots" aria-hidden="true">
-                      {p.images.map((src) => <i key={src}></i>)}
-                    </span>
-                  )}
-                  {p.cat === 'sold' && <span className="hc-folio-tag">Placed</span>}
-                </div>
+                <PropertyGallery property={p} />
                 <div className="hc-folio-body">
                   <div className="hc-folio-top">
-                    <span className="hc-folio-idx">№ {p.idx}</span>
                     <span className="hc-folio-meta">{p.mod} · {p.loc}</span>
                   </div>
                   <h3 className="hc-folio-name"><em>{p.name}</em></h3>
@@ -354,7 +390,7 @@ export function PropertiesIndex() {
                   </span>
                 </div>
               </div>
-            </a>
+            </article>
           ))}
         </div>
       </div>

@@ -228,6 +228,9 @@ export function Process() {
   // stage for the .proc-mobile swipe carousel (see render), driven by the user's thumb, not scroll.
   // So there's no mobile ScrollTrigger here anymore. Reduced-motion: no pin.
   useEffect(() => {
+    let cancelled = false;
+    let firstFrame = 0;
+    let secondFrame = 0;
     const reduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const onScroll = (self) => {
       const p = self.progress;
@@ -249,7 +252,31 @@ export function Process() {
         onUpdate: onScroll,
       });
     });
-    return () => mm.revert();
+
+    // Paras · 2026-06-24: refresh after the loader restores scrolling so pin bounds use settled layout.
+    const refreshAfterLoader = () => {
+      Promise.resolve(document.fonts?.ready).then(() => {
+        if (cancelled) return;
+        firstFrame = requestAnimationFrame(() => {
+          secondFrame = requestAnimationFrame(() => {
+            if (!cancelled) ScrollTrigger.refresh();
+          });
+        });
+      });
+    };
+    if (document.querySelector('.loader')) {
+      document.addEventListener('onepixel:loader-complete', refreshAfterLoader, { once: true });
+    } else {
+      refreshAfterLoader();
+    }
+
+    return () => {
+      cancelled = true;
+      document.removeEventListener('onepixel:loader-complete', refreshAfterLoader);
+      cancelAnimationFrame(firstFrame);
+      cancelAnimationFrame(secondFrame);
+      mm.revert();
+    };
   }, []);
 
   return (

@@ -36,9 +36,9 @@ function SeamBleedBand() {
 
 export function Testimonials() {
   const items = [
-    { quote: 'They didn’t just redesign our site, they reset what our brand could look like online.',           who: 'Naina Mehta',   role: 'Principal Broker, Aangan Estates', av: 'NM', image: '/testimonials/naina-mehta.jpg' },
-    { quote: 'Fastest, sharpest, calmest project I’ve ever shipped with an agency. We launched a week ahead.',   who: 'Rohan Khanna',  role: 'Head of Growth, Setu Labs',         av: 'RK', image: '/testimonials/rohan-khanna.jpg' },
-    { quote: 'Every detail was considered. Our conversion rate is up 38% three months in.',                      who: 'Ananya Patel',  role: 'Founder, Karigar Living',           av: 'AP', image: '/testimonials/ananya-patel.jpg' },
+    { quote: 'Honestly, our old website was too basic. I was wanting to redo it since two years but never found the time. Now it properly looks like the serious firm we are, and clients have also started taking us more seriously.', who: 'Naina Mehta',   role: 'Principal Broker, Aangan Estates', av: 'NM', image: '/testimonials/naina-mehta.jpg' },
+    { quote: 'I have worked with two or three agencies before, and usually by the third week itself everything becomes a mess. This time there was no such drama at all. Everything was on time, in fact we went live one week early only.', who: 'Rohan Khanna',  role: 'Head of Growth, Setu Labs',         av: 'RK', image: '/testimonials/rohan-khanna.jpg' },
+    { quote: 'It has been three months and our enquiries have almost doubled. So many customers keep telling me the site looks really premium. For this price, frankly, it is too good.', who: 'Ananya Patel',  role: 'Founder, Karigar Living',           av: 'AP', image: '/testimonials/ananya-patel.jpg' },
   ];
   return (
     <section id="testimonials" style={{ background: 'var(--paper)', position: 'relative' }}>

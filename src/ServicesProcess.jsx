@@ -166,9 +166,9 @@ function ProcPixels({ step }) {
 export function Process() {
   const steps = [
     { n: '01', t: 'Discovery',      tag: 'Listen', d: 'A 30 minute call. We dig into your business, your audience, and the metric that actually matters. No pitch deck.', time: 'Week 1',     deliverables: ['Kickoff brief', 'Audience map', 'Success metric'], visual: '/process/discovery-signal-funnel.png' },
-    { n: '02', t: 'Direction',      tag: 'Decide', d: 'Two visual directions, one strategy. We pick a path together in a single review. No fourteen rounds of revisions.', time: 'Week 1 to 2', deliverables: ['Two directions', 'Moodboard', 'Site map'], visual: '/process/direction-homepage-review.png' },
-    { n: '03', t: 'Build',          tag: 'Make',   d: 'Design and engineering happen in parallel. Weekly demos in your live staging URL. Not slides, not PDFs.',           time: 'Week 3 to 7', deliverables: ['Live staging', 'Weekly demos', 'CMS handoff'], visual: '/process/build-assembly.png' },
-    { n: '04', t: 'Launch + Care',  tag: 'Ship',   d: 'We ship the site, monitor it, and stick around. 14 days of tuning after launch is included with every project.',     time: 'Week 8 →',   deliverables: ['Launch day', '14 days of care', 'Retainer optional'], visual: '/process/launch-care-abstract.png' },
+    { n: '02', t: 'Direction',      tag: 'Decide', d: 'Two visual directions, one strategy. We pick a path together in a single review. No fourteen rounds of revisions.', time: 'Week 1', deliverables: ['Two directions', 'Moodboard', 'Site map'], visual: '/process/direction-homepage-review.png' },
+    { n: '03', t: 'Build',          tag: 'Make',   d: 'Design and engineering happen in parallel. Weekly demos in your live staging URL. Not slides, not PDFs.',           time: 'Week 1 to 2', deliverables: ['Live staging', 'Weekly demos', 'CMS handoff'], visual: '/process/build-assembly.png' },
+    { n: '04', t: 'Launch + Care',  tag: 'Ship',   d: 'We ship the site, monitor it, and stick around. 14 days of tuning after launch is included with every project.',     time: 'Week 3 →',   deliverables: ['Launch day', '14 days of care', 'Retainer optional'], visual: '/process/launch-care-abstract.png' },
   ];
   const [active, setActive] = useState(0);
   const ref = useRef(null);
@@ -259,9 +259,9 @@ export function Process() {
           <div className="section-head">
             <div><div className="section-num">[ 03 ] Process</div></div>
             <div>
-              <h2 className="section-title">From kickoff to <em>live</em> in 4 to 8 weeks.</h2>
+              <h2 className="section-title">From kickoff to <em>live</em> in 2 to 3 weeks.</h2>
               <p className="section-sub" style={{ marginTop: 24 }}>
-                One project at a time. One small senior team. No account managers, no relay races, no surprises.
+                One project at a time. One senior team. No surprises.
               </p>
             </div>
           </div>

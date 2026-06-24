@@ -78,7 +78,7 @@ export function Testimonials() {
 export function FAQ() {
   const qs = [
     { q: 'How do you scope a project?', a: 'Every project starts with a 30 minute discovery call. We listen, understand the work ahead, and send a detailed proposal built around your real needs, not a one size fits all price list. The first call is on us, with no pressure to take it further.' },
-    { q: 'How long does it take?', a: 'Most websites take 4 to 6 weeks. Bigger projects that include branding run 6 to 10 weeks. We take on one new project a month, so yours always gets our full attention.' },
+    { q: 'How long does it take?', a: 'Most websites take 2 to 3 weeks. Bigger projects run 4 to 6 weeks. We take on one new project a month, so yours always gets our full attention.' },
     { q: 'What do you build websites with?', a: 'We choose the right technology for your needs, not whatever is trendy. The result is a website that loads fast, ranks well, and is easy for your team to update without calling a developer.' },
     { q: 'Do you offer ongoing care?', a: 'Yes. Every project includes 14 days of fine tuning after launch. After that, we offer simple monthly plans for design and development, and most clients stay with us for 6 to 12 months.' },
     { q: 'Why “OnePixel”?', a: 'Because the difference between average and exceptional is usually one pixel, repeated obsessively across every screen. That’s the bar we hold ourselves to.' },

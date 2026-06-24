@@ -65,7 +65,7 @@ const PACKAGES = {
       'Everything in Launch, plus:',
       'Advanced on-page SEO + speed optimization',
       'Analytics + Meta Pixel setup',
-      'Ready in about 12 to 18 days',
+      'Ready in about 10 to 14 days',
     ],
   },
   flagship: {
@@ -76,7 +76,7 @@ const PACKAGES = {
       'Signature animations and interactions',
       'Conversion-focused landing pages',
       'Full SEO, analytics and performance tuning',
-      'Ready in about 18 to 28 days',
+      'Ready in about 14 to 21 days',
     ],
   },
 };

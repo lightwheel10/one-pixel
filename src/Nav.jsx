@@ -80,7 +80,6 @@ export function Nav({ dark, onToggleTheme }) {
       <a href="#top" className="nav-logo">
         <PixelMark />
         <span>OnePixel</span>
-        <span className="nav-est">EST. ’24</span>
       </a>
       {/* Paras: desktop inline links — CSS hides these < 700px in favour of the dropdown. */}
       <div className="nav-links">

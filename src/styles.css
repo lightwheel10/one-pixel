@@ -28,7 +28,9 @@ body {
   overflow-x: hidden;
 }
 
-::selection { background: var(--accent); color: var(--paper); }
+/* Paras · 2026-06-24: selection highlight disabled — selecting text no longer shows the coral
+   tint (or any highlight colour). Text stays fully selectable and copyable; only the visual is off. */
+::selection { background: transparent; color: inherit; }
 
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
@@ -93,9 +95,6 @@ img { display: block; max-width: 100%; }
 }
 .nav-logo .lockup { display:flex; align-items:baseline; gap: 2px; }
 .nav-logo .dot { width: 8px; height: 8px; background: var(--accent); display: inline-block; margin-right: 8px; }
-/* Paras: the “EST. ’24” badge — was inline-styled; moved to a class so it can be
-   hidden on small phones (see the 420px media query below). */
-.nav-est { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-left: 8px; letter-spacing: 0.1em; }
 .nav-links {
   display: flex; gap: 28px;
   font-family: var(--mono);
@@ -171,10 +170,6 @@ img { display: block; max-width: 100%; }
   .nav-cta { display: none; }
   .nav-burger { display: inline-flex; }
   .nav-mobile { display: flex; }
-}
-/* Paras: drop the decorative “EST. ’24” badge on small phones so the bar never clips. */
-@media (max-width: 420px) {
-  .nav-est { display: none; }
 }
 
 /* ============ THEME TOGGLE ============ */

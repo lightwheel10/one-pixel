@@ -11,9 +11,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 // connected via the WhatsApp Business account, is the live hand-off channel for every lead.
 const WHATSAPP_NUMBER = '916307022880';
 
-// TODO(Paras): once the VPS endpoint is live, set this URL and submitLead() will POST every lead to
-// it (in addition to the WhatsApp hand-off). Empty for now, so we just log.
-const LEAD_ENDPOINT = '';
+// Paras · 2026-06-25: live VPS endpoint. submitLead() POSTs every completed form here (alongside the
+// WhatsApp hand-off); leads are stored in Postgres on the VPS (form.onepixel.in -> nginx -> a node
+// service on localhost:4000 -> the onepixel db) and an instant ping is sent to Discord.
+const LEAD_ENDPOINT = 'https://form.onepixel.in/api/leads';
 
 // openStartForm() is imported by every CTA (nav, hero, hosting) so they stay decoupled from this
 // component — they just fire the event; the single mounted <StartForm/> in App listens for it.
@@ -375,11 +376,15 @@ export function StartForm() {
             <input id="sf-biz" defaultValue={a.business} autoComplete="organization" placeholder="Your company" onBlur={sync('business')} />
           </div>
           <label className="sf-consent">
-            <input id="sf-consent" type="checkbox" defaultChecked={a.consent} />
+            {/* Paras · 2026-06-25: consent is the one CONTROLLED field here. Checkboxes are never
+                autofilled, so the uncontrolled-input caveat above doesn't apply — controlling it lets
+                it drive the submit button's disabled state, making the contact consent non-negotiable. */}
+            <input id="sf-consent" type="checkbox" checked={a.consent} onChange={(e) => setA((s) => ({ ...s, consent: e.target.checked }))} />
             <span>I would like OnePixel to contact me about my project on WhatsApp or email.</span>
           </label>
           {err && <div className="sf-error" role="alert">{err}</div>}
-          <button type="submit" className="sf-submit">See my recommendation →</button>
+          {/* Submit is greyed out until consent is ticked (CSS: .sf-submit:disabled). */}
+          <button type="submit" className="sf-submit" disabled={!a.consent}>See my recommendation →</button>
         </form>
       </div>
     );

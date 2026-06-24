@@ -239,6 +239,19 @@ function ContactPixels() {
   );
 }
 
+// Paras · 2026-06-24: the "Currently booking" month updates itself. We book the next calendar
+// month, so this returns today's month + 1 (rolling the year over in December → January). It's
+// evaluated fresh in every visitor's browser on each page load, so it's always right with no
+// manual edits and no background job — the page's own JS is the "script".
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+function nextBookingLabel() {
+  const now = new Date();
+  let month = now.getMonth() + 1;   // getMonth() is 0-indexed; +1 lands on next month
+  let year = now.getFullYear();
+  if (month > 11) { month = 0; year += 1; }   // December → January of next year
+  return `Booking ${MONTHS[month]} ${year}`;
+}
+
 export function Contact() {
   const sectionRef = useRef(null);
   const headingRef = useRef(null);
@@ -346,7 +359,7 @@ export function Contact() {
             <div className="contact-block">
               <div className="label">Currently</div>
               <div className="big" style={{ color: 'var(--accent)' }}>
-                Booking July 2026 →
+                {nextBookingLabel()} →
               </div>
             </div>
           </div>

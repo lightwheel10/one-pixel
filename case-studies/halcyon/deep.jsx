@@ -76,6 +76,32 @@ export function History() {
       };
     });
 
+    // Mobile keeps the vertical record, but still brings the current entry into colour.
+    mm.add('(max-width: 860px)', () => {
+      const panels = gsap.utils.toArray(trackRef.current.querySelectorAll('.hc-rec-panel'));
+      let activeIdx = -1;
+
+      const setActive = (idx) => {
+        if (idx === activeIdx) return;
+        if (activeIdx >= 0) panels[activeIdx].classList.remove('is-active');
+        panels[idx].classList.add('is-active');
+        activeIdx = idx;
+      };
+
+      const triggers = panels.map((panel, idx) => ScrollTrigger.create({
+        trigger: panel,
+        start: 'top 65%',
+        end: 'bottom 35%',
+        onEnter: () => setActive(idx),
+        onEnterBack: () => setActive(idx),
+      }));
+
+      return () => {
+        triggers.forEach((trigger) => trigger.kill());
+        if (activeIdx >= 0) panels[activeIdx].classList.remove('is-active');
+      };
+    });
+
     // The loader locks body scroll for ~2.5s and the big display font loads late;
     // recompute every trigger once both have settled so the pin geometry is correct.
     const refresh = () => ScrollTrigger.refresh();

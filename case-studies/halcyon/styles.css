@@ -126,9 +126,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   color: var(--hc-stone);
   display: flex; align-items: center; gap: 24px;
 }
-@media (max-width: 800px) {
-  .hc-nav-links, .hc-nav-meta { display: none; }
-}
 .hc-call {
   border: 1px solid var(--hc-ink);
   padding: 10px 16px;
@@ -140,6 +137,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   display: inline-flex; align-items: center; gap: 8px;
 }
 .hc-call:hover { background: var(--hc-ink); color: var(--hc-paper); }
+@media (max-width: 800px) {
+  .hc-nav-links, .hc-nav-meta, .hc-call { display: none; }
+}
 
 /* ============ HERO — typographic title page over faded atmosphere ============ */
 .hc-hero {
@@ -202,7 +202,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   display: grid; grid-template-columns: 1.3fr 1fr;
   gap: clamp(24px, 5vw, 72px); align-items: end;
 }
-@media (max-width: 760px) { .hc-hero-foot { grid-template-columns: 1fr; gap: 16px; } }
 .hc-hero-note {
   font-family: var(--hc-body); font-size: 16px; line-height: 1.62;
   color: rgba(242, 239, 234, 0.82); max-width: 44ch;
@@ -210,6 +209,74 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hc-hero-detail {
   font-family: var(--hc-mono); font-size: 10px; letter-spacing: 0.16em;
   text-transform: uppercase; color: rgba(242, 239, 234, 0.55); line-height: 1.8;
+}
+@media (max-width: 800px) {
+  .hc-hero {
+    min-height: calc(100svh - var(--hc-topbar-h) - 78px);
+  }
+  .hc-hero-bg {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .hc-hero-bg img {
+    object-position: 60% center;
+  }
+  .hc-hero-inner {
+    padding: clamp(28px, 5vh, 48px) var(--hc-gutter) clamp(24px, 4vh, 40px);
+    gap: clamp(24px, 4vh, 40px);
+  }
+  .hc-hero-top {
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .hc-hero-top .hc-hero-rule {
+    display: none;
+  }
+  .hc-hero-mark {
+    font-size: clamp(18px, 4.5vw, 22px);
+  }
+  .hc-hero-eyebrow {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-align: right;
+  }
+  .hc-hero-title {
+    font-size: clamp(38px, 10.2vw, 72px);
+    line-height: 0.98;
+    letter-spacing: -0.025em;
+  }
+  .hc-hero-kept-rule {
+    height: 3px;
+  }
+  .hc-hero-foot {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .hc-hero-note {
+    font-size: clamp(14px, 3.8vw, 16px);
+    line-height: 1.55;
+    max-width: 36ch;
+  }
+  .hc-hero-detail {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    line-height: 1.7;
+  }
+  .hc-hero-base {
+    gap: 14px;
+  }
+}
+@media (max-width: 420px) {
+  .hc-hero-eyebrow {
+    max-width: 18ch;
+    white-space: normal;
+    line-height: 1.5;
+  }
+  .hc-hero-title {
+    font-size: clamp(36px, 10.5vw, 44px);
+  }
 }
 
 /* ============ SECTION ============ */

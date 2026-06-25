@@ -48,9 +48,8 @@ export function Hero() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     let played = false;
-    let onMove;
+    const mm = gsap.matchMedia();
 
     const ctx = gsap.context(() => {
       gsap.set('.hc-hero-bg', { scale: 1.14 });
@@ -58,7 +57,7 @@ export function Hero() {
       gsap.set('.hc-hero-mark, .hc-hero-eyebrow, .hc-hero-cue, .hc-hero-foot > *', { opacity: 0, y: 18 });
       gsap.set('.hc-hero-rule, .hc-hero-kept-rule', { scaleX: 0 });
 
-      if (!reduce) {
+      mm.add('(min-width: 801px) and (prefers-reduced-motion: no-preference)', () => {
         // scroll parallax: backdrop drifts, content lifts + fades as the hero leaves
         gsap.to('.hc-hero-bg', {
           yPercent: 9, ease: 'none',
@@ -69,20 +68,22 @@ export function Hero() {
           scrollTrigger: { trigger: ref.current, start: 'top top', end: 'bottom top', scrub: true },
         });
         // cursor parallax: backdrop and headline drift oppositely for depth (desktop)
-        if (fine) {
+        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
           const bgX = gsap.quickTo('.hc-hero-bg', 'x', { duration: 1.1, ease: 'power3' });
           const bgY = gsap.quickTo('.hc-hero-bg', 'y', { duration: 1.1, ease: 'power3' });
           const ttlX = gsap.quickTo('.hc-hero-title', 'x', { duration: 1.2, ease: 'power3' });
           const ttlY = gsap.quickTo('.hc-hero-title', 'y', { duration: 1.2, ease: 'power3' });
-          onMove = (e) => {
+          const onMove = (e) => {
             const px = e.clientX / window.innerWidth - 0.5;
             const py = e.clientY / window.innerHeight - 0.5;
             bgX(px * 24); bgY(py * 16);
             ttlX(px * -16); ttlY(py * -10);
           };
           window.addEventListener('mousemove', onMove);
+          return () => window.removeEventListener('mousemove', onMove);
         }
-      }
+        return undefined;
+      });
     }, ref);
 
     const play = () => {
@@ -114,7 +115,7 @@ export function Hero() {
     return () => {
       clearTimeout(fb);
       document.removeEventListener('onepixel:loader-complete', play);
-      if (onMove) window.removeEventListener('mousemove', onMove);
+      mm.revert();
       ctx.revert();
     };
   }, []);

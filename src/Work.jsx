@@ -76,12 +76,12 @@ export function Work() {
 
   const items = [
     { num: '01', name: 'Mehta & Sons',     domain: 'mehta-sons.in',      meta: ['Family Office', 'Brand + Site', '2026'], kind: 'editorial',  href: '/case-studies/halcyon/', live: true, preview: '/work/mehta-sons-full.jpg' },
-    { num: '02', name: 'Sahyadri & Co',    domain: 'sahyadri.co',        meta: ['Tax + Advisory', 'Brand + Site', '2026'], kind: 'saas',       preview: '/work/sahyadri-placeholder.jpg' },
-    { num: '03', name: 'Forest & Loom',    domain: 'forestandloom.com',  meta: ['D2C Textiles', 'Shopify', '2025'],        kind: 'ecommerce',  preview: '/work/forest-loom-placeholder.jpg' },
+    { num: '02', name: 'Saint Orson',      domain: 'saintorson.com',     meta: ['Luxury Fashion', 'Editorial Commerce', '2026'], kind: 'ecommerce', href: '/case-studies/saint-orson/', live: true, preview: '/work/saint-orson-full.jpg' },
+    { num: '03', name: 'Forest & Loom',    domain: 'forestandloom.com',  meta: ['D2C Textiles', 'Custom Storefront', '2026'], kind: 'ecommerce',  href: '/case-studies/forest-loom/', live: true, preview: '/work/forest-loom-full.jpg' },
     { num: '04', name: 'Sangam Type Co',   domain: 'sangamtype.co',      meta: ['Type Foundry', 'Design + Dev', '2025'],   kind: 'type',       preview: '/work/sangam-type-placeholder.jpg' },
     { num: '05', name: 'Pravah Cloud',     domain: 'pravah.cloud',       meta: ['B2B SaaS', 'Site + Docs', '2025'],        kind: 'saas',       preview: '/work/pravah-cloud-placeholder.jpg' },
     { num: '06', name: 'Coast & Co',       domain: 'coastandco.in',      meta: ['Boutique Hotels', 'CMS', '2025'],         kind: 'editorial',  preview: '/work/coast-co-placeholder.jpg' },
-    { num: '07', name: 'Karya Industries', domain: 'karya.industries',   meta: ['Industrial', 'Site', '2025'],             kind: 'structured', preview: '/work/karya-industries-placeholder.jpg' },
+    { num: '07', name: 'Karya Solar',      domain: 'karyasolar.com',    meta: ['Solar Infrastructure', 'Site', '2026'],   kind: 'structured', href: '/case-studies/karya/', live: true, preview: '/work/karya-industries-placeholder.jpg' },
   ];
 
   return (
@@ -110,7 +110,22 @@ export function Work() {
                 </div>
                 <div className="work-screen" aria-hidden>
                   <div className="work-shot-wrap">
-                    <img className="work-shot" src={it.preview} alt="" loading="lazy" />
+                    <img
+                      className="work-shot"
+                      src={it.preview}
+                      alt=""
+                      loading="lazy"
+                      onLoad={(e) => {
+                        // The card scrolls the whole preview over a fixed CSS duration, so a tall page
+                        // scrolls fast and a short one drags. Normalise to a constant speed (anchored to
+                        // the Mehta capture, 1280×9845 → 24.6s) so every card glides at the same pace.
+                        const im = e.currentTarget;
+                        if (!im.naturalWidth) return;
+                        const ratio = im.naturalHeight / im.naturalWidth; // frame is 16:10 → 0.625
+                        const dur = Math.max(5, 3.48 * (ratio - 0.625));
+                        im.style.transitionDuration = `${dur.toFixed(1)}s`;
+                      }}
+                    />
                     {it.href && <span className="work-preview-cta">View site</span>}
                   </div>
                 </div>

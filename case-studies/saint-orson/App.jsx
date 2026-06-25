@@ -1,0 +1,1193 @@
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Loader } from '../../src/Loader.jsx';
+import { PRODUCTS, PRODUCT_BY_SLUG, productHref, formatINR } from './products.js';
+
+gsap.registerPlugin(ScrollTrigger);
+
+const ASSET = '/case-studies/saint-orson/';
+const LOOKS = PRODUCTS.slice(0, 7);
+const COLOR_HEX = {
+  Black: '#101010', Navy: '#17203c', Wine: '#651c2b', Charcoal: '#454544',
+  Ivory: '#ded8cb', Stone: '#aaa397', Chestnut: '#5c321f', Oxblood: '#571d26',
+};
+
+function Header({ bag, onBag, onSearch, interiorPage = false }) {
+  const homeLink = (id = '') => interiorPage ? `#/${id ? `?section=${id}` : ''}` : `#${id}`;
+  return (
+    <header className={`so-header${interiorPage ? ' product-page' : ''}`}>
+      <a className="so-wordmark" href={homeLink()}>Saint Orson</a>
+      <nav className="so-nav" aria-label="Primary navigation">
+        <a href="#/shop">Shop all</a>
+        <a href={homeLink('morning')}>Collection</a>
+        <a href={homeLink('journey')}>Stories</a>
+        <a href={homeLink('fit')}>Studio</a>
+      </nav>
+      <div className="so-tools">
+        <button type="button" onClick={onSearch}>Search</button>
+        <button type="button" onClick={() => { window.location.href = 'mailto:clients@saintorson.com?subject=' + encodeURIComponent('Client account'); }}>Account</button>
+        <button type="button" onClick={onBag}>Bag ({bag})</button>
+      </div>
+    </header>
+  );
+}
+
+function ChapterRail({ active }) {
+  const chapters = ['top', 'morning', 'journey', 'fit', 'discover', 'evening'];
+  return (
+    <aside className="so-chapters" aria-label="Page chapters">
+      <span>Chapters</span>
+      {chapters.map((id, index) => (
+        <a key={id} className={active === id ? 'active' : ''} href={`#${id}`}>
+          {String(index + 1).padStart(2, '0')}
+        </a>
+      ))}
+      <i aria-hidden="true" />
+    </aside>
+  );
+}
+
+function LookTicker() {
+  const polo = PRODUCT_BY_SLUG['cashmere-polo-knit'];
+  const trouser = PRODUCT_BY_SLUG['pleated-wool-trouser'];
+  const coat = PRODUCT_BY_SLUG['milano-coat'];
+  return (
+    <div className="so-ticker">
+      <span className="accent">Wearing look 04</span>
+      <a href={productHref(polo.slug)}>{polo.name}</a><b>·</b><span>Navy</span><span>{formatINR(polo.price)}</span>
+      <b>·</b><a href={productHref(trouser.slug)}>{trouser.name}</a><span>Ivory</span><span>{formatINR(trouser.price)}</span>
+      <b>·</b><a href={productHref(coat.slug)}>{coat.name}</a><span>Navy</span><span>{formatINR(coat.price)}</span>
+      <a href="#discover">Isolate garment <i>⌖</i></a>
+    </div>
+  );
+}
+
+function Hero() {
+  return (
+    <section className="so-hero" id="top">
+      <img src={`${ASSET}hero.webp`} alt="Saint Orson model in black tailoring beside limestone architecture" />
+      <div className="so-hero-shade" />
+      <div className="so-issue-side"><span>Issue</span><b>01</b></div>
+      <div className="so-issue-number">01</div>
+      <div className="so-weather">
+        <span>Spring<br />Summer<br />2026</span>
+        <span>08:32<br />AM</span>
+        <span>14°C<br />Paris</span>
+      </div>
+      <h1>A day,<br />well cut</h1>
+      <a className="so-scroll" href="#morning">Scroll to begin <span>↓</span></a>
+    </section>
+  );
+}
+
+function Morning() {
+  const blazer = PRODUCT_BY_SLUG['relaxed-tailored-blazer'];
+  const scarf = PRODUCT_BY_SLUG['silk-print-scarf'];
+  return (
+    <section className="so-morning so-light" id="morning">
+      <div className="so-morning-copy">
+        <span className="so-number">01.</span>
+        <h2>Morning<br />structure</h2>
+        <p>City light.<br />Considered silhouettes.<br />Purpose in every detail.</p>
+        <a href="#journey">Read the story <span>→</span></a>
+      </div>
+      <div className="so-morning-photo">
+        <img src={`${ASSET}morning.webp`} alt="Woman wearing an ivory Saint Orson suit" loading="lazy" />
+      </div>
+      <div className="so-related">
+        <a href={productHref(blazer.slug)} className="so-related-product">
+          <div className="so-product-crop blazer"><img src={`${ASSET}products.webp`} alt="Ivory tailored blazer" loading="lazy" /></div>
+          <div><span>{blazer.name}</span><small>Ivory<br />{formatINR(blazer.price)}</small><i aria-hidden="true">+</i></div>
+        </a>
+        <a href={productHref(scarf.slug)} className="so-related-product">
+          <div className="so-product-crop scarf"><img src={`${ASSET}products.webp`} alt="Navy silk scarf" loading="lazy" /></div>
+          <div><span>{scarf.name}</span><small>Navy / Red<br />{formatINR(scarf.price)}</small><i aria-hidden="true">+</i></div>
+        </a>
+      </div>
+    </section>
+  );
+}
+
+function Journey() {
+  return (
+    <section className="so-journey" id="journey">
+      <img src={`${ASSET}train.webp`} alt="Saint Orson model walking beside a midnight train" loading="lazy" />
+      <div className="so-journey-shade" />
+      <div className="so-journey-copy">
+        <span className="so-number">02.</span>
+        <h2>En route</h2>
+        <p>The in-between.<br />Moments that<br />move the day forward.</p>
+        <a href="#fit">Read the story <span>→</span></a>
+      </div>
+      <div className="so-look-strip">
+        {LOOKS.map((product, index) => (
+          <a key={product.slug} href={productHref(product.slug)} className={index === 3 ? 'active' : ''}>
+            <span className={`so-look-thumb look-${index + 1}`}><img src={`${ASSET}${index % 2 ? 'morning' : 'hero'}.webp`} alt="" /></span>
+            <small>Look {product.number}</small>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Fit() {
+  const [fit, setFit] = useState('Regular');
+  const [size, setSize] = useState('38');
+  return (
+    <section className="so-fit" id="fit">
+      <img src={`${ASSET}tailoring.webp`} alt="" aria-hidden="true" loading="lazy" />
+      <div className="so-fit-shade" />
+      <div className="so-fit-title">
+        <span className="so-number">03.</span>
+        <h2>Find<br />your<br />cut</h2>
+        <small>Measure · Adjust · Perfect</small>
+      </div>
+      <div className="so-fit-message">
+        <p>A better fit<br />changes everything.</p>
+        <a href="#discover">Start the tool <span>→</span></a>
+      </div>
+      <div className="so-jacket" aria-hidden="true">
+        <svg viewBox="0 0 260 310">
+          <path d="M83 28 118 15h24l35 13 38 44-27 25-9-15v194H80V82l-9 15-27-25 39-44Z" />
+          <path d="m118 15-17 46 29 31 29-31-17-46M130 92v184M101 61l29 31 29-31M91 128h28M141 128h28M92 198h25M143 198h25" />
+        </svg>
+      </div>
+      <div className="so-fit-controls">
+        <fieldset>
+          <legend>Fit</legend>
+          {['Slim', 'Regular', 'Relaxed'].map((item) => (
+            <label key={item}><input type="radio" checked={fit === item} onChange={() => setFit(item)} />{item}</label>
+          ))}
+        </fieldset>
+        <fieldset>
+          <legend>Size</legend>
+          {['36', '38', '40', '42', '44'].map((item) => (
+            <label key={item}><input type="radio" checked={size === item} onChange={() => setSize(item)} />{item}</label>
+          ))}
+        </fieldset>
+      </div>
+    </section>
+  );
+}
+
+function Discover({ onAdd }) {
+  const blazer = PRODUCT_BY_SLUG['relaxed-tailored-blazer'];
+  const polo = PRODUCT_BY_SLUG['cashmere-polo-knit'];
+  const dress = PRODUCT_BY_SLUG['draped-silk-dress'];
+  const coat = PRODUCT_BY_SLUG['milano-coat'];
+  const scarf = PRODUCT_BY_SLUG['silk-print-scarf'];
+  const holdall = PRODUCT_BY_SLUG['weekend-holdall'];
+  return (
+    <section className="so-discover so-light" id="discover">
+      <header>
+        <div><span className="so-number">04.</span><h2>Discover</h2></div>
+        <p>A working wardrobe, seen in fragments.<br />Seven pieces. One day.</p>
+      </header>
+      <div className="so-contact-sheet">
+        <a href={productHref(blazer.slug)} className="so-discover-tile so-discover-woman" aria-label="Explore morning tailoring">
+          <img src={`${ASSET}morning.webp`} alt="Woman in ivory Saint Orson tailoring" loading="lazy" />
+          <span><b>01</b> Morning tailoring</span>
+        </a>
+        <a href={productHref(polo.slug)} className="so-discover-tile so-discover-man" aria-label="Explore the cashmere polo">
+          <img src={`${ASSET}hero.webp`} alt="Man wearing a black cashmere polo" loading="lazy" />
+          <span><b>02</b> Cashmere polo</span>
+        </a>
+        <a href={productHref(dress.slug)} className="so-discover-tile so-discover-night" aria-label="Explore evening dressing">
+          <img src={`${ASSET}evening.webp`} alt="Woman in the evening collection" loading="lazy" />
+          <span><b>03</b> After dark</span>
+        </a>
+        <a href={productHref(coat.slug)} className="so-discover-tile so-discover-atelier" aria-label="Explore tailoring details">
+          <img src={`${ASSET}tailoring.webp`} alt="Saint Orson tailoring materials" loading="lazy" />
+          <span><b>04</b> The cut within</span>
+        </a>
+        <a href={productHref(blazer.slug)} className="so-discover-tile so-discover-blazer" aria-label="Explore the ivory blazer">
+          <span className="so-product-crop blazer"><img src={`${ASSET}products.webp`} alt="Ivory tailored blazer" loading="lazy" /></span>
+          <span><b>05</b> Relaxed blazer <i>{formatINR(blazer.price)}</i></span>
+        </a>
+        <a href={productHref(scarf.slug)} className="so-discover-tile so-discover-scarf" aria-label="Explore the silk scarf">
+          <span className="so-product-crop scarf"><img src={`${ASSET}products.webp`} alt="Navy and red silk scarf" loading="lazy" /></span>
+          <span><b>06</b> Silk scarf <i>{formatINR(scarf.price)}</i></span>
+        </a>
+        <a href={productHref(dress.slug)} className="so-discover-tile so-discover-dress" aria-label="Explore the draped silk dress">
+          <img src={`${ASSET}dress.webp`} alt="Black draped silk dress" loading="lazy" />
+          <span><b>07</b> Draped silk <i>{formatINR(dress.price)}</i></span>
+        </a>
+        <article className="so-bag-feature">
+          <div className="so-product-crop bag"><img src={`${ASSET}products.webp`} alt="Dark chestnut weekend bag" loading="lazy" /></div>
+          <div>
+            <span>Weekend holdall</span>
+            <small>Dark chestnut<br />{formatINR(holdall.price)}</small>
+          </div>
+          <button onClick={() => onAdd(holdall)} aria-label="Add weekend holdall">+</button>
+          {/* Stretched link covers the tile (real anchor); the + button sits above it (z-index) to add instead. */}
+          <a className="so-bag-link" href={productHref(holdall.slug)} aria-label="View weekend holdall" />
+        </article>
+      </div>
+    </section>
+  );
+}
+
+function Evening({ onAdd }) {
+  const product = PRODUCT_BY_SLUG['draped-silk-dress'];
+  const [color, setColor] = useState('black');
+  const [size, setSize] = useState('S');
+  const [saved, setSaved] = useState(false);
+  return (
+    <section className="so-evening" id="evening">
+      <div className="so-evening-copy">
+        <span className="so-number">05.</span>
+        <h2>Evening<br />chapter</h2>
+        <p>Nightfall calls<br />for ease and<br />elegance.</p>
+        <a href="#collection">Read the story <span>→</span></a>
+      </div>
+      <img src={`${ASSET}evening.webp`} alt="Woman in a draped black evening dress" loading="lazy" />
+      <div className="so-dress-panel">
+        <button className="so-close" aria-label="Close product">×</button>
+        <div className={`so-dress ${color}`}>
+          <img src={`${ASSET}dress.webp`} alt="Draped black silk dress" loading="lazy" />
+        </div>
+        <div className="so-dress-info">
+          <h3>{product.name}</h3><p>{color}<br />{formatINR(product.price)}</p>
+          <a className="so-view-product" href={productHref(product.slug)}>View full details <span>→</span></a>
+          <label>Color</label>
+          <div className="so-swatches">
+            {['black', 'navy', 'wine'].map((item) => <button key={item} className={`${item} ${color === item ? 'active' : ''}`} aria-pressed={color === item} onClick={() => setColor(item)} aria-label={item} />)}
+          </div>
+          <label>Size</label>
+          <div className="so-sizes">
+            {['XS', 'S', 'M', 'L'].map((item) => <button key={item} className={size === item ? 'active' : ''} aria-pressed={size === item} onClick={() => setSize(item)}>{item}</button>)}
+          </div>
+          <div className="so-buy-row"><button onClick={() => onAdd(product, { color: color.charAt(0).toUpperCase() + color.slice(1), size })}>Add to bag</button><button onClick={() => setSaved((value) => !value)}>{saved ? 'Saved ✓' : 'Save for later'}</button></div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ShopCard({ product, index, onAdd }) {
+  return (
+    <article className={`so-shop-card so-shop-card-${index + 1}`}>
+      <div>
+        <a className="so-shop-media" href={productHref(product.slug)} aria-label={`View ${product.name}`}>
+          {product.shopCrop ? (
+            <span className={`so-shop-product-crop ${product.shopCrop}`}>
+              <img src={`${ASSET}${product.shopImage}`} alt={product.name} loading="lazy" />
+            </span>
+          ) : (
+            <img src={`${ASSET}${product.shopImage}`} alt={product.name} loading="lazy" style={{ objectPosition: product.shopPosition }} />
+          )}
+          <span className="so-shop-view">View piece <i>↗</i></span>
+        </a>
+        <div className="so-shop-card-info">
+          <div>
+            <span>{product.category}</span>
+            <h2><a href={productHref(product.slug)}>{product.name}</a></h2>
+          </div>
+          <div className="so-shop-card-buy">
+            <strong>{formatINR(product.price)}</strong>
+            <button onClick={() => onAdd(product)} aria-label={`Add ${product.name} to bag`}>+</button>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function ShopPage({ onAdd }) {
+  const root = useRef(null);
+  const gridRef = useRef(null);
+  const [filter, setFilter] = useState('All');
+  const [displayFilter, setDisplayFilter] = useState('All');
+  const [filtering, setFiltering] = useState(false);
+  const filters = ['All', 'Tailoring', 'Knitwear', 'Evening', 'Accessories'];
+  const group = (product) => {
+    if (product.category.includes('Evening')) return 'Evening';
+    if (['Accessories', 'Leather goods'].includes(product.category)) return 'Accessories';
+    return product.category;
+  };
+  const visible = displayFilter === 'All' ? PRODUCTS : PRODUCTS.filter((product) => group(product) === displayFilter);
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const ctx = gsap.context(() => {
+      gsap.timeline()
+        .from('.so-shop-hero .so-number, .so-shop-hero h1, .so-shop-hero p', {
+          y: 36, opacity: 0, duration: 1, stagger: 0.1, ease: 'power3.out',
+        })
+        .from('.so-shop-filter', { y: 20, opacity: 0, duration: .8, ease: 'power3.out' }, .35);
+
+      gsap.from('.so-shop-card', {
+        y: 80,
+        opacity: 0,
+        duration: 1.05,
+        stagger: 0.08,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.so-shop-grid', start: 'top 82%', once: true },
+      });
+    }, root);
+    return () => ctx.revert();
+  }, []);
+
+  const changeFilter = (next) => {
+    if (next === filter || filtering) return;
+    setFilter(next);
+    setFiltering(true);
+    const grid = gridRef.current;
+    gsap.to(grid, {
+      opacity: 0,
+      y: 18,
+      duration: 0.22,
+      ease: 'power2.in',
+      onComplete: () => {
+        setDisplayFilter(next);
+        window.requestAnimationFrame(() => {
+          gsap.fromTo(grid, { opacity: 0, y: 18 }, {
+            opacity: 1,
+            y: 0,
+            duration: 0.42,
+            ease: 'power3.out',
+            onComplete: () => setFiltering(false),
+          });
+        });
+      },
+    });
+  };
+
+  return (
+    <main className="so-shop" ref={root}>
+      <section className="so-shop-hero" id="shop-top">
+        <div>
+          <span className="so-number">Collection</span>
+          <h1>The complete<br />Saint Orson edit.</h1>
+        </div>
+        <p>Ten pieces for a day considered from first light to after dark. Tailoring, silk, knitwear and leather, made in small numbers.</p>
+      </section>
+
+      <nav className="so-shop-filter" aria-label="Filter collection">
+        <div>
+          {filters.map((item) => (
+            <button key={item} className={filter === item ? 'active' : ''} onClick={() => changeFilter(item)}>{item}</button>
+          ))}
+        </div>
+        <span>{String(visible.length).padStart(2, '0')} pieces</span>
+      </nav>
+
+      <section className="so-shop-grid" ref={gridRef} aria-live="polite">
+        {visible.map((product, index) => (
+          <ShopCard key={product.slug} product={product} index={index} onAdd={onAdd} />
+        ))}
+      </section>
+
+      <section className="so-shop-service">
+        <span>Private client service</span>
+        <h2>Not certain where<br />to begin?</h2>
+        <p>A Saint Orson advisor can assemble a private edit around your wardrobe, travel and preferred fit.</p>
+        <button onClick={() => { window.location.href = 'mailto:clients@saintorson.com?subject=' + encodeURIComponent('Private styling consultation'); }}>Arrange a consultation <i>→</i></button>
+      </section>
+    </main>
+  );
+}
+
+function ProductPage({ product, onAdd }) {
+  const root = useRef(null);
+  const [color, setColor] = useState(product.colors[0]);
+  const [size, setSize] = useState(product.sizes[Math.min(1, product.sizes.length - 1)]);
+  const [added, setAdded] = useState(false);
+  const [openDetail, setOpenDetail] = useState('Composition');
+  const [activeImage, setActiveImage] = useState(0);
+  const [zoomOpen, setZoomOpen] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
+  const [stickyVisible, setStickyVisible] = useState(false);
+  const [measureUnit, setMeasureUnit] = useState('cm');
+  const [pincode, setPincode] = useState('');
+  const [delivery, setDelivery] = useState('');
+
+  const addProduct = () => {
+    onAdd(product, { color, size });
+    setAdded(true);
+    window.setTimeout(() => setAdded(false), 2200);
+  };
+
+  const estimateDelivery = (event) => {
+    event.preventDefault();
+    if (!/^\d{6}$/.test(pincode)) {
+      setDelivery('Enter a valid 6-digit PIN code.');
+      return;
+    }
+    setDelivery('Delivery in 2–4 working days · Complimentary');
+  };
+
+  const shareProduct = async () => {
+    const data = { title: product.name, text: product.description, url: window.location.href };
+    if (navigator.share) {
+      await navigator.share(data).catch(() => {});
+    } else {
+      await navigator.clipboard?.writeText(window.location.href);
+    }
+  };
+
+  useEffect(() => {
+    const purchase = document.getElementById('pdp-purchase');
+    if (!purchase) return undefined;
+    const observer = new IntersectionObserver(([entry]) => setStickyVisible(!entry.isIntersecting), { threshold: 0.12 });
+    observer.observe(purchase);
+    return () => observer.disconnect();
+  }, [product.slug]);
+
+  useEffect(() => {
+    const modalOpen = zoomOpen || sizeGuideOpen;
+    if (!modalOpen) return undefined;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const close = (event) => {
+      if (event.key === 'Escape') {
+        setZoomOpen(false);
+        setSizeGuideOpen(false);
+      }
+    };
+    window.addEventListener('keydown', close);
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener('keydown', close);
+    };
+  }, [zoomOpen, sizeGuideOpen]);
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+
+    const ctx = gsap.context(() => {
+      gsap.timeline()
+        .from('.so-pdp-primary img', { scale: 1.08, duration: 1.6, ease: 'power2.out' }, 0)
+        .from('.so-pdp-index, .so-pdp-back', { opacity: 0, y: 18, duration: .7, stagger: .1, ease: 'power2.out' }, .15)
+        .from('.so-pdp-buybox > *', { opacity: 0, y: 28, duration: .85, stagger: .07, ease: 'power3.out' }, .3);
+
+      gsap.to('.so-pdp-primary img', {
+        yPercent: 7,
+        ease: 'none',
+        scrollTrigger: { trigger: '.so-pdp-opening', start: 'top top', end: 'bottom top', scrub: .8 },
+      });
+
+      gsap.from('.so-pdp-detail-copy > *', {
+        y: 34, opacity: 0, duration: .9, stagger: .08, ease: 'power3.out',
+        scrollTrigger: { trigger: '.so-pdp-detail-story', start: 'top 72%', once: true },
+      });
+      gsap.from('.so-pdp-detail-photo', {
+        clipPath: 'inset(0 100% 0 0)', duration: 1.3, ease: 'power3.inOut',
+        scrollTrigger: { trigger: '.so-pdp-detail-story', start: 'top 72%', once: true },
+      });
+      gsap.from('.so-pdp-rear-photo', {
+        clipPath: 'inset(0 0 100% 0)', duration: 1.25, ease: 'power3.inOut',
+        scrollTrigger: { trigger: '.so-pdp-movement', start: 'top 72%', once: true },
+      });
+      gsap.from('.so-pdp-movement-copy > *', {
+        x: 36, opacity: 0, duration: .9, stagger: .08, ease: 'power3.out',
+        scrollTrigger: { trigger: '.so-pdp-movement', start: 'top 72%', once: true },
+      });
+      gsap.from('.so-review-grid article', {
+        y: 40, opacity: 0, duration: .85, stagger: .1, ease: 'power3.out',
+        scrollTrigger: { trigger: '.so-pdp-reviews', start: 'top 74%', once: true },
+      });
+      gsap.from('.so-pdp-related a', {
+        y: 42, opacity: 0, duration: .9, stagger: .1, ease: 'power3.out',
+        scrollTrigger: { trigger: '.so-pdp-related', start: 'top 76%', once: true },
+      });
+    }, root);
+    return () => ctx.revert();
+  }, [product.slug]);
+
+  const details = {
+    Composition: product.material,
+    Construction: product.construction,
+    Care: product.care,
+    Delivery: product.delivery,
+  };
+
+  return (
+    <main className="so-pdp" ref={root}>
+      <section className="so-pdp-opening">
+        <a className="so-pdp-back" href="#/">← Issue 01</a>
+        <div className="so-pdp-index"><span>Collection {product.number}</span><span>{product.category}</span></div>
+        <div className="so-pdp-primary">
+          <img src={`${ASSET}${product.images[activeImage]}`} alt={`${product.name} view ${activeImage + 1}`} />
+          <span>View {String(activeImage + 1).padStart(2, '0')} / 03</span>
+          <div className="so-pdp-thumbs" aria-label="Product images">
+            {product.images.map((image, index) => (
+              <button key={image} className={activeImage === index ? 'active' : ''} onClick={() => setActiveImage(index)} aria-label={`Show image ${index + 1}`}>
+                <img src={`${ASSET}${image}`} alt="" />
+              </button>
+            ))}
+          </div>
+          <button className="so-pdp-zoom" onClick={() => setZoomOpen(true)} aria-label="Zoom product image">⌕</button>
+        </div>
+        <aside className="so-pdp-buybox" id="pdp-purchase">
+          <div className="so-pdp-buyhead">
+            <span className="so-pdp-kicker">{product.chapter} · Look {product.number}</span>
+            <div><button className={saved ? 'saved' : ''} onClick={() => setSaved(!saved)} aria-label="Save product">{saved ? '♥' : '♡'}</button><button onClick={shareProduct} aria-label="Share product">↗</button></div>
+          </div>
+          <h1>{product.display[0]}<br />{product.display[1]}</h1>
+          <div className="so-pdp-price">{formatINR(product.price)} <small>MRP inclusive of all taxes</small></div>
+          <p className="so-pdp-lede">{product.description}</p>
+          <div className="so-pdp-rating"><a href="#reviews"><span>★★★★★</span> 4.8 · 38 reviews</a><b>Made in India</b></div>
+
+          <div className="so-pdp-option">
+            <div><span>Color</span><b>{color}</b></div>
+            <div className="so-pdp-colors">
+              {product.colors.map((item) => (
+                <button
+                  key={item}
+                  className={color === item ? 'active' : ''}
+                  style={{ backgroundColor: COLOR_HEX[item] || '#888' }}
+                  onClick={() => setColor(item)}
+                  aria-label={item}
+                  aria-pressed={color === item}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="so-pdp-option">
+            <div><span>Size</span><button className="so-size-guide" onClick={() => setSizeGuideOpen(true)}>Size &amp; fit guide</button></div>
+            <div className="so-pdp-sizes">
+              {product.sizes.map((item) => (
+                <button key={item} className={size === item ? 'active' : ''} aria-pressed={size === item} onClick={() => setSize(item)}>{item}</button>
+              ))}
+            </div>
+            <p className="so-pdp-stock"><i /> In stock · Ready to dispatch</p>
+          </div>
+
+          <button className={`so-pdp-add ${added ? 'added' : ''}`} onClick={addProduct}>
+            <span>{added ? 'Added to bag' : 'Add to bag'}</span><span>{added ? '✓' : formatINR(product.price)}</span>
+          </button>
+          <button className="so-pdp-appointment" onClick={() => { window.location.href = 'mailto:clients@saintorson.com?subject=' + encodeURIComponent('Private fitting — ' + product.name); }}>Arrange a private fitting <span>→</span></button>
+          <form className="so-pdp-delivery" onSubmit={estimateDelivery}>
+            <label htmlFor="delivery-pin">Delivery to your PIN code</label>
+            <div><input id="delivery-pin" value={pincode} onChange={(event) => setPincode(event.target.value.replace(/\D/g, '').slice(0, 6))} inputMode="numeric" placeholder="400001" /><button type="submit">Check</button></div>
+            {delivery && <p className={delivery.startsWith('Enter') ? 'error' : ''}>{delivery}</p>}
+          </form>
+          <div className="so-pdp-trust">
+            <div><b>Complimentary delivery</b><span>Across India</span></div>
+            <div><b>14-day returns</b><span>Collection available</span></div>
+            <div><b>Secure payments</b><span>UPI · Cards · Netbanking</span></div>
+          </div>
+          <p className="so-pdp-note">{product.fitNote}</p>
+        </aside>
+      </section>
+
+      <section className="so-pdp-detail-story">
+        <div className="so-pdp-detail-copy">
+          <span className="so-number">01.</span>
+          <small>The construction</small>
+          <h2>{product.storyTitle.map((line) => <span key={line}>{line}<br /></span>)}</h2>
+          <p>{product.storyCopy}</p>
+          <span className="so-pdp-signature">{product.signature}</span>
+        </div>
+        <div className="so-pdp-detail-photo">
+          <img src={`${ASSET}${product.images[1]}`} alt={`${product.name} construction detail`} loading="lazy" />
+          <span>{product.materialLabel}</span>
+        </div>
+      </section>
+
+      <section className="so-pdp-specification">
+        <header><span className="so-number">02.</span><h2>The garment,<br />considered.</h2></header>
+        <div className="so-pdp-accordions">
+          {Object.entries(details).map(([title, text]) => (
+            <article key={title} className={openDetail === title ? 'open' : ''}>
+              <button onClick={() => setOpenDetail(openDetail === title ? '' : title)}><span>{title}</span><b>{openDetail === title ? '−' : '+'}</b></button>
+              <div><p>{text}</p></div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="so-pdp-movement">
+        <div className="so-pdp-rear-photo">
+          <img src={`${ASSET}${product.images[2]}`} alt={`${product.name} rear view`} loading="lazy" />
+          <span>View 03 / 03</span>
+        </div>
+        <div className="so-pdp-movement-copy">
+          <span className="so-number">03.</span>
+          <small>In movement</small>
+          <h2>{product.movementTitle.map((line) => <span key={line}>{line}<br /></span>)}</h2>
+          <p>{product.movementCopy}</p>
+          <button onClick={addProduct}>Add size {size} to bag <span>{formatINR(product.price)}</span></button>
+        </div>
+      </section>
+
+      <section className="so-pdp-reviews" id="reviews">
+        <header>
+          <span className="so-number">04.</span>
+          <div><small>Client notes</small><h2>Worn,<br />then known.</h2></div>
+          <div className="so-review-score"><strong>4.8</strong><span>★★★★★<br />38 verified reviews</span></div>
+        </header>
+        <div className="so-fit-summary">
+          <span>How it fits</span>
+          <div><i style={{ '--fit': '68%' }} /><b>True to size</b></div>
+          <p>86% of clients kept their usual Saint Orson size.</p>
+        </div>
+        <div className="so-review-grid">
+          {[
+            ['Ananya S.', 'Mumbai', 'The construction is exceptional. It holds at the waist and then moves beautifully without feeling formal.', 'Size S · True to size'],
+            ['Meher K.', 'New Delhi', 'The silk has real weight, which makes the drape look far better in person than a lighter evening dress.', 'Size M · True to size'],
+            ['Rhea D.', 'Bengaluru', 'Client service helped me choose between sizes and arranged collection for the return. Quietly excellent.', 'Size XS · Runs slightly long'],
+          ].map(([name, city, review, fit]) => (
+            <article key={name}>
+              <div><span>★★★★★</span><small>Verified purchase</small></div>
+              <p>“{review}”</p>
+              <footer><b>{name}</b><span>{city}<br />{fit}</span></footer>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="so-pdp-related">
+        <header><span>Continue the edit</span><h2>Consider with.</h2><a href="#/shop">View all pieces →</a></header>
+        <div>
+          {PRODUCTS.filter((item) => item.slug !== product.slug).slice(0, 3).map((item) => (
+            <a key={item.slug} href={productHref(item.slug)}>
+              <div>
+                {item.shopCrop ? (
+                  <span className={`so-shop-product-crop ${item.shopCrop}`}><img src={`${ASSET}${item.shopImage}`} alt={item.name} loading="lazy" /></span>
+                ) : (
+                  <img src={`${ASSET}${item.shopImage}`} alt={item.name} loading="lazy" style={{ objectPosition: item.shopPosition }} />
+                )}
+              </div>
+              <span>{item.category}</span><h3>{item.name}</h3><b>{formatINR(item.price)}</b>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section className="so-pdp-closing">
+        <div><span>Saint Orson · Collection {product.number}</span><h2>Considered<br />for the hours<br />that matter.</h2></div>
+        <button onClick={addProduct}><span>{added ? 'Added to bag' : `Add ${color} · ${size}`}</span><span>{added ? '✓' : `${formatINR(product.price)} →`}</span></button>
+      </section>
+
+      <div className={`so-pdp-sticky ${stickyVisible ? 'visible' : ''}`}>
+        <div><span>{product.name}</span><b>{formatINR(product.price)}</b></div>
+        <div><span>{color} · {size}</span><button onClick={addProduct}>{added ? 'Added ✓' : 'Add to bag'}</button></div>
+      </div>
+
+      {zoomOpen && (
+        <div className="so-pdp-lightbox" role="dialog" aria-modal="true" aria-label={`${product.name} image viewer`}>
+          <button onClick={() => setZoomOpen(false)} aria-label="Close image viewer">×</button>
+          <img src={`${ASSET}${product.images[activeImage]}`} alt={`${product.name} enlarged view`} />
+          <div>{product.images.map((image, index) => <button key={image} className={activeImage === index ? 'active' : ''} onClick={() => setActiveImage(index)}>{String(index + 1).padStart(2, '0')}</button>)}</div>
+        </div>
+      )}
+
+      {sizeGuideOpen && (
+        <div className="so-size-modal" role="dialog" aria-modal="true" aria-label="Size and fit guide">
+          <button className="so-modal-close" onClick={() => setSizeGuideOpen(false)} aria-label="Close size guide">×</button>
+          <span className="so-number">Size &amp; fit</span>
+          <h2>Find your Saint Orson size.</h2>
+          <p>{product.fitNote}</p>
+          <div className="so-unit-toggle"><button className={measureUnit === 'cm' ? 'active' : ''} onClick={() => setMeasureUnit('cm')}>CM</button><button className={measureUnit === 'in' ? 'active' : ''} onClick={() => setMeasureUnit('in')}>IN</button></div>
+          {product.sizes.length === 1 ? (
+            <div className="so-one-size"><b>One size</b><p>{product.fitNote}</p></div>
+          ) : (
+            <div className="so-size-table">
+              <div><span>Size</span><span>Chest</span><span>Waist</span><span>Hip</span></div>
+              {product.sizes.map((label, index) => {
+                const numeric = /^\d+$/.test(label);
+                const cm = numeric
+                  ? [84 + index * 5, Number(label) * 2.54, 91 + index * 5]
+                  : [82 + index * 5, 64 + index * 5, 90 + index * 5];
+                const values = measureUnit === 'cm' ? cm.map((value) => Math.round(value)) : cm.map((value) => (value / 2.54).toFixed(1));
+                return <div key={label}><b>{label}</b>{values.map((value, valueIndex) => <span key={valueIndex}>{value}</span>)}</div>;
+              })}
+            </div>
+          )}
+          <button className="so-size-help" onClick={() => { window.location.href = 'mailto:clients@saintorson.com?subject=' + encodeURIComponent('Fit advice — ' + product.name); }}>Speak to a fit advisor <span>→</span></button>
+        </div>
+      )}
+    </main>
+  );
+}
+
+function FinalCall() {
+  return (
+    <section className="so-final" id="collection">
+      <img src={`${ASSET}hero.webp`} alt="" aria-hidden="true" loading="lazy" />
+      <div className="so-final-shade" />
+      <span>Issue 01</span>
+      <h2>Well dressed.<br />Well lived.</h2>
+      <p>Clothing for<br />the hours that<br />matter most.</p>
+      <a href="#morning">Enter the collection <span>→</span></a>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="so-footer">
+      <a href="#top">Saint Orson</a>
+      <nav><a href="#top">About</a><a href="#fit">Client services</a><a href="#top">Shipping</a><a href="#top">Returns</a><a href="#top">Terms</a><a href="#top">Privacy</a></nav>
+      <div><a href="#discover">Instagram</a><a href="#discover">Journal</a></div>
+    </footer>
+  );
+}
+
+function CartDrawer({ open, items, count, total, onClose, onQty, onCheckout }) {
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKey = (event) => { if (event.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = previous; };
+  }, [open, onClose]);
+  return (
+    <>
+      <div className={`so-cart-scrim ${open ? 'open' : ''}`} onClick={onClose} aria-hidden="true" />
+      <aside className={`so-cart ${open ? 'open' : ''}`} aria-label="Shopping bag" aria-hidden={!open}>
+        <header className="so-cart-head">
+          <span>Your bag{count ? ` · ${count}` : ''}</span>
+          <button onClick={onClose} aria-label="Close bag">Close ×</button>
+        </header>
+        {items.length === 0 ? (
+          <div className="so-cart-empty">
+            <p>Your bag is empty.</p>
+            <a href="#/shop" onClick={onClose}>Browse the collection <span>→</span></a>
+          </div>
+        ) : (
+          <>
+            <ul className="so-cart-items">
+              {items.map((line) => (
+                <li key={line.key}>
+                  <a className="so-cart-thumb" href={productHref(line.slug)} onClick={onClose}><img src={`${ASSET}${line.image}`} alt={line.name} loading="lazy" /></a>
+                  <div className="so-cart-line">
+                    <a href={productHref(line.slug)} onClick={onClose}>{line.name}</a>
+                    <span>{line.color} · {line.size}</span>
+                    <div className="so-cart-qty">
+                      <button onClick={() => onQty(line.key, line.qty - 1)} aria-label="Decrease quantity">−</button>
+                      <b>{line.qty}</b>
+                      <button onClick={() => onQty(line.key, line.qty + 1)} aria-label="Increase quantity">+</button>
+                      <button className="so-cart-remove" onClick={() => onQty(line.key, 0)}>Remove</button>
+                    </div>
+                  </div>
+                  <span className="so-cart-price">{formatINR(line.price * line.qty)}</span>
+                </li>
+              ))}
+            </ul>
+            <footer className="so-cart-foot">
+              <div className="so-cart-total"><span>Subtotal</span><b>{formatINR(total)}</b></div>
+              <p>Complimentary delivery and 14-day returns across India.</p>
+              <button className="so-cart-checkout" onClick={onCheckout}>Checkout <span>{formatINR(total)}</span></button>
+            </footer>
+          </>
+        )}
+      </aside>
+    </>
+  );
+}
+
+function SearchOverlay({ open, onClose }) {
+  const [query, setQuery] = useState('');
+  const inputRef = useRef(null);
+  useEffect(() => {
+    if (!open) { setQuery(''); return undefined; }
+    inputRef.current?.focus();
+    const onKey = (event) => { if (event.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = previous; };
+  }, [open, onClose]);
+  const term = query.trim().toLowerCase();
+  const results = term
+    ? PRODUCTS.filter((p) => `${p.name} ${p.category} ${p.chapter}`.toLowerCase().includes(term)).slice(0, 6)
+    : [];
+  return (
+    <div className={`so-search ${open ? 'open' : ''}`} aria-hidden={!open}>
+      <div className="so-search-scrim" onClick={onClose} aria-hidden="true" />
+      <div className="so-search-panel">
+        <div className="so-search-bar">
+          <span className="so-search-label">Search</span>
+          <input ref={inputRef} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Tailoring, silk, knitwear…" aria-label="Search the collection" />
+          <button onClick={onClose} aria-label="Close search">Close ×</button>
+        </div>
+        {term ? (
+          results.length ? (
+            <ul className="so-search-results">
+              {results.map((p) => (
+                <li key={p.slug}>
+                  <a href={productHref(p.slug)} onClick={onClose}>
+                    <span className="so-search-cat">{p.category}</span>
+                    <span className="so-search-name">{p.name}</span>
+                    <span className="so-search-price">{formatINR(p.price)}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="so-search-empty">Nothing matches “{query}”. Try “tailoring”, “silk” or “coat”.</p>
+          )
+        ) : (
+          <div className="so-search-suggest">
+            <span>Popular</span>
+            {['Tailoring', 'Knitwear', 'Evening', 'Coat'].map((tag) => <button key={tag} onClick={() => setQuery(tag)}>{tag}</button>)}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function Checkout({ items, total, onQty, onClear }) {
+  const [placed, setPlaced] = useState(false);
+  const [order, setOrder] = useState('');
+  useLayoutEffect(() => { window.scrollTo({ top: 0, behavior: 'auto' }); }, []);
+
+  const submit = (event) => {
+    event.preventDefault();
+    setOrder('SO' + String(Date.now()).slice(-6));
+    setPlaced(true);
+    onClear();
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  };
+
+  if (placed) {
+    return (
+      <main className="so-checkout so-checkout-message">
+        <span className="so-number">Order {order}</span>
+        <h1>Thank you.</h1>
+        <p>Your order is confirmed. A note is on its way to your inbox, and your pieces will be prepared and dispatched with complimentary delivery across India.</p>
+        <a href="#/shop">Continue the edit <span>→</span></a>
+      </main>
+    );
+  }
+
+  if (!items.length) {
+    return (
+      <main className="so-checkout so-checkout-message">
+        <span className="so-number">Checkout</span>
+        <h1>Your bag is empty.</h1>
+        <p>Add a piece from the collection to begin.</p>
+        <a href="#/shop">Browse the collection <span>→</span></a>
+      </main>
+    );
+  }
+
+  return (
+    <main className="so-checkout">
+      <header className="so-checkout-head">
+        <a href="#/shop" className="so-checkout-back">← The complete edit</a>
+        <h1>Checkout</h1>
+      </header>
+      <div className="so-checkout-grid">
+        <form className="so-checkout-form" onSubmit={submit}>
+          <fieldset>
+            <legend>Contact</legend>
+            <label>Email<input type="email" required placeholder="you@email.com" /></label>
+            <label>Phone<input type="tel" required placeholder="+91" /></label>
+          </fieldset>
+          <fieldset>
+            <legend>Delivery</legend>
+            <label>Full name<input type="text" required placeholder="Name" /></label>
+            <label>Address<input type="text" required placeholder="Flat, street, area" /></label>
+            <div className="so-checkout-row">
+              <label>City<input type="text" required placeholder="Mumbai" /></label>
+              <label>PIN code<input type="text" inputMode="numeric" required placeholder="400001" /></label>
+            </div>
+          </fieldset>
+          <p className="so-checkout-note">This is a demo checkout. No payment is taken and no card details are needed.</p>
+          <button type="submit">Place order · {formatINR(total)}</button>
+        </form>
+        <aside className="so-checkout-summary">
+          <span className="so-checkout-sumlabel">Your order</span>
+          <ul>
+            {items.map((line) => (
+              <li key={line.key}>
+                <span className="so-checkout-thumb"><img src={`${ASSET}${line.image}`} alt={line.name} loading="lazy" /></span>
+                <div>
+                  <b>{line.name}</b>
+                  <span>{line.color} · {line.size}</span>
+                  <div className="so-checkout-qty">
+                    <button type="button" onClick={() => onQty(line.key, line.qty - 1)} aria-label="Decrease quantity">−</button>
+                    <i>{line.qty}</i>
+                    <button type="button" onClick={() => onQty(line.key, line.qty + 1)} aria-label="Increase quantity">+</button>
+                    <button type="button" className="so-checkout-remove" onClick={() => onQty(line.key, 0)}>Remove</button>
+                  </div>
+                </div>
+                <strong>{formatINR(line.price * line.qty)}</strong>
+              </li>
+            ))}
+          </ul>
+          <dl className="so-checkout-totals">
+            <div><dt>Subtotal</dt><dd>{formatINR(total)}</dd></div>
+            <div><dt>Delivery</dt><dd>Complimentary</dd></div>
+            <div className="so-checkout-grand"><dt>Total</dt><dd>{formatINR(total)}</dd></div>
+          </dl>
+        </aside>
+      </div>
+    </main>
+  );
+}
+
+export default function App() {
+  const rootRef = useRef(null);
+  const routeTimer = useRef(null);
+  const [cart, setCart] = useState([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [active, setActive] = useState('top');
+  const [route, setRoute] = useState(() => window.location.hash);
+  const [transitioning, setTransitioning] = useState(false);
+  const chapterIds = useMemo(() => ['top', 'morning', 'journey', 'fit', 'discover', 'evening'], []);
+  const productSlug = route.match(/^#\/product\/([^?]+)/)?.[1];
+  const product = productSlug ? PRODUCT_BY_SLUG[productSlug] : null;
+  const productPage = Boolean(product);
+  const shopPage = route === '#/shop';
+  const checkoutPage = route === '#/checkout';
+  const interiorPage = productPage || shopPage || checkoutPage;
+
+  const bagCount = cart.reduce((sum, line) => sum + line.qty, 0);
+  const cartTotal = cart.reduce((sum, line) => sum + line.price * line.qty, 0);
+  const addToCart = (item, opts = {}) => {
+    if (!item) return;
+    const color = opts.color || item.colors?.[0] || 'One colour';
+    const size = opts.size || item.sizes?.[Math.min(1, (item.sizes?.length || 1) - 1)] || 'One size';
+    const key = `${item.slug}|${color}|${size}`;
+    setCart((prev) => {
+      const existing = prev.find((line) => line.key === key);
+      if (existing) return prev.map((line) => (line.key === key ? { ...line, qty: line.qty + 1 } : line));
+      return [...prev, { key, slug: item.slug, name: item.name, price: item.price, image: item.shopImage, color, size, qty: 1 }];
+    });
+    setCartOpen(true);
+  };
+  const setCartQty = (key, qty) => setCart((prev) => (qty <= 0 ? prev.filter((line) => line.key !== key) : prev.map((line) => (line.key === key ? { ...line, qty } : line))));
+  const clearCart = () => setCart([]);
+
+  useEffect(() => {
+    // Under reduced motion the CSS overlay transition is instant, so don't sit on the cover
+    // delay (it would just be a blank stall) — swap immediately. Otherwise keep the editorial timing.
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const coverDelay = reduce ? 0 : 460;
+    const onHash = () => {
+      const next = window.location.hash;
+      if (next === route) return;
+      window.clearTimeout(routeTimer.current);
+      setTransitioning(true);
+      routeTimer.current = window.setTimeout(() => {
+        setRoute(next);
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        if (next === '#/' || next.startsWith('#/?section=')) {
+          const section = new URLSearchParams(next.split('?')[1] || '').get('section');
+          window.setTimeout(() => document.getElementById(section || 'top')?.scrollIntoView(), 40);
+        }
+        window.setTimeout(() => setTransitioning(false), reduce ? 0 : 80);
+      }, coverDelay);
+    };
+    window.addEventListener('hashchange', onHash);
+    return () => {
+      window.clearTimeout(routeTimer.current);
+      window.removeEventListener('hashchange', onHash);
+    };
+  }, [route]);
+
+  useEffect(() => {
+    if (interiorPage) return undefined;
+    const sections = chapterIds.map((id) => document.getElementById(id)).filter(Boolean);
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+      if (visible[0]) setActive(visible[0].target.id);
+    }, { rootMargin: '-28% 0px -52%', threshold: [0, 0.1, 0.35] });
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, [chapterIds, interiorPage]);
+
+  useLayoutEffect(() => {
+    if (interiorPage) return undefined;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+
+    let heroPlayed = false;
+    let heroTimeline;
+    const ctx = gsap.context(() => {
+      const revealSections = gsap.utils.toArray('.so-morning, .so-journey, .so-fit, .so-discover, .so-evening, .so-final');
+
+      revealSections.forEach((section) => {
+        const content = section.querySelectorAll('h2, .so-number, p, a');
+        gsap.from(content, {
+          y: 34,
+          opacity: 0,
+          duration: 1,
+          stagger: 0.07,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: section, start: 'top 78%', once: true },
+        });
+      });
+
+      heroTimeline = gsap.timeline({ paused: true })
+        .from('.so-hero > img', { scale: 1.08, duration: 1.8, ease: 'power2.out' }, 0)
+        .from('.so-issue-number', { xPercent: -16, opacity: 0, duration: 1.5, ease: 'power3.out' }, 0.1)
+        .from('.so-hero h1', { yPercent: 32, opacity: 0, duration: 1.25, ease: 'power3.out' }, 0.32)
+        .from('.so-weather, .so-issue-side, .so-scroll', { y: 18, opacity: 0, duration: 0.8, stagger: 0.1, ease: 'power2.out' }, 0.52);
+
+      gsap.to('.so-hero > img', {
+        yPercent: 5,
+        ease: 'none',
+        scrollTrigger: { trigger: '.so-hero', start: 'top top', end: 'bottom top', scrub: 0.8 },
+      });
+
+      gsap.from('.so-morning-photo', {
+        clipPath: 'inset(0 100% 0 0)',
+        duration: 1.35,
+        ease: 'power3.inOut',
+        scrollTrigger: { trigger: '.so-morning', start: 'top 72%', once: true },
+      });
+      gsap.from('.so-related-product', {
+        x: 42,
+        opacity: 0,
+        duration: 0.9,
+        stagger: 0.14,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.so-related', start: 'top 80%', once: true },
+      });
+
+      gsap.to('.so-journey > img', {
+        xPercent: -3,
+        scale: 1.05,
+        ease: 'none',
+        scrollTrigger: { trigger: '.so-journey', start: 'top bottom', end: 'bottom top', scrub: 1 },
+      });
+      gsap.from('.so-look-strip > a', {
+        y: 30,
+        opacity: 0,
+        duration: 0.75,
+        stagger: 0.06,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.so-look-strip', start: 'top 90%', once: true },
+      });
+
+      gsap.from('.so-jacket svg', {
+        scale: 0.84,
+        opacity: 0,
+        duration: 1.2,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.so-fit', start: 'top 70%', once: true },
+      });
+      gsap.from('.so-fit-controls fieldset', {
+        x: 24,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.14,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.so-fit', start: 'top 70%', once: true },
+      });
+
+      gsap.from('.so-discover-tile', {
+        clipPath: 'inset(100% 0 0 0)',
+        duration: 0.9,
+        stagger: 0.07,
+        ease: 'power3.inOut',
+        scrollTrigger: { trigger: '.so-contact-sheet', start: 'top 78%', once: true },
+      });
+      gsap.from('.so-bag-feature', {
+        x: 40,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.so-discover', start: 'top 72%', once: true },
+      });
+
+      gsap.from('.so-evening > img', {
+        clipPath: 'inset(0 0 0 100%)',
+        duration: 1.25,
+        ease: 'power3.inOut',
+        scrollTrigger: { trigger: '.so-evening', start: 'top 72%', once: true },
+      });
+      gsap.from('.so-dress-panel', {
+        xPercent: 18,
+        opacity: 0,
+        duration: 1.1,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.so-evening', start: 'top 65%', once: true },
+      });
+      gsap.from('.so-dress img', {
+        y: 36,
+        scale: 0.92,
+        opacity: 0,
+        duration: 1.15,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.so-dress-panel', start: 'top 78%', once: true },
+      });
+    }, rootRef);
+
+    const revealHero = () => {
+      if (heroPlayed) return;
+      heroPlayed = true;
+      heroTimeline?.play();
+      ScrollTrigger.refresh();
+    };
+    document.addEventListener('onepixel:loader-complete', revealHero, { once: true });
+    const fallback = window.setTimeout(revealHero, 2600);
+    document.fonts?.ready.then(() => ScrollTrigger.refresh());
+
+    // Lazy images settle after their reveal trigger is measured; refresh on each load so the
+    // once:true triggers don't fire at stale positions on this long, image-heavy page.
+    let refreshRaf = 0;
+    const refreshSoon = () => { cancelAnimationFrame(refreshRaf); refreshRaf = requestAnimationFrame(() => ScrollTrigger.refresh()); };
+    const imgs = Array.from(rootRef.current?.querySelectorAll('img') || []);
+    imgs.forEach((img) => img.addEventListener('load', refreshSoon));
+
+    return () => {
+      window.clearTimeout(fallback);
+      cancelAnimationFrame(refreshRaf);
+      imgs.forEach((img) => img.removeEventListener('load', refreshSoon));
+      document.removeEventListener('onepixel:loader-complete', revealHero);
+      ctx.revert();
+    };
+  }, [interiorPage]);
+
+  const transitionLabel = (() => {
+    const nextSlug = window.location.hash.match(/^#\/product\/([^?]+)/)?.[1];
+    if (window.location.hash === '#/shop') return 'The complete edit';
+    if (window.location.hash === '#/checkout') return 'Checkout';
+    return PRODUCT_BY_SLUG[nextSlug]?.name || 'Saint Orson';
+  })();
+
+  return (
+    <div ref={rootRef}>
+      <Loader duration={2200} mark="Saint Orson · Issue 01" />
+      <div className={`so-route-transition ${transitioning ? 'active' : ''}`} aria-hidden="true">
+        <span>Saint Orson</span><strong>{transitionLabel}</strong><i />
+      </div>
+      <Header bag={bagCount} interiorPage={interiorPage} onBag={() => setCartOpen(true)} onSearch={() => setSearchOpen(true)} />
+      {!interiorPage && <ChapterRail active={active} />}
+      {checkoutPage ? (
+        <Checkout items={cart} total={cartTotal} onQty={setCartQty} onClear={clearCart} />
+      ) : productPage ? (
+        <ProductPage key={product.slug} product={product} onAdd={addToCart} />
+      ) : shopPage ? (
+        <ShopPage onAdd={addToCart} />
+      ) : (
+        <main>
+          <Hero />
+          <LookTicker />
+          <Morning />
+          <Journey />
+          <Fit />
+          <Discover onAdd={addToCart} />
+          <Evening onAdd={addToCart} />
+          <FinalCall />
+        </main>
+      )}
+      <Footer />
+      <CartDrawer
+        open={cartOpen}
+        items={cart}
+        count={bagCount}
+        total={cartTotal}
+        onClose={() => setCartOpen(false)}
+        onQty={setCartQty}
+        onCheckout={() => { setCartOpen(false); window.location.hash = '/checkout'; }}
+      />
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
+    </div>
+  );
+}

@@ -10,6 +10,9 @@ export default defineConfig({
       input: {
         index: resolve(__dirname, 'index.html'),
         halcyon: resolve(__dirname, 'case-studies/halcyon/index.html'),
+        forestLoom: resolve(__dirname, 'case-studies/forest-loom/index.html'),
+        saintOrson: resolve(__dirname, 'case-studies/saint-orson/index.html'),
+        karya: resolve(__dirname, 'case-studies/karya/index.html'),
         privacy: resolve(__dirname, 'privacy/index.html'),
       },
     },

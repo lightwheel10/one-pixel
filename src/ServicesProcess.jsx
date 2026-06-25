@@ -107,7 +107,7 @@ export function Services() {
           </div>
 
           {/* desktop detail panel — hidden on phones; cross-fades on switch (key={active}) */}
-          <div className={`svc-panel ${items[active].art ? 'has-art' : ''}`} aria-live="polite">
+          <div className={`svc-panel svc-fade-${active} ${items[active].art ? 'has-art' : ''}`} aria-live="polite">
             {items[active].art && (
               <img
                 key={items[active].art}

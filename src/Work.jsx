@@ -107,8 +107,6 @@ export function Work() {
               <div className="work-browser">
                 <div className="work-bar">
                   <span className="work-dots" aria-hidden><i /><i /><i /></span>
-                  <span className="work-url">{it.domain}</span>
-                  <span className="work-bar-sp" aria-hidden />
                 </div>
                 <div className="work-screen" aria-hidden>
                   <div className="work-shot-wrap">

@@ -430,7 +430,7 @@ section { position: relative; padding: 120px 0; }
 /* browser chrome */
 .work-bar {
   display: flex; align-items: center; gap: 10px;
-  padding: 11px 14px;
+  padding: 9px 14px;
   /* Paras · 2026-06-19: a dedicated browser-chrome tone, not var(--bg), so the bar
      stays distinct from the preview image in both themes. */
   background: #DCD7CE;
@@ -439,20 +439,6 @@ section { position: relative; padding: 120px 0; }
 body.dark .work-bar { background: #181818; }
 .work-dots { display: inline-flex; gap: 6px; flex: none; }
 .work-dots i { width: 9px; height: 9px; border-radius: 999px; background: rgba(125,120,112,.6); }   /* reads on both chrome tones */
-.work-url {
-  flex: 1;
-  max-width: 62%;
-  margin: 0 auto;
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em;
-  color: var(--muted);
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 5px 14px;
-  text-align: center;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.work-bar-sp { width: 39px; flex: none; }   /* == dots width (3×9 + 2×6 gap) so the url pill is truly centred */
 /* the preview viewport — a query container so the image animation can use frame units */
 .work-screen {
   position: relative;

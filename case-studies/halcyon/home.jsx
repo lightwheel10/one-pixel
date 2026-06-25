@@ -292,11 +292,11 @@ export function PropertiesIndex() {
     { idx: '1', images: HC_PHOTOS.prop1, name: 'Riverbend',     mod: 'Cottage',   loc: 'Bandra (W)',     beds: '3 BD · 2 BA · 1,840 SF', year: '1948', price: '₹8.5 Cr',       cat: 'home' },
     { idx: '2', images: HC_PHOTOS.prop2, name: 'Sahyadri House', mod: 'Manor',    loc: 'Lonavala',       beds: '5 BD · 4 BA · 3,210 SF', year: '1894', price: '₹28.5 Cr',      cat: 'estate' },
     { idx: '3', images: HC_PHOTOS.prop3, name: 'Mill Lane',     mod: 'Residence', loc: 'Bandra (W)',     beds: '2 BD · 2 BA · 1,210 SF', year: '2026', price: '₹6.8 Cr',       cat: 'home' },
-    { idx: '4',   img: HC_PHOTOS.prop4, name: 'The Crest',     mod: 'Estate',    loc: 'Khandala',       beds: '6 BD · 5 BA · 4,800 SF', year: '1908', price: '₹17.5 Cr',      cat: 'estate' },
-    { idx: '5',    img: HC_PHOTOS.prop5, name: 'The Hutments',  mod: 'Restored',  loc: 'Karjat',         beds: '4 BD · 3 BA · 2,640 SF', year: '1894', price: 'Sold · ₹7.2 Cr', cat: 'sold' },
-    { idx: '6',   img: HC_PHOTOS.prop6, name: 'Brindavan',     mod: 'Cottage',   loc: 'Walkeshwar',     beds: '3 BD · 2 BA · 1,990 SF', year: '1907', price: '₹11 Cr',         cat: 'home' },
-    { idx: '7',  img: HC_PHOTOS.prop7, name: 'Aspinwall',     mod: 'Estate',    loc: 'Mahabaleshwar',  beds: '7 BD · 6 BA · 6,200 SF', year: '1888', price: '₹38 Cr',         cat: 'estate' },
-    { idx: '8', img: HC_PHOTOS.prop8, name: 'The Banyan',    mod: 'Farmhouse', loc: 'Alibag',         beds: '4 BD · 3 BA · 3,100 SF', year: '1898', price: 'Sold · ₹11 Cr',  cat: 'sold' },
+    { idx: '4', images: HC_PHOTOS.prop4, name: 'The Crest',    mod: 'Bungalow',  loc: 'Juhu Scheme',    beds: '6 BD · 7 BA · 8,400 SF', year: '2026', price: '₹85 Cr',         cat: 'estate' },
+    { idx: '5', images: HC_PHOTOS.prop5, name: 'The Breakwater', mod: 'Apartment', loc: 'Nepean Sea Rd', beds: '4 BD · 4 BA · 3,600 SF', year: '2026', price: 'Sold · ₹42 Cr', cat: 'sold' },
+    { idx: '6', images: HC_PHOTOS.prop6, name: 'Brindavan',   mod: 'Cottage',   loc: 'Walkeshwar',     beds: '3 BD · 2 BA · 1,990 SF', year: '1907', price: '₹11 Cr',         cat: 'home' },
+    { idx: '7', images: HC_PHOTOS.prop7, name: 'Aspinwall',  mod: 'Estate',    loc: 'Mahabaleshwar',  beds: '7 BD · 6 BA · 6,200 SF', year: '1888', price: '₹38 Cr',         cat: 'estate' },
+    { idx: '8', images: HC_PHOTOS.prop8, name: 'The Banyan', mod: 'Farmhouse', loc: 'Alibag',         beds: '4 BD · 3 BA · 3,100 SF', year: '1898', price: 'Sold · ₹11 Cr',  cat: 'sold' },
   ];
   const visible = filter === 'all' ? props : props.filter(p => p.cat === filter);
   const filters = [

@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Loader } from '../../src/Loader.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -385,11 +386,52 @@ function Closing() {
   );
 }
 
+function OpxBar() {
+  return (
+    <div className="atlas-opx">
+      <span className="atlas-opx-note">A OnePixel sample site · figures and projects shown are placeholder</span>
+      <a className="atlas-opx-back" href="/">← Back to OnePixel</a>
+    </div>
+  );
+}
+
 export default function App() {
   const root = useRef(null);
+  // ?still freezes the page for a clean full-page screenshot (see the layout effect below)
+  // and skips the intro loader so captures aren't covered by it.
+  const still = new URLSearchParams(window.location.search).has('still');
 
   useLayoutEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // ?still shares the reduced-motion path: no pin, no scrub, the assembly video parked on its
+    // final assembled frame and the sun resting on the arc, so capturing never needs OS settings.
+
+    if (reduce || still) {
+      const liveSun = root.current?.querySelector('.sun-live');
+      const arcPath = root.current?.querySelector('.sun-arc path');
+      if (liveSun && arcPath) {
+        // A still capture parks the sun at the arc apex (solar noon, 0.5) so the shot is balanced
+        // and deterministic whatever the time of capture. Reduced-motion keeps the true live position.
+        const progress = still ? 0.5 : Math.min(1, Math.max(0, Number(liveSun.dataset.progress) || 0));
+        const point = arcPath.getPointAtLength(arcPath.getTotalLength() * progress);
+        liveSun.style.left = `${point.x}%`;
+        liveSun.style.top = `${point.y}%`;
+      }
+
+      const video = root.current?.querySelector('.assembly-video');
+      // The five stage labels stack on one spot and are normally revealed one at a time by the
+      // scrub timeline. With no timeline running they pile up, so show only the final stage.
+      const labels = root.current ? Array.from(root.current.querySelectorAll('.assembly-label')) : [];
+      labels.forEach((label, index) => { label.style.opacity = index === labels.length - 1 ? '1' : '0'; });
+      if (video) {
+        const showAssembled = () => {
+          try { video.currentTime = Math.max(0, (video.duration || 9.9) - 0.04); } catch (error) { /* metadata not ready yet */ }
+        };
+        if (video.readyState >= 1) showAssembled();
+        else video.addEventListener('loadedmetadata', showAssembled, { once: true });
+      }
+      return undefined;
+    }
 
     const media = gsap.matchMedia();
     const ctx = gsap.context(() => {
@@ -694,21 +736,30 @@ export default function App() {
       });
     }, root);
 
+    // The intro loader locks scroll while it plays; recompute trigger positions once it lifts.
+    const onLoaderDone = () => ScrollTrigger.refresh();
+    document.addEventListener('onepixel:loader-complete', onLoaderDone);
+
     return () => {
+      document.removeEventListener('onepixel:loader-complete', onLoaderDone);
       media.revert();
       ctx.revert();
     };
   }, []);
 
   return (
-    <main ref={root}>
-      <Hero />
-      <Manifesto />
-      <Projects />
-      <Technology />
-      <Operations />
-      <Impact />
-      <Closing />
-    </main>
+    <>
+      {!still && <Loader duration={2500} mark="Karya Solar" />}
+      <OpxBar />
+      <main ref={root}>
+        <Hero />
+        <Manifesto />
+        <Projects />
+        <Technology />
+        <Operations />
+        <Impact />
+        <Closing />
+      </main>
+    </>
   );
 }

@@ -1,14 +1,14 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
-  ['01', 'Rajasthan', '700 MW', 'Bikaner Solar Park', '27.2330 N / 73.8050 E', 'Jan 2025'],
-  ['02', 'Gujarat', '250 MW', 'Kutch Solar Project', '23.7537 N / 69.8597 E', 'Nov 2024'],
-  ['03', 'Karnataka', '200 MW', 'Shakti Solar Project', '15.4062 N / 75.9064 E', 'Sep 2024'],
-  ['04', 'Telangana', '150 MW', 'Vanaparthy Solar Plant', '16.3650 N / 78.0560 E', 'Jun 2024'],
+  ['01', 'Rajasthan', '700 MW', 'Bikaner Solar Park', '27.2330 N / 73.8050 E', 'Jan 2025', '/case-studies/karya/images/project-bikaner.webp'],
+  ['02', 'Gujarat', '250 MW', 'Kutch Solar Project', '23.7537 N / 69.8597 E', 'Nov 2024', '/case-studies/karya/images/project-kutch.webp'],
+  ['03', 'Karnataka', '200 MW', 'Shakti Solar Project', '15.4062 N / 75.9064 E', 'Sep 2024', '/case-studies/karya/images/project-karnataka.webp'],
+  ['04', 'Telangana', '150 MW', 'Vanaparthy Solar Plant', '16.3650 N / 78.0560 E', 'Jun 2024', '/case-studies/karya/images/project-telangana.webp'],
 ];
 
 const assemblySteps = [
@@ -34,20 +34,82 @@ const impact = [
   ['98.6%', 'Uptime achieved'],
 ];
 
+const sunWindow = {
+  sunrise: 5 * 60 + 42,
+  sunset: 19 * 60 + 14,
+};
+
+const sunPath = {
+  startX: 2,
+  endX: 98,
+  baselineY: 78,
+  riseY: 50,
+};
+
 function Arrow() {
   return <span aria-hidden="true">-&gt;</span>;
 }
 
-function ImageBox({ label, note, className = '' }) {
+function SunIcon() {
   return (
-    <div className={`image-box ${className}`} role="img" aria-label={`${label} image placeholder`}>
-      <span className="image-cross image-cross-a" />
-      <span className="image-cross image-cross-b" />
-      <div className="image-box-label">
-        <span>Image</span>
-        <strong>{label}</strong>
-        {note && <small>{note}</small>}
-      </div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="4" fill="currentColor" />
+      <path d="M12 2v2" />
+      <path d="M12 20v2" />
+      <path d="m4.93 4.93 1.41 1.41" />
+      <path d="m17.66 17.66 1.41 1.41" />
+      <path d="M2 12h2" />
+      <path d="M20 12h2" />
+      <path d="m6.34 17.66-1.41 1.41" />
+      <path d="m19.07 4.93-1.41 1.41" />
+    </svg>
+  );
+}
+
+function useSunPosition() {
+  const getPosition = () => {
+    const now = new Date();
+    const minutes = now.getHours() * 60 + now.getMinutes();
+    const rawProgress = (minutes - sunWindow.sunrise) / (sunWindow.sunset - sunWindow.sunrise);
+    const progress = Math.min(1, Math.max(0, rawProgress));
+    const angle = Math.PI * progress;
+    const x = sunPath.startX + ((sunPath.endX - sunPath.startX) * progress);
+    const y = sunPath.baselineY - (Math.sin(angle) * sunPath.riseY);
+
+    return {
+      progress,
+      x,
+      y,
+      currentTime: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    };
+  };
+
+  const [position, setPosition] = useState(getPosition);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setPosition(getPosition()), 60 * 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  return position;
+}
+
+function ImageBox({ label, note, className = '', src }) {
+  return (
+    <div className={`image-box ${src ? 'has-image' : ''} ${className}`} role={src ? undefined : 'img'} aria-label={src ? undefined : `${label} image placeholder`}>
+      {src ? (
+        <img src={src} alt={label} loading={className.includes('hero-media') ? 'eager' : 'lazy'} />
+      ) : (
+        <>
+          <span className="image-cross image-cross-a" />
+          <span className="image-cross image-cross-b" />
+          <div className="image-box-label">
+            <span>Image</span>
+            <strong>{label}</strong>
+            {note && <small>{note}</small>}
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -78,7 +140,7 @@ function Header() {
 function Hero() {
   return (
     <section className="atlas-hero" id="top">
-      <ImageBox label="Aerial solar atlas" note="Full-bleed utility-scale solar farm" className="hero-media" />
+      <ImageBox label="Aerial view of Karya Solar's Rajasthan utility-scale solar farm" className="hero-media" src="/case-studies/karya/images/hero-rajasthan.webp" />
       <Header />
       <p className="vertical-label">Solar infrastructure</p>
       <article className="hero-statement reveal">
@@ -106,29 +168,51 @@ function Hero() {
 }
 
 function Manifesto() {
+  const sunPosition = useSunPosition();
+  const leftPrinciples = [
+    ['01', 'Long-term thinking', 'Built for 25+ years of consistent performance.'],
+    ['02', 'Engineering excellence', 'Designed for Indian conditions. Engineered in India.'],
+  ];
+  const rightPrinciples = [
+    ['03', 'Responsible growth', 'Land, community and environment at the core.'],
+    ['04', 'Operational discipline', 'Measured every day so output stays dependable.'],
+  ];
+
   return (
     <section className="manifesto atlas-section" id="atlas">
-      <div className="manifesto-title reveal">
+      <div className="manifesto-head reveal">
         <p className="mono-label">Our manifesto</p>
-        <h2>Light<br />becomes<br />load<span>.</span></h2>
-      </div>
-      <div className="manifesto-center reveal">
+        <h2>Light becomes load<span>.</span></h2>
         <p>We design, build and operate utility-scale solar systems that deliver reliable, affordable power every day, for decades.</p>
-        <div className="sun-path" aria-label="Sun path from sunrise to sunset">
-          <span className="sun sun-left">+</span>
-          <span className="sun sun-high">+</span>
-          <span className="sun sun-right">+</span>
-          <i />
-          <div className="time sunrise">Sunrise<br />05:42</div>
-          <div className="time noon">Solar noon<br />12:20</div>
-          <div className="time sunset">Sunset<br />19:14</div>
-          <footer><b>E</b><span /><b>W</b></footer>
-        </div>
       </div>
-      <ol className="principles reveal">
-        <li><span>01</span><div><strong>Long-term thinking</strong><p>Built for 25+ years of consistent performance.</p></div></li>
-        <li><span>02</span><div><strong>Engineering excellence</strong><p>Designed for Indian conditions. Engineered in India.</p></div></li>
-        <li><span>03</span><div><strong>Responsible growth</strong><p>Land, community and environment at the core.</p></div></li>
+      <ol className="principles principles-left reveal">
+        {leftPrinciples.map(([number, title, copy]) => (
+          <li key={title}><span>{number}</span><div><strong>{title}</strong><p>{copy}</p></div></li>
+        ))}
+      </ol>
+      <div
+        className="sun-path"
+        aria-label={`Live sun path from sunrise at 05:42 to sunset at 19:14. Current local time ${sunPosition.currentTime}.`}
+      >
+        <svg className="sun-arc" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M 2 78 A 48 50 0 0 1 98 78" />
+        </svg>
+        <span
+          className="sun sun-live"
+          style={{ left: `${sunPosition.x}%`, top: `${sunPosition.y}%` }}
+          data-progress={sunPosition.progress}
+          aria-hidden="true"
+        >
+          <SunIcon />
+        </span>
+        <div className="time sunrise">Sunrise<br />05:42</div>
+        <div className="time sunset">Sunset<br />19:14</div>
+        <footer><b>E</b><span /><b>W</b></footer>
+      </div>
+      <ol className="principles principles-right reveal">
+        {rightPrinciples.map(([number, title, copy]) => (
+          <li key={title}><span>{number}</span><div><strong>{title}</strong><p>{copy}</p></div></li>
+        ))}
       </ol>
     </section>
   );
@@ -142,9 +226,9 @@ function Projects() {
         <a href="#operations">View all projects <Arrow /></a>
       </div>
       <div className="project-grid">
-        {projects.map(([number, state, capacity, name, coordinate, date]) => (
+        {projects.map(([number, state, capacity, name, coordinate, date, image]) => (
           <article className="project-card reveal" key={name}>
-            <ImageBox label={`${state} project`} note="Aerial site photography" />
+            <ImageBox label={`Aerial view of the ${name} in ${state}`} src={image} />
             <div className="project-place"><span>{number}</span><strong>{state}</strong></div>
             <div className="project-info">
               <h3>{capacity}</h3>
@@ -187,13 +271,13 @@ function Technology() {
           <video
             className="assembly-video"
             poster="/case-studies/karya/video/solar-assembly-poster.jpg"
-            preload="auto"
+            preload="metadata"
             muted
             playsInline
             aria-label="Utility-scale solar power block assembling from foundations to grid connection"
           >
-            <source src="/case-studies/karya/video/solar-assembly-alpha.webm" type="video/webm" />
-            <source src="/case-studies/karya/video/solar-assembly-scroll.mp4" type="video/mp4" />
+            <source src="/case-studies/karya/video/solar-assembly-mobile.mp4?v=20260626-mobile" type="video/mp4" media="(max-width: 900px)" />
+            <source src="/case-studies/karya/video/solar-assembly-scroll.mp4?v=20260626-scrub" type="video/mp4" />
           </video>
           <div className="assembly-labels" aria-hidden="true">
             {assemblySteps.map(([number, title]) => (
@@ -225,7 +309,7 @@ function Operations() {
           <p>From the Thar to the Deccan, our assets are sited for irradiance, grid access and long-term value.</p>
           <div className="map-key"><span><i /> Operational</span><span><i /> Under construction</span></div>
         </div>
-        <ImageBox label="India operations map" note="State-level project locations and capacity" className="map-media reveal" />
+        <ImageBox label="Map of Karya Solar projects across India" className="map-media reveal" src="/case-studies/karya/images/operations-india.webp" />
         <div className="map-stats reveal">
           <span>States<strong>8</strong></span>
           <span>Operational capacity<strong>1.2 GW+</strong></span>
@@ -240,12 +324,12 @@ function Operations() {
         </div>
         <div className="fieldwork-grid">
           {[
-            ['Engineering', 'In-house design, yield modelling and detailed engineering.'],
+            ['Engineering', 'In-house design, yield modelling and detailed engineering.', '/case-studies/karya/images/field-engineering.webp'],
             ['Monitoring', '24/7 remote monitoring and AI-driven analysis.'],
-            ['Maintenance', 'Preventive maintenance programs for maximum uptime.'],
-          ].map(([title, copy]) => (
+            ['Maintenance', 'Preventive maintenance programs for maximum uptime.', '/case-studies/karya/images/field-maintenance.webp'],
+          ].map(([title, copy, image]) => (
             <article className="field-card reveal" key={title}>
-              <ImageBox label={title} note="Indian solar operations team" />
+              <ImageBox label={`${title} at a Karya Solar site`} note="Indian solar operations team" src={image} />
               <div><strong>{title}</strong><p>{copy}</p></div>
             </article>
           ))}
@@ -281,7 +365,7 @@ function Closing() {
   return (
     <>
       <section className="closing" id="contact">
-        <ImageBox label="Solar horizon at dusk" note="Wide cinematic closing image" className="closing-media" />
+        <ImageBox label="Karya Solar arrays stretching toward the horizon at dusk" className="closing-media" src="/case-studies/karya/images/closing-horizon.webp" />
         <div className="closing-copy reveal">
           <p className="mono-label">The next terawatt</p>
           <h2>Let's build<br />what's next<span>.</span></h2>
@@ -340,6 +424,127 @@ export default function App() {
         });
       });
 
+      const liveSun = root.current?.querySelector('.sun-live');
+      if (liveSun) {
+        const arcPath = root.current?.querySelector('.sun-arc path');
+        if (!arcPath) return;
+
+        const finalProgress = Math.min(1, Math.max(0, Number(liveSun.dataset.progress) || 0));
+        const arcLength = arcPath.getTotalLength();
+        const sunPlayhead = { progress: 0 };
+        const setSunOnArc = () => {
+          const point = arcPath.getPointAtLength(arcLength * sunPlayhead.progress);
+          liveSun.style.left = `${point.x}%`;
+          liveSun.style.top = `${point.y}%`;
+        };
+        const sunTimeline = gsap.timeline({
+          scrollTrigger: { trigger: '.manifesto', start: 'top 72%', once: true },
+        });
+
+        setSunOnArc();
+
+        sunTimeline
+          .fromTo('.sun-arc path',
+            { opacity: 0, strokeDashoffset: 48 },
+            { opacity: 1, strokeDashoffset: 0, duration: 1.15, ease: 'power2.out' },
+            0)
+          .fromTo('.sun-path footer span',
+            { scaleX: 0, transformOrigin: 'left center' },
+            { scaleX: 1, duration: 1.05, ease: 'power2.inOut' },
+            0.08)
+          .fromTo('.sun-path footer b, .sun-path .time',
+            { opacity: 0, y: 8 },
+            { opacity: 1, y: 0, duration: 0.45, stagger: 0.05, ease: 'power2.out' },
+            0.26)
+          .fromTo(liveSun,
+            { opacity: 0, scale: 0.78 },
+            { opacity: 1, scale: 1, duration: 0.38, ease: 'power2.out' },
+            0.18)
+          .to(sunPlayhead, {
+            progress: finalProgress,
+            duration: 2.62,
+            ease: 'power2.inOut',
+            onUpdate: setSunOnArc,
+          }, 0.18);
+      }
+
+      const compactMotion = window.matchMedia('(max-width: 720px)').matches;
+
+      gsap.utils.toArray('.image-box.has-image:not(.hero-media)').forEach((box) => {
+        const image = box.querySelector('img');
+        if (compactMotion) {
+          gsap.from(box, {
+            y: 16,
+            opacity: 0,
+            duration: 0.5,
+            ease: 'power2.out',
+            scrollTrigger: { trigger: box, start: 'top 90%', once: true },
+          });
+        } else {
+          gsap.fromTo(box,
+            { clipPath: 'inset(8% 0% 8% 0%)' },
+            {
+              clipPath: 'inset(0% 0% 0% 0%)',
+              duration: 1.1,
+              ease: 'power3.out',
+              scrollTrigger: { trigger: box, start: 'top 88%', once: true },
+            });
+        }
+
+        if (!compactMotion && image && !box.classList.contains('map-media') && !box.classList.contains('closing-media')) {
+          gsap.fromTo(image,
+            { scale: 1.08 },
+            {
+              scale: 1,
+              duration: 1.25,
+              ease: 'power3.out',
+              scrollTrigger: { trigger: box, start: 'top 88%', once: true },
+            });
+        }
+      });
+
+      media.add('(min-width: 901px)', () => {
+        gsap.to('.hero-media img', {
+          yPercent: 8,
+          scale: 1.08,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.atlas-hero',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+          },
+        });
+
+        gsap.utils.toArray('.project-card, .field-card').forEach((card) => {
+          const image = card.querySelector('.image-box img');
+          if (!image) return;
+
+          gsap.to(image, {
+            yPercent: -7,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 0.7,
+            },
+          });
+        });
+
+        gsap.to('.closing-media img', {
+          yPercent: -6,
+          scale: 1.08,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.closing',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 0.8,
+          },
+        });
+      });
+
       const buildAssemblyTimeline = (scrollTrigger) => {
         const video = root.current?.querySelector('.assembly-video');
         if (!video) return null;
@@ -348,13 +553,24 @@ export default function App() {
         const labels = gsap.utils.toArray('.assembly-label');
         const playhead = { time: 0 };
         const duration = 9.9;
+        const frameRate = 24;
         const stageTimes = [0, 1.25, 3.45, 6.1, 8.05];
         const introDuration = 1.25;
+        let targetFrame = 0;
+        let renderedFrame = -1;
+        let seekFrame = 0;
         const timeline = gsap.timeline({
           scrollTrigger,
         });
 
         video.pause();
+        const renderVideoFrame = () => {
+          seekFrame = 0;
+          if (video.readyState > 0 && targetFrame !== renderedFrame) {
+            renderedFrame = targetFrame;
+            video.currentTime = targetFrame / frameRate;
+          }
+        };
         const primeVideo = () => {
           if (video.readyState > 0) video.currentTime = 0.001;
         };
@@ -383,9 +599,8 @@ export default function App() {
           duration,
           ease: 'none',
           onUpdate: () => {
-            if (video.readyState > 0 && Math.abs(video.currentTime - playhead.time) > 0.025) {
-              video.currentTime = playhead.time;
-            }
+            targetFrame = Math.round(playhead.time * frameRate);
+            if (!seekFrame) seekFrame = window.requestAnimationFrame(renderVideoFrame);
           },
         }, introDuration);
 
@@ -412,7 +627,55 @@ export default function App() {
           .to('.performance footer', { opacity: 1, x: 0, duration: 0.42, ease: 'power2.out' }, introDuration + 10.05)
           .to('.technology-line', { scaleX: 1, duration: 0.7, ease: 'power2.inOut' }, introDuration + 9.85);
 
-        return () => video.removeEventListener('loadedmetadata', primeVideo);
+        return () => {
+          video.removeEventListener('loadedmetadata', primeVideo);
+          if (seekFrame) window.cancelAnimationFrame(seekFrame);
+        };
+      };
+
+      const buildMobileAssemblyReveal = () => {
+        const video = root.current?.querySelector('.assembly-video');
+        const steps = gsap.utils.toArray('.technology-step');
+        if (!video) return null;
+
+        video.pause();
+        gsap.set('.technology-copy .mono-label, .technology-copy h2', { opacity: 0, y: 20 });
+        gsap.set(steps, { opacity: 0, y: 12 });
+        gsap.set('.assembly-grid', { opacity: 0, scale: 0.98 });
+        gsap.set(video, { opacity: 0, y: 18, scale: 0.98 });
+        gsap.set('.assembly-label', { opacity: 0 });
+        gsap.set('.assembly-progress', { opacity: 0 });
+        gsap.set('.assembly-progress i', { scaleX: 0, transformOrigin: 'left center' });
+        gsap.set('.performance > div, .performance footer', { opacity: 0, y: 12 });
+
+        const timeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: '.technology',
+            start: 'top 78%',
+            once: true,
+            onEnter: () => {
+              try {
+                video.currentTime = 0;
+              } catch (error) {
+                // Metadata may not be ready on slower mobile connections; playback can still start normally.
+              }
+              video.play().catch(() => {});
+            },
+          },
+        });
+
+        timeline
+          .to('.technology-copy .mono-label', { opacity: 1, y: 0, duration: 0.28, ease: 'power2.out' }, 0)
+          .to('.technology-copy h2', { opacity: 1, y: 0, duration: 0.48, ease: 'power3.out' }, 0.1)
+          .to(steps, { opacity: 1, y: 0, duration: 0.38, stagger: 0.06, ease: 'power2.out' }, 0.24)
+          .to('.assembly-grid', { opacity: 1, scale: 1, duration: 0.36, ease: 'power2.out' }, 0.28)
+          .to(video, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power2.out' }, 0.34)
+          .to('.assembly-progress', { opacity: 1, duration: 0.2 }, 0.64)
+          .to('.assembly-progress i', { scaleX: 1, duration: 0.9, ease: 'power2.inOut' }, 0.76)
+          .to('.performance > div', { opacity: 1, y: 0, duration: 0.34, stagger: 0.06, ease: 'power2.out' }, 0.9)
+          .to('.performance footer', { opacity: 1, y: 0, duration: 0.34, ease: 'power2.out' }, 1.18);
+
+        return () => video.pause();
       };
 
       media.add('(min-width: 901px)', () => {
@@ -427,13 +690,7 @@ export default function App() {
         });
       });
       media.add('(max-width: 900px)', () => {
-        return buildAssemblyTimeline({
-          trigger: '.technology',
-          start: 'top 82%',
-          end: 'bottom 18%',
-          scrub: 0.55,
-          invalidateOnRefresh: true,
-        });
+        return buildMobileAssemblyReveal();
       });
     }, root);
 

@@ -1,9 +1,12 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'node:path';
 
 export default defineConfig({
-  plugins: [react()],
+  // Tailwind only emits utilities into CSS that does `@import "tailwindcss"` (just the Pravah
+  // entry), so the other case studies keep their hand-written CSS untouched.
+  plugins: [react(), tailwindcss()],
   appType: 'mpa',
   build: {
     rollupOptions: {
@@ -13,6 +16,13 @@ export default defineConfig({
         forestLoom: resolve(__dirname, 'case-studies/forest-loom/index.html'),
         saintOrson: resolve(__dirname, 'case-studies/saint-orson/index.html'),
         karya: resolve(__dirname, 'case-studies/karya/index.html'),
+        atlasAangan: resolve(__dirname, 'case-studies/atlas-aangan/index.html'),
+        atlasAanganDestinations: resolve(__dirname, 'case-studies/atlas-aangan/destinations/index.html'),
+        atlasAanganJapanUnplugged: resolve(__dirname, 'case-studies/atlas-aangan/japan-unplugged/index.html'),
+        atlasAanganPlan: resolve(__dirname, 'case-studies/atlas-aangan/plan/index.html'),
+        pravah: resolve(__dirname, 'case-studies/pravah/index.html'),
+        pravahAuth: resolve(__dirname, 'case-studies/pravah/auth/index.html'),
+        pravahContact: resolve(__dirname, 'case-studies/pravah/contact/index.html'),
         privacy: resolve(__dirname, 'privacy/index.html'),
       },
     },

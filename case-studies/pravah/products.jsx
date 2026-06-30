@@ -152,7 +152,7 @@ export function Products() {
 
             {/* Facility image */}
             <div className="lg:col-span-2 bg-base">
-              <Placeholder label="Mumbai · DC1" sub="facility photo" className="h-full min-h-[210px]" />
+              <Placeholder label="Pravah data centre, Mumbai" src="/case-studies/pravah/facility-mumbai.webp" className="h-full min-h-[210px]" />
             </div>
 
             {/* Bare Metal */}

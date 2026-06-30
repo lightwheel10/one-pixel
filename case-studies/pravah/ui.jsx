@@ -34,7 +34,7 @@ export function Placeholder({ label, sub, src, className = '' }) {
   return (
     <div className={`pv-ph pv-ticks ${className}`}>
       {src ? (
-        <img src={src} alt={label} loading="lazy" />
+        <img src={src} alt={label} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
       ) : (
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
           <span className="font-mono text-[10px] tracking-[0.3em] text-electric uppercase mb-2">Image</span>

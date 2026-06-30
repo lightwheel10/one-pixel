@@ -752,7 +752,7 @@ h2 span {
 
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) 0.62fr;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 7px;
 }
 
@@ -761,6 +761,31 @@ h2 span {
   border: 1px solid var(--line);
   transform: translateZ(0);
   transition: border-color 260ms ease, box-shadow 260ms ease, transform 260ms ease;
+}
+
+/* Featured lead project — a large 2x2 card; the rest form a 2x2 index */
+.project-card-feature {
+  grid-column: span 2;
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.project-card-feature .image-box {
+  flex: 1;
+  min-height: 300px;
+}
+
+.project-card-feature .project-info {
+  padding: clamp(16px, 1.7vw, 26px);
+}
+
+.project-card-feature .project-info h3 {
+  font-size: clamp(30px, 3vw, 46px);
+}
+
+.project-card-feature .project-place {
+  font-size: 9px;
 }
 
 .project-card .image-box {
@@ -1148,33 +1173,77 @@ h2 span {
 
 .impact {
   display: grid;
-  grid-template-columns: 0.9fr 3fr 0.65fr;
-  gap: 28px;
+  grid-template-columns: 0.9fr 2.5fr;
+  gap: clamp(32px, 4vw, 68px);
   align-items: center;
-  min-height: 170px;
-  padding: 26px var(--pad);
+  padding: clamp(56px, 6.5vw, 96px) var(--pad);
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   background: var(--paper);
 }
 
 .impact h2 {
-  font-size: 31px;
+  margin: 0;
+  font-size: clamp(40px, 3.8vw, 62px);
+  line-height: 0.95;
 }
 
 .impact .mono-label {
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
-.impact-grid {
+/* Ledger panel — featured navy stat + bezeled supporting grid */
+.impact-ledger {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: 1fr 1.2fr;
+  border: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 28px 56px -38px rgba(6, 24, 36, 0.5);
 }
 
-.impact-stat {
-  min-height: 95px;
-  padding: 0 18px;
-  border-left: 1px solid var(--line);
+.impact-feature {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 28px;
+  min-height: 232px;
+  padding: clamp(28px, 3vw, 46px);
+  background: var(--navy);
+  color: var(--paper);
+}
+
+.impact-feature-tag {
+  max-width: 210px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  line-height: 1.6;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+
+.impact-feature strong {
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(46px, 5.2vw, 80px);
+  font-weight: 400;
+  line-height: 0.88;
+  font-variant-numeric: tabular-nums;
+}
+
+.impact-rest {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+}
+
+.impact-rest .impact-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 116px;
+  padding: clamp(18px, 2vw, 28px);
+  border: 0;
+  background: var(--paper-deep);
 }
 
 .impact-stat > span {
@@ -1183,10 +1252,11 @@ h2 span {
 
 .impact-stat strong {
   display: block;
-  margin-top: 13px;
-  font-size: 18px;
+  margin-top: 12px;
+  font-size: 22px;
   font-weight: 400;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .impact-stat p {
@@ -1197,7 +1267,7 @@ h2 span {
 }
 
 .impact-note {
-  margin: 0;
+  margin: 24px 0 0;
   color: rgba(20, 23, 18, 0.55);
   font-size: 8px;
   line-height: 1.6;
@@ -1462,6 +1532,15 @@ h2 span {
     scroll-snap-align: start;
   }
 
+  .project-card-feature {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .project-card-feature .image-box {
+    min-height: 210px;
+  }
+
   .technology-sticky {
     grid-template-columns: minmax(175px, 0.75fr) minmax(410px, 1.65fr) minmax(140px, 0.62fr);
     gap: 24px;
@@ -1669,13 +1748,8 @@ h2 span {
     grid-column: auto;
   }
 
-  .impact-grid {
-    grid-template-columns: repeat(2, 1fr);
-    row-gap: 28px;
-  }
-
-  .impact-stat:nth-child(odd) {
-    border-left: 0;
+  .impact-ledger {
+    grid-template-columns: 1fr;
   }
 
   .closing-media .image-box-label {
@@ -1789,4 +1863,87 @@ h2 span {
   .loader.flickering .loader-pixel-color { animation: none !important; }
   .loader-pixel-march { animation: none; }
   .loader { transition-duration: .3s; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   PASS 1 — premium polish (redesign upgrade). Additive only; keeps the
+   cream / navy / amber + Italiana identity.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* 1 · Paper grain — fixed, neutral film-grain for physical paper depth */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0.09;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* 2 · Type micro-polish */
+.atlas-hero h1,
+.manifesto-head h2,
+.technology h2,
+.map-copy h2,
+.fieldwork-title h2,
+.impact h2,
+.closing-copy h2 { text-wrap: balance; }
+.hero-summary,
+.manifesto-head > p,
+.map-copy > p:nth-of-type(2),
+.field-card p { text-wrap: pretty; }
+.hero-stats strong,
+.impact-stat strong,
+.map-stats strong,
+.performance strong,
+.project-info h3 { font-variant-numeric: tabular-nums; }
+
+/* 3 · Card depth — subtle navy-tinted lift at rest (hover already deepens) */
+.project-card { box-shadow: 0 12px 26px -20px rgba(6, 24, 36, 0.42); }
+.field-card { box-shadow: 0 16px 32px -22px rgba(6, 24, 36, 0.55); }
+
+/* 4 · Motion — staggered blur-up reveal. JS adds .js-reveal + .is-in;
+   the hidden state only applies when JS is active AND motion is allowed,
+   so no-JS and reduced-motion users always see content. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js-reveal .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    filter: blur(7px);
+    transition: opacity 0.85s cubic-bezier(0.2, 0.7, 0.2, 1),
+                transform 0.85s cubic-bezier(0.2, 0.7, 0.2, 1),
+                filter 0.85s ease;
+  }
+  html.js-reveal .reveal.is-in {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1 !important; transform: none !important; filter: none !important; }
+}
+
+/* 4b · Editorial link micro-interaction — arrow nudge on the index CTA */
+.section-heading a span[aria-hidden] {
+  display: inline-block;
+  transition: transform 240ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.section-heading a:hover span[aria-hidden] { transform: translateX(5px); }
+
+/* 5 · Navy seams — a faint amber hairline so the dark sections read as
+   deliberate "energy" moments rather than hard cuts */
+.operations-map { position: relative; }
+.operations-map::before,
+.closing::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  z-index: 4;
+  background: linear-gradient(90deg, transparent, rgba(227, 155, 32, 0.6), transparent);
 }

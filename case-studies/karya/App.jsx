@@ -227,8 +227,8 @@ function Projects() {
         <a href="#operations">View all projects <Arrow /></a>
       </div>
       <div className="project-grid">
-        {projects.map(([number, state, capacity, name, coordinate, date, image]) => (
-          <article className="project-card reveal" key={name}>
+        {projects.map(([number, state, capacity, name, coordinate, date, image], i) => (
+          <article className={`project-card reveal${i === 0 ? ' project-card-feature' : ''}`} key={name}>
             <ImageBox label={`Aerial view of the ${name} in ${state}`} src={image} />
             <div className="project-place"><span>{number}</span><strong>{state}</strong></div>
             <div className="project-info">
@@ -342,22 +342,29 @@ function Operations() {
 }
 
 function Impact() {
+  const [feature, ...rest] = impact;
   return (
     <section className="impact" id="impact">
-      <div className="impact-title reveal">
+      <div className="impact-head reveal">
         <p className="mono-label">Impact ledger</p>
         <h2>Energy that<br />transforms<span>.</span></h2>
+        <p className="impact-note">Numbers as of Apr 2026.<br />Continuously improving.</p>
       </div>
-      <div className="impact-grid">
-        {impact.map(([value, label]) => (
-          <div className="impact-stat reveal" key={label}>
-            <span>+</span>
-            <strong>{value}</strong>
-            <p>{label}</p>
-          </div>
-        ))}
+      <div className="impact-ledger reveal">
+        <div className="impact-feature">
+          <span className="impact-feature-tag">{feature[1]}</span>
+          <strong>{feature[0]}</strong>
+        </div>
+        <div className="impact-rest">
+          {rest.map(([value, label]) => (
+            <div className="impact-stat" key={label}>
+              <span>+</span>
+              <strong>{value}</strong>
+              <p>{label}</p>
+            </div>
+          ))}
+        </div>
       </div>
-      <p className="impact-note">Numbers as of Apr 2026.<br />Continuously improving.</p>
     </section>
   );
 }
@@ -400,6 +407,30 @@ export default function App() {
   // ?still freezes the page for a clean full-page screenshot (see the layout effect below)
   // and skips the intro loader so captures aren't covered by it.
   const still = new URLSearchParams(window.location.search).has('still');
+
+  // Staggered blur-up reveal as sections enter view. JS-gated via .js-reveal
+  // and reduced-motion safe: if JS is off or motion is reduced, the hidden
+  // state never applies and every .reveal stays fully visible.
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const els = Array.from(document.querySelectorAll('.reveal'));
+    if (!els.length) return;
+    document.documentElement.classList.add('js-reveal');
+    els.forEach((el) => {
+      const sibs = el.parentElement
+        ? Array.from(el.parentElement.children).filter((c) => c.classList.contains('reveal'))
+        : [el];
+      const i = sibs.indexOf(el);
+      if (i > 0) el.style.transitionDelay = `${Math.min(i, 5) * 70}ms`;
+    });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    els.forEach((el) => io.observe(el));
+    return () => { io.disconnect(); document.documentElement.classList.remove('js-reveal'); };
+  }, []);
 
   useLayoutEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

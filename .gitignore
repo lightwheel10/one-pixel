@@ -6,3 +6,8 @@ dist
 _design
 marketing
 .claude/settings.local.json
+
+# Installed agent skills (taste-skill, etc.) — local tooling, not site code
+.agents/
+.claude/skills/
+skills-lock.json

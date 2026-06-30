@@ -132,11 +132,11 @@ function Channels() {
 }
 
 const faqs = [
-  { q: 'Where is my data stored?', a: 'In India, always. All five Pravah regions — Mumbai, Chennai, Delhi NCR, Bengaluru and Hyderabad — are inside the country, and data is never replicated across a border. Residency and MeitY-readiness are the default.' },
+  { q: 'Where is my data stored?', a: 'In India, always. All five Pravah regions are inside the country: Mumbai, Chennai, Delhi NCR, Bengaluru and Hyderabad. Data is never replicated across a border, so residency and MeitY readiness are the default.' },
   { q: 'How does billing work?', a: 'Everything is priced in rupees with per-second metering. Pay by UPI, NetBanking or card, and download GST invoices from the console. No currency conversion and no surprises.' },
   { q: 'Do you charge for bandwidth?', a: 'Every plan includes generous transfer, and traffic between Pravah regions inside India is free. You only pay metered rates for egress that leaves our network.' },
   { q: 'Can you help me migrate from another cloud?', a: 'Yes. Our team helps you move servers, databases and storage with minimal downtime, and committed-use customers get a dedicated migration engineer.' },
-  { q: 'What support do I get?', a: 'Real engineers, 24/7, on every plan, with a median first reply under five minutes. Scale customers also get a named solutions engineer and a 99.99% SLA.' },
+  { q: 'What support do I get?', a: 'Real engineers, 24/7, on every plan, with a median first reply under five minutes. Customers on our larger plans also get a named solutions engineer and a 99.99% SLA.' },
   { q: 'Is there a free trial?', a: 'New accounts get ₹500 in credit with no card required, so you can deploy and test before committing to anything.' },
 ];
 

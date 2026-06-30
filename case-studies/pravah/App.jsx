@@ -181,7 +181,7 @@ function CallToAction() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[760px] h-[360px] bg-electric/10 blur-[120px] z-0" aria-hidden="true" />
       <Reveal className="relative z-10 max-w-3xl mx-auto text-center">
         <h2 className="font-display text-4xl md:text-6xl font-medium tracking-tight">
-          Put your stack on the current.
+          Start building on Pravah.
         </h2>
         <p className="text-white/55 mt-5 max-w-xl mx-auto leading-relaxed">
           Spin up your first server in under a minute, or pull the CLI and script it from your terminal.
@@ -215,7 +215,7 @@ function Footer() {
         <div>
           <Logo />
           <p className="text-white/45 text-sm mt-4 max-w-xs leading-relaxed">
-            India&rsquo;s cloud, on full current. Cloud servers, bare metal and storage, hosted at home.
+            India&rsquo;s cloud, built for builders. Cloud servers, bare metal and storage, hosted in India.
           </p>
           <a href="#" className="mt-5 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wide text-white/50 hover:text-white transition-colors">
             <i className="w-1.5 h-1.5 bg-emerald-400 inline-block" /> All systems operational

@@ -3,10 +3,10 @@ import { Check, ArrowRight } from 'lucide-react';
 import { Reveal } from './ui.jsx';
 
 const plans = [
-  { name: 'Spark', tag: 'side projects', price: 399, vcpu: '2', ram: '4 GB', disk: '40 GB', xfer: '2 TB', feats: ['Shared vCPU', 'IPv4 + IPv6', 'Snapshots'] },
-  { name: 'Surge', tag: 'production', price: 799, vcpu: '4', ram: '8 GB', disk: '80 GB', xfer: '4 TB', feats: ['Dedicated vCPU option', 'Daily backups ready', 'Priority network'], hot: true },
-  { name: 'Storm', tag: 'scaling apps', price: 1599, vcpu: '8', ram: '16 GB', disk: '160 GB', xfer: '8 TB', feats: ['Dedicated vCPU', 'Private networking', '99.99% SLA'] },
-  { name: 'Bolt', tag: 'heavy workloads', price: 3199, vcpu: '16', ram: '32 GB', disk: '320 GB', xfer: '20 TB', feats: ['Dedicated vCPU', 'NVMe RAID option', 'Priority support'] },
+  { name: 'Basic', tag: 'side projects', price: 399, vcpu: '2', ram: '4 GB', disk: '40 GB', xfer: '2 TB', feats: ['Shared vCPU', 'IPv4 + IPv6', 'Snapshots'] },
+  { name: 'General Purpose', tag: 'production', price: 799, vcpu: '4', ram: '8 GB', disk: '80 GB', xfer: '4 TB', feats: ['Dedicated vCPU option', 'Daily backups ready', 'Priority network'], hot: true },
+  { name: 'Performance', tag: 'scaling apps', price: 1599, vcpu: '8', ram: '16 GB', disk: '160 GB', xfer: '8 TB', feats: ['Dedicated vCPU', 'Private networking', '99.99% SLA'] },
+  { name: 'Dedicated', tag: 'heavy workloads', price: 3199, vcpu: '16', ram: '32 GB', disk: '320 GB', xfer: '20 TB', feats: ['Dedicated vCPU', 'NVMe RAID option', 'Priority support'] },
 ];
 
 const inr = (n) => '₹' + n.toLocaleString('en-IN');
@@ -54,7 +54,7 @@ function Segmented({ options, value, onChange }) {
           key={o}
           type="button"
           onClick={() => onChange(i)}
-          className={`px-2 py-2.5 text-sm font-display transition-colors ${value === i ? 'bg-electric text-black' : 'bg-base text-white/65 hover:bg-white/[0.05]'}`}
+          className={`px-1.5 py-2.5 text-[11px] sm:text-xs font-display leading-tight transition-colors ${value === i ? 'bg-electric text-black' : 'bg-base text-white/65 hover:bg-white/[0.05]'}`}
         >
           {o}
         </button>

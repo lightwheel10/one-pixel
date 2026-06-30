@@ -12,7 +12,7 @@ const tabs = [
     id: 'cli', label: 'CLI', lines: [
       '$ pravah server create \\',
       '    --name web-01 \\',
-      '    --plan surge \\',
+      '    --plan general-purpose \\',
       '    --region bom-1 \\',
       '    --image ubuntu-24.04',
       '',
@@ -25,7 +25,7 @@ const tabs = [
     id: 'tf', label: 'Terraform', lines: [
       'resource "pravah_server" "web" {',
       '  name     = "web-01"',
-      '  plan     = "surge"',
+      '  plan     = "general-purpose"',
       '  region   = "bom-1"',
       '  image    = "ubuntu-24.04"',
       '  ssh_keys = [pravah_ssh_key.deploy.id]',
@@ -40,7 +40,7 @@ const tabs = [
     id: 'api', label: 'API', lines: [
       '$ curl -X POST https://api.pravah.cloud/v1/servers \\',
       '    -H "Authorization: Bearer $PRAVAH_TOKEN" \\',
-      '    -d \'{"name":"web-01","plan":"surge","region":"bom-1"}\'',
+      '    -d \'{"name":"web-01","plan":"general-purpose","region":"bom-1"}\'',
       '',
       '# 201 Created',
       '# { "id": "srv_7f3", "ipv4": "103.21.84.12" }',
@@ -52,7 +52,7 @@ const tabs = [
       '',
       'srv, err := client.Servers.Create(ctx, &pravah.ServerCreate{',
       '    Name:   "web-01",',
-      '    Plan:   "surge",',
+      '    Plan:   "general-purpose",',
       '    Region: "bom-1",',
       '    Image:  "ubuntu-24.04",',
       '})',
@@ -114,11 +114,11 @@ function CodeTabs() {
 
 const sidebarIcons = [Server, Database, HardDrive, Network, Save, Settings];
 const servers = [
-  { name: 'web-01', region: 'BOM-1', plan: 'Surge', status: 'Running', ip: '103.21.84.12' },
-  { name: 'api-01', region: 'BOM-1', plan: 'Storm', status: 'Running', ip: '103.21.84.31' },
-  { name: 'worker-1', region: 'MAA-1', plan: 'Spark', status: 'Running', ip: '103.27.12.9' },
-  { name: 'db-01', region: 'DEL-1', plan: 'Storm', status: 'Running', ip: '103.41.6.55' },
-  { name: 'cache-1', region: 'BLR-1', plan: 'Spark', status: 'Provisioning', ip: '—' },
+  { name: 'web-01', region: 'BOM-1', plan: 'General Purpose', status: 'Running', ip: '103.21.84.12' },
+  { name: 'api-01', region: 'BOM-1', plan: 'Performance', status: 'Running', ip: '103.21.84.31' },
+  { name: 'worker-1', region: 'MAA-1', plan: 'Basic', status: 'Running', ip: '103.27.12.9' },
+  { name: 'db-01', region: 'DEL-1', plan: 'Performance', status: 'Running', ip: '103.41.6.55' },
+  { name: 'cache-1', region: 'BLR-1', plan: 'Basic', status: 'Provisioning', ip: 'assigning' },
 ];
 
 function ConsoleMock() {
@@ -150,7 +150,7 @@ function ConsoleMock() {
           </div>
 
           <div className="overflow-x-auto flex-1">
-            <table className="w-full min-w-[440px] text-left border-collapse">
+            <table className="w-full min-w-[520px] text-left border-collapse">
               <thead>
                 <tr className="font-mono text-[10px] uppercase tracking-wider text-white/40">
                   <th className="font-normal px-4 py-2.5">Name</th>

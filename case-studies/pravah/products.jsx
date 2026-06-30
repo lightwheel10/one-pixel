@@ -5,10 +5,10 @@ import { Reveal, Placeholder } from './ui.jsx';
 /* ----- small sharp technical diagrams, one per product ----- */
 
 const ladder = [
-  { n: 'Spark', s: '2 vCPU · 4 GB', p: '₹399', w: 28 },
-  { n: 'Surge', s: '4 vCPU · 8 GB', p: '₹799', w: 48, hot: true },
-  { n: 'Storm', s: '8 vCPU · 16 GB', p: '₹1,599', w: 72 },
-  { n: 'Bolt', s: '16 vCPU · 32 GB', p: '₹3,199', w: 100 },
+  { n: 'Basic', s: '2 vCPU · 4 GB', p: '₹399', w: 28 },
+  { n: 'General Purpose', s: '4 vCPU · 8 GB', p: '₹799', w: 48, hot: true },
+  { n: 'Performance', s: '8 vCPU · 16 GB', p: '₹1,599', w: 72 },
+  { n: 'Dedicated', s: '16 vCPU · 32 GB', p: '₹3,199', w: 100 },
 ];
 
 function PlanLadder() {
@@ -19,7 +19,7 @@ function PlanLadder() {
           key={p.n}
           className={`flex items-center gap-4 px-4 py-3 border-b border-white/10 last:border-b-0 transition-colors hover:bg-white/[0.03] ${p.hot ? 'bg-electric/[0.06]' : ''}`}
         >
-          <span className="w-12 shrink-0 font-display text-sm">{p.n}</span>
+          <span className="w-32 shrink-0 font-display text-sm">{p.n}</span>
           <div className="flex-1 h-1.5 bg-white/[0.06] relative">
             <div className="absolute inset-y-0 left-0 bg-electric/60" style={{ width: `${p.w}%` }} />
           </div>
@@ -139,7 +139,7 @@ export function Products() {
               <CellHead icon={Server} name="Cloud Servers" price="from ₹399/mo" />
               <p className="text-white/55 text-sm mt-4 max-w-lg leading-relaxed">
                 Virtual servers on shared or dedicated vCPU, NVMe everywhere. Resize, snapshot and clone in
-                seconds — pick a size and you are live in under a minute.
+                seconds. Pick a size and you are live in under a minute.
               </p>
               <PlanLadder />
               <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mt-auto pt-6">

@@ -237,7 +237,7 @@ const regions = ['Mumbai', 'Chennai', 'Delhi NCR', 'Bengaluru', 'Hyderabad'];
 
 const instanceSpecs = [
   ['Region', 'Mumbai · BOM-1'],
-  ['Plan', 'Surge'],
+  ['Plan', 'General Purpose'],
   ['Compute', '4 vCPU · 8 GB'],
   ['Disk', '80 GB NVMe'],
   ['IPv4', '103.21.x.x'],
@@ -254,7 +254,7 @@ function InstanceCard() {
           <span className="flex gap-1.5" aria-hidden="true">
             <i className="w-2.5 h-2.5 bg-white/15" /><i className="w-2.5 h-2.5 bg-white/15" /><i className="w-2.5 h-2.5 bg-white/15" />
           </span>
-          bolt-7f3
+          srv-7f3
         </div>
         <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wide text-green-400">
           <i className="w-1.5 h-1.5 bg-green-400" /> Running
@@ -360,10 +360,10 @@ export const HeroSection = () => {
         <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-12 lg:gap-16 items-center">
           <motion.div variants={stagger} initial="hidden" animate="visible">
             <motion.p variants={item} className="pv-eyebrow mb-6">
-              Cloud · Bare metal · Storage — hosted in India
+              Cloud · Bare metal · Storage · hosted in India
             </motion.p>
             <motion.h1 variants={item} className="font-display text-5xl sm:text-6xl lg:text-7xl font-medium leading-[0.98] tracking-tight">
-              India&rsquo;s cloud,<br />on full <span className="text-electric">current</span>.
+              India&rsquo;s cloud,<br />built for <span className="text-electric">builders</span>.
             </motion.h1>
             <motion.p variants={item} className="text-white/60 text-lg mt-7 max-w-xl leading-relaxed">
               Cloud servers, bare metal and block storage across five Indian data centres. Honest rupee

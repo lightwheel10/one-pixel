@@ -222,7 +222,7 @@ export default function AuthApp() {
           <div className="relative z-10"><BrandLogo /></div>
           <div className="relative z-10">
             <h2 className="font-display text-4xl leading-tight tracking-tight">
-              India&rsquo;s cloud,<br />on full <span className="text-electric">current</span>.
+              India&rsquo;s cloud,<br />built for <span className="text-electric">builders</span>.
             </h2>
             <ul className="space-y-3 mt-8">
               {features.map((t) => (

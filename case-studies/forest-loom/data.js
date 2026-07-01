@@ -20,6 +20,7 @@ export const CATEGORIES = [
 export const PRODUCTS = [
   {
     id: 'kora-throw', name: 'Kora Throw', type: 'throws', price: 6800, img: IMG.pKora,
+    gallery: [IMG.pKora, IMG.pKoraAlt1, IMG.pKoraAlt2],
     line: 'Undyed kala cotton, left the colour it grew.',
     desc: 'A generous throw in rain-fed kala cotton, woven on a pit loom in Kutch and left undyed. It carries the warm, uneven colour of the cotton itself, and softens with every wash.',
     material: 'Kala cotton', weave: 'Plain weave', gsm: '320 GSM', size: '200 × 150 cm',
@@ -28,6 +29,7 @@ export const PRODUCTS = [
   },
   {
     id: 'indigo-khes', name: 'Khes Blanket', type: 'throws', price: 9400, img: IMG.pKhes,
+    gallery: [IMG.pKhes, IMG.pKhesAlt1, IMG.pKhesAlt2],
     line: 'A double cloth blanket. Warm on one face, cool on the other.',
     desc: 'Two cloths woven as one on the loom, so the blanket is warm on the indigo face and cool on the natural one. Handspun cotton, dyed in a living indigo vat. The piece we are proudest of.',
     material: 'Handspun cotton', weave: 'Double cloth', gsm: '480 GSM', size: '230 × 160 cm',
@@ -36,6 +38,7 @@ export const PRODUCTS = [
   },
   {
     id: 'maheshwar-stole', name: 'Maheshwari Stole', type: 'wearables', price: 3200, img: IMG.pStole,
+    gallery: [IMG.pStole, IMG.pStoleAlt1, IMG.pStoleAlt2],
     line: 'Featherweight cotton and silk, with the fine Maheshwar border.',
     desc: 'A stole so light you forget you are wearing it, with the slim gold border Maheshwar has woven for centuries. Cotton in the body, a thread of tussar silk through the edge.',
     material: 'Cotton · tussar silk', weave: 'Plain weave, zari border', gsm: '90 GSM', size: '210 × 70 cm',
@@ -44,6 +47,7 @@ export const PRODUCTS = [
   },
   {
     id: 'tussar-scarf', name: 'Tussar Scarf', type: 'wearables', price: 4600, img: IMG.pScarf,
+    gallery: [IMG.pScarf, IMG.pScarfAlt1, IMG.pScarfAlt2],
     line: 'Wild tussar silk, reeled by hand from the cocoon.',
     desc: 'Wild tussar, reeled by hand so the silk keeps its slub and its quiet shine. It holds a little warmth and a lot of light, and only gets better with age.',
     material: 'Wild tussar silk', weave: 'Plain weave', gsm: '110 GSM', size: '180 × 55 cm',
@@ -52,6 +56,7 @@ export const PRODUCTS = [
   },
   {
     id: 'merino-wrap', name: 'Kutch Wool Wrap', type: 'wearables', price: 7200, img: IMG.pWrap,
+    gallery: [IMG.pWrap, IMG.pWrapAlt1, IMG.pWrapAlt2],
     line: 'Soft merino and cotton, with a quiet extra-weft motif.',
     desc: 'A big, soft wrap in merino and cotton, carrying a small extra-weft motif lifted straight from the weaver’s own sampler. Warm enough for a Bengaluru December or a hill-station evening.',
     material: 'Merino · cotton', weave: 'Extra weft', gsm: '260 GSM', size: '220 × 90 cm',
@@ -60,6 +65,7 @@ export const PRODUCTS = [
   },
   {
     id: 'selvedge-napkins', name: 'Selvedge Napkins', type: 'home', price: 2400, img: IMG.pNapkins,
+    gallery: [IMG.pNapkins, IMG.pNapkinsAlt1, IMG.pNapkinsAlt2],
     line: 'A set of four, edged in the loom’s own selvedge.',
     desc: 'Four napkins in kala cotton, left with the loom’s own selvedge as the edge so they never need a hem. They soften and fray kindly, and look better at year five than year one.',
     material: 'Kala cotton', weave: 'Plain weave', gsm: 'Set of 4', size: '45 × 45 cm',
@@ -68,6 +74,7 @@ export const PRODUCTS = [
   },
   {
     id: 'indigo-runner', name: 'Indigo Table Runner', type: 'home', price: 3600, img: IMG.pRunner,
+    gallery: [IMG.pRunner, IMG.pRunnerAlt1, IMG.pRunnerAlt2],
     line: 'A long runner in vat indigo, for a table that gets used.',
     desc: 'A long, narrow runner dyed in a natural indigo vat, with a fine undyed stripe at each end. Made for a table that is actually eaten at, and washes back to soft.',
     material: 'Kala cotton', weave: 'Plain weave, striped ends', gsm: '220 GSM', size: '180 × 40 cm',
@@ -76,6 +83,7 @@ export const PRODUCTS = [
   },
   {
     id: 'bhujodi-cushion', name: 'Bhujodi Cushion', type: 'home', price: 2800, img: IMG.pCushion,
+    gallery: [IMG.pCushion, IMG.pCushionAlt1, IMG.pCushionAlt2],
     line: 'Merino and cotton, with an extra-weft motif from the sampler.',
     desc: 'A cushion cover in merino and cotton with a small woven motif, closed with a wooden button and an envelope back. Cover only, sized for a standard 50 cm insert.',
     material: 'Merino · cotton', weave: 'Extra weft', gsm: 'Cover only', size: '50 × 50 cm',

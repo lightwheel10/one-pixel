@@ -1,39 +1,58 @@
-// Placeholder photography (Pexels CDN). Every URL curl-verified (HTTP 200, image/jpeg).
-// Cinematic set is warm/moody/film-graded for the editorial lookbook; product set is
-// neutral textile shots. Swap for the brand's own photography before going live.
-const px = (id, w) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
+// Local photography map for Forest & Loom.
+const core = (name) => `/case-studies/forest-loom/core/${name}.jpg`;
+const product = (name) => `/case-studies/forest-loom/products/${name}.jpg`;
+const productVariant = (name) => `/case-studies/forest-loom/products/variants/${name}.jpg`;
+const detail = (name) => `/case-studies/forest-loom/details/${name}.jpg`;
+const maker = (name) => `/case-studies/forest-loom/makers/${name}.jpg`;
+const category = (name) => `/case-studies/forest-loom/categories/${name}.jpg`;
 
 export const IMG = {
   // cinematic editorial (warm, moody)
-  heroMain: px(14705601, 2400),   // man in a long overcoat on a stone ridge, golden valley
-  heroAlt: px(16721382, 2400),    // woman in a woven wool shawl over warm rock formations
-  heroC: px(10958554, 2400),      // man wrapped in a deep maroon wool shawl at dusk
-  heroD: px(2213574, 2400),       // woman in a natural wrap on warm rock formations, golden hills
-  lookMain: px(8796287, 1600),    // editorial figure in a natural linen suit, muted dusk
-  craftMain: px(5908251, 1800),   // earthy linen draped in folds, warm directional light
-  roomMain: px(7746045, 1800),    // warm living room, stone fireplace, earthy throws
-  closingMain: px(19470574, 2400),// couple wrapped together in a shawl by a golden lake
+  heroMain: core('hero-main-v1'),
+  heroAlt: core('hero-alt-v1'),
+  heroC: core('hero-c-v1'),
+  heroD: core('hero-d-v1'),
+  lookMain: core('look-main-v1'),
+  craftMain: core('craft-main-v1'),
+  roomMain: core('room-main-v1'),
+  closingMain: core('closing-main-v1'),
 
   // categories (referenced by data; not rendered as tiles in the current home)
-  catThrows: px(11125918, 1400),
-  catWearables: px(19346997, 1400),
-  catHome: px(30618181, 1400),
+  catThrows: category('throws-cover-v1'),
+  catWearables: category('wearables-cover-v1'),
+  catHome: category('home-cover-v1'),
 
   // products
-  pKora: px(4862928, 1400),
-  pKhes: px(35197097, 1400),
-  pStole: px(17325401, 1400),
-  pScarf: px(7988399, 1400),
-  pWrap: px(6630873, 1400),
-  pNapkins: px(6378665, 1400),
-  pRunner: px(4805775, 1400),
-  pCushion: px(37023122, 1400),
+  pKora: product('kora-throw-v1'),
+  pKhes: product('indigo-khes-v1'),
+  pStole: product('maheshwari-stole-v1'),
+  pScarf: product('tussar-scarf-v1'),
+  pWrap: product('kutch-wool-wrap-v1'),
+  pNapkins: product('selvedge-napkins-v1'),
+  pRunner: product('indigo-table-runner-v1'),
+  pCushion: product('bhujodi-cushion-v1'),
+  pKoraAlt1: productVariant('kora-throw-alt-1'),
+  pKoraAlt2: productVariant('kora-throw-alt-2'),
+  pKhesAlt1: productVariant('indigo-khes-alt-1'),
+  pKhesAlt2: productVariant('indigo-khes-alt-2'),
+  pStoleAlt1: productVariant('maheshwari-stole-alt-1'),
+  pStoleAlt2: productVariant('maheshwari-stole-alt-2'),
+  pScarfAlt1: productVariant('tussar-scarf-alt-1'),
+  pScarfAlt2: productVariant('tussar-scarf-alt-2'),
+  pWrapAlt1: productVariant('kutch-wool-wrap-alt-1'),
+  pWrapAlt2: productVariant('kutch-wool-wrap-alt-2'),
+  pNapkinsAlt1: productVariant('selvedge-napkins-alt-1'),
+  pNapkinsAlt2: productVariant('selvedge-napkins-alt-2'),
+  pRunnerAlt1: productVariant('indigo-table-runner-alt-1'),
+  pRunnerAlt2: productVariant('indigo-table-runner-alt-2'),
+  pCushionAlt1: productVariant('bhujodi-cushion-alt-1'),
+  pCushionAlt2: productVariant('bhujodi-cushion-alt-2'),
 
   // makers
-  maker1: px(6634689, 1400),   // hands weaving coloured threads on a loom
-  maker2: px(8207648, 1400),   // weaver at a loom, warm workspace
+  maker1: maker('bhujodi-vankars-v1'),
+  maker2: maker('rehman-master-dyer-v1'),
 
   // product-detail gallery supporting shots
-  detailMacro: px(6275937, 1400),   // extreme macro of handwoven cotton, threads + fringe
-  foldedStack: px(14642652, 1400),  // neatly folded handwoven throws, warm muted tones
+  detailMacro: detail('detail-macro-v1'),
+  foldedStack: detail('folded-stack-v1'),
 };

@@ -261,7 +261,7 @@ export function Product({ id }) {
   }
 
   const cat = CATEGORIES.find((c) => c.v === p.type);
-  const gallery = [p.img, IMG.detailMacro, IMG.foldedStack, IMG.roomMain];
+  const gallery = [...(p.gallery || [p.img]), IMG.detailMacro, IMG.foldedStack];
   const doAdd = () => {
     add(p, colour, qty);
     setAdded(true);

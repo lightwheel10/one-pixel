@@ -80,7 +80,7 @@ export function Work() {
     { num: '03', name: 'Forest & Loom',    domain: 'forestandloom.com',  meta: ['D2C Textiles', 'Custom Storefront', '2026'], kind: 'ecommerce',  href: '/case-studies/forest-loom/', live: true, preview: '/work/forest-loom-full.jpg' },
     { num: '04', name: 'Sangam Type Co',   domain: 'sangamtype.co',      meta: ['Type Foundry', 'Design + Dev', '2025'],   kind: 'type',       preview: '/work/sangam-type-placeholder.jpg' },
     { num: '05', name: 'Pravah Cloud',     domain: 'pravah.cloud',       meta: ['B2B SaaS', 'Site + Docs', '2026'],        kind: 'saas',       href: '/case-studies/pravah/', live: true, preview: '/work/pravah-cloud-full.jpg' },
-    { num: '06', name: 'Atlas & Aangan',   domain: 'atlasandaangan.com', meta: ['Travel Agency', 'Booking Flow', '2026'],  kind: 'structured', href: '/case-studies/atlas-aangan/', live: true, preview: '/work/coast-co-placeholder.jpg' },
+    { num: '06', name: 'Atlas & Aangan',   domain: 'atlasandaangan.com', meta: ['Travel Agency', 'Booking Flow', '2026'],  kind: 'structured', href: '/case-studies/atlas-aangan/', live: true, preview: '/work/atlas-aangan-full.jpg' },
     { num: '07', name: 'Karya Solar',      domain: 'karyasolar.com',    meta: ['Solar Infrastructure', 'Site', '2026'],   kind: 'structured', href: '/case-studies/karya/', live: true, preview: '/work/karya-solar-full.jpg' },
   ];
 

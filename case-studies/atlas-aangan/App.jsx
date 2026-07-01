@@ -829,16 +829,6 @@ export default function App() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return undefined;
 
-    // The intro reveal is built paused and played once the OnePixel loader
-    // lifts, so the entrance isn't wasted behind the loading screen.
-    let introTl;
-    let introPlayed = false;
-    const playIntro = () => {
-      if (introPlayed || !introTl) return;
-      introPlayed = true;
-      introTl.play();
-    };
-
     const handleInternalNavigation = (event) => {
       if (!(event.target instanceof Element)) return;
       const link = event.target.closest('a[href]');
@@ -923,41 +913,31 @@ export default function App() {
       const headerItems = gsap.utils.toArray('.aa-header .aa-brand, .aa-nav a, .aa-menu');
 
       gsap.set(root.current, { opacity: 1 });
-
-      // Paused so the from-tweens hide the elements immediately (immediateRender)
-      // while the loader covers them; playIntro() runs it when the loader lifts.
-      introTl = gsap.timeline({ paused: true });
-      introTl
-        .from(headerItems, {
-          opacity: 0,
-          y: -12,
-          duration: 0.55,
-          stagger: 0.045,
-          ease: 'power3.out',
-          clearProps: 'transform,opacity',
-        }, 0)
-        .from('.aa-header-cta', {
-          opacity: 0,
-          duration: 0.45,
-          ease: 'power2.out',
-          clearProps: 'opacity',
-        }, 0.18)
-        .from(introItems, {
-          opacity: 0,
-          y: 28,
-          scale: (index, target) => (target.matches('img, .aa-planner, .aa-trip-hero-card, .aa-travel-form, .aa-planner-panel') ? 0.985 : 1),
-          duration: 0.9,
-          stagger: 0.075,
-          ease: 'power3.out',
-          clearProps: 'transform,opacity',
-        }, 0.12);
-
-      if (document.querySelector('.loader')) {
-        document.addEventListener('onepixel:loader-complete', playIntro, { once: true });
-        gsap.delayedCall(2.8, playIntro); // fallback if the loader event never fires
-      } else {
-        playIntro();
-      }
+      gsap.from(headerItems, {
+        opacity: 0,
+        y: -12,
+        duration: 0.55,
+        stagger: 0.045,
+        ease: 'power3.out',
+        clearProps: 'transform,opacity',
+      });
+      gsap.from('.aa-header-cta', {
+        opacity: 0,
+        duration: 0.45,
+        delay: 0.18,
+        ease: 'power2.out',
+        clearProps: 'opacity',
+      });
+      gsap.from(introItems, {
+        opacity: 0,
+        y: 28,
+        scale: (index, target) => (target.matches('img, .aa-planner, .aa-trip-hero-card, .aa-travel-form, .aa-planner-panel') ? 0.985 : 1),
+        duration: 0.9,
+        stagger: 0.075,
+        delay: 0.12,
+        ease: 'power3.out',
+        clearProps: 'transform,opacity',
+      });
 
       const pendingAnchor = sessionStorage.getItem('aaPendingAnchor');
       if (pendingAnchor) {
@@ -1004,7 +984,6 @@ export default function App() {
 
     return () => {
       document.removeEventListener('click', handleInternalNavigation);
-      document.removeEventListener('onepixel:loader-complete', playIntro);
       window.removeEventListener('load', refreshScrollTriggers);
       ctx.revert();
     };

@@ -19,6 +19,7 @@ export default defineConfig({
         atlasAangan: resolve(__dirname, 'case-studies/atlas-aangan/index.html'),
         atlasAanganDestinations: resolve(__dirname, 'case-studies/atlas-aangan/destinations/index.html'),
         atlasAanganJapanUnplugged: resolve(__dirname, 'case-studies/atlas-aangan/japan-unplugged/index.html'),
+        atlasAanganAbout: resolve(__dirname, 'case-studies/atlas-aangan/about/index.html'),
         atlasAanganPlan: resolve(__dirname, 'case-studies/atlas-aangan/plan/index.html'),
         pravah: resolve(__dirname, 'case-studies/pravah/index.html'),
         pravahAuth: resolve(__dirname, 'case-studies/pravah/auth/index.html'),

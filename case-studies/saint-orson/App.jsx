@@ -25,7 +25,277 @@ const DRESS_COLOR_IMAGES = {
 const COLOR_HEX = {
   Black: '#101010', Navy: '#17203c', Wine: '#651c2b', Charcoal: '#454544',
   Ivory: '#ded8cb', Stone: '#aaa397', Chestnut: '#5c321f', Oxblood: '#571d26',
+  Midnight: '#10172d', Obsidian: '#080808',
 };
+const COLLECTION_DELIVERY = 'Complimentary insured delivery across India. Collection pieces ship in a numbered Saint Orson garment case.';
+const collectionImage = (slug, name) => `collection/${slug}/${name}.jpg`;
+const COLLECTION_PRODUCTS = [
+  {
+    slug: 'midnight-travel-blazer',
+    collectionOnly: true,
+    number: 'C01',
+    name: 'Midnight travel blazer',
+    display: ['Midnight', 'travel blazer'],
+    category: 'Collection tailoring',
+    chapter: 'Collection 01',
+    price: 128000,
+    colors: ['Midnight', 'Charcoal', 'Black'],
+    sizes: ['XS', 'S', 'M', 'L', 'XL'],
+    description: 'A double-breasted travel blazer in matte midnight wool, cut with authority through the shoulder and ease through the body.',
+    material: 'Compact wool with a dry hand, selected for a dark surface that keeps its line through long hours.',
+    construction: 'Soft shoulder, peak lapel, dark horn buttons, half canvas and a double vent finished for movement.',
+    care: 'Specialist dry clean only. Rest on a broad hanger and steam lightly from the reverse.',
+    delivery: COLLECTION_DELIVERY,
+    fitNote: 'Model is 188 cm and wears size M. Tailored through the shoulder with room over a fine knit.',
+    storyTitle: ['Authority,', 'without', 'noise.'],
+    storyCopy: 'The blazer is built for arrival: structured enough to command a room, relaxed enough to travel through one.',
+    movementTitle: ['Cut for', 'the long', 'evening.'],
+    movementCopy: 'A softened chest and double vent keep the silhouette composed when seated, standing or moving between rooms.',
+    materialLabel: 'Matte wool · Half canvas',
+    signature: 'Collection-only · Numbered release',
+    images: [
+      collectionImage('midnight-travel-blazer', 'main-v1'),
+      collectionImage('midnight-travel-blazer', 'detail-v1'),
+      collectionImage('midnight-travel-blazer', 'rear-v1'),
+      collectionImage('midnight-travel-blazer', 'editorial-v1'),
+    ],
+    shopImage: collectionImage('midnight-travel-blazer', 'main-v1'),
+    shopPosition: 'center 16%',
+    collectionImage: collectionImage('midnight-travel-blazer', 'editorial-v1'),
+  },
+  {
+    slug: 'obsidian-silk-column-dress',
+    collectionOnly: true,
+    number: 'C02',
+    name: 'Obsidian silk column dress',
+    display: ['Obsidian', 'silk column'],
+    category: 'Collection evening',
+    chapter: 'Collection 01',
+    price: 118000,
+    colors: ['Obsidian', 'Wine', 'Ivory'],
+    sizes: ['XS', 'S', 'M', 'L'],
+    description: 'A matte silk column dress with an asymmetric neckline, long fall and enough restraint to feel more powerful than decorative.',
+    material: 'Heavy silk crepe with a matte face, chosen for quiet movement and a controlled vertical line.',
+    construction: 'Asymmetric neckline, internal waist stay, clean side seam and a hand-finished hem.',
+    care: 'Specialist dry clean only. Store hanging with space around the neckline and steam lightly before wear.',
+    delivery: COLLECTION_DELIVERY,
+    fitNote: 'Model is 178 cm and wears size S. Close through the upper body with a fluid lower column.',
+    storyTitle: ['Evening,', 'reduced to', 'a line.'],
+    storyCopy: 'The dress carries drama through proportion rather than shine, allowing the fabric to move without announcing itself.',
+    movementTitle: ['A silhouette', 'that keeps', 'its calm.'],
+    movementCopy: 'The weighted crepe falls back into place after every step, keeping the body line long and deliberate.',
+    materialLabel: 'Matte silk crepe · Hand finish',
+    signature: 'Collection-only · Numbered release',
+    images: [
+      collectionImage('obsidian-silk-column-dress', 'main-v1'),
+      collectionImage('obsidian-silk-column-dress', 'detail-v1'),
+      collectionImage('obsidian-silk-column-dress', 'rear-v1'),
+      collectionImage('obsidian-silk-column-dress', 'editorial-v1'),
+    ],
+    shopImage: collectionImage('obsidian-silk-column-dress', 'main-v1'),
+    shopPosition: 'center 16%',
+    collectionImage: collectionImage('obsidian-silk-column-dress', 'editorial-v1'),
+  },
+  {
+    slug: 'navigator-leather-folio',
+    collectionOnly: true,
+    number: 'C03',
+    name: 'Navigator leather folio',
+    display: ['Navigator', 'leather folio'],
+    category: 'Collection accessory',
+    chapter: 'Collection 01',
+    price: 72500,
+    colors: ['Oxblood', 'Black', 'Chestnut'],
+    sizes: ['One size'],
+    description: 'A slim full-grain leather folio for documents, cards and travel papers, made to sit cleanly under the arm.',
+    material: 'Vegetable-tanned full-grain leather with a firm hand, cotton drill lining and muted brass hardware.',
+    construction: 'Painted edges, fine stitching, structured internal pockets and a smooth brass zip closure.',
+    care: 'Wipe with a soft dry cloth. Condition sparingly and store flat inside its dust sleeve.',
+    delivery: COLLECTION_DELIVERY,
+    fitNote: 'Measures 34 × 24 cm. Holds documents, boarding papers, cards and a slim notebook.',
+    storyTitle: ['The papers', 'kept in', 'order.'],
+    storyCopy: 'The folio is designed for the parts of travel that should not look improvised: documents, confirmations and the next room key.',
+    movementTitle: ['Carried', 'without', 'clutter.'],
+    movementCopy: 'Its flat profile keeps the line close to the body while the interior separates the details that matter.',
+    materialLabel: 'Full-grain leather · Brass',
+    signature: 'Collection-only · Numbered release',
+    images: [
+      collectionImage('navigator-leather-folio', 'main-v1'),
+      collectionImage('navigator-leather-folio', 'detail-v1'),
+      collectionImage('navigator-leather-folio', 'interior-v1'),
+      collectionImage('navigator-leather-folio', 'editorial-v1'),
+    ],
+    shopImage: collectionImage('navigator-leather-folio', 'main-v1'),
+    shopPosition: 'center',
+    collectionImage: collectionImage('navigator-leather-folio', 'editorial-v1'),
+  },
+  {
+    slug: 'aster-cashmere-evening-polo',
+    collectionOnly: true,
+    number: 'C04',
+    name: 'Aster cashmere evening polo',
+    display: ['Aster', 'cashmere polo'],
+    category: 'Collection knitwear',
+    chapter: 'Collection 01',
+    price: 64500,
+    colors: ['Charcoal', 'Black', 'Navy'],
+    sizes: ['XS', 'S', 'M', 'L', 'XL'],
+    description: 'A dense cashmere evening polo with an open collar, built to sit between knitwear and soft tailoring.',
+    material: 'Two-ply cashmere knitted with a compact surface and enough body to hold the collar.',
+    construction: 'Open soft collar, linked seams, ribbed cuffs and hem, and a close but unforced body.',
+    care: 'Dry clean or specialist cashmere care only. Fold flat and avoid hanging for long storage.',
+    delivery: COLLECTION_DELIVERY,
+    fitNote: 'Model is 188 cm and wears size M. Close through the chest with ease at the waist.',
+    storyTitle: ['Knitwear', 'with evening', 'manners.'],
+    storyCopy: 'The collar gives the piece enough formality for dinner while the knit keeps it easy against the body.',
+    movementTitle: ['Softness', 'given', 'structure.'],
+    movementCopy: 'The dense gauge holds the neckline and sleeve line without turning the garment stiff.',
+    materialLabel: 'Two-ply cashmere · Compact knit',
+    signature: 'Collection-only · Numbered release',
+    images: [
+      collectionImage('aster-cashmere-evening-polo', 'main-v1'),
+      collectionImage('aster-cashmere-evening-polo', 'detail-v1'),
+      collectionImage('aster-cashmere-evening-polo', 'rear-v1'),
+      collectionImage('aster-cashmere-evening-polo', 'editorial-v1'),
+    ],
+    shopImage: collectionImage('aster-cashmere-evening-polo', 'main-v1'),
+    shopPosition: 'center 16%',
+    collectionImage: collectionImage('aster-cashmere-evening-polo', 'editorial-v1'),
+  },
+  {
+    slug: 'charcoal-ceremony-trouser',
+    collectionOnly: true,
+    number: 'C05',
+    name: 'Charcoal ceremony trouser',
+    display: ['Charcoal', 'ceremony trouser'],
+    category: 'Collection tailoring',
+    chapter: 'Collection 01',
+    price: 68500,
+    colors: ['Charcoal', 'Black', 'Navy'],
+    sizes: ['28', '30', '32', '34', '36'],
+    description: 'A high-rise charcoal wool trouser with inward pleats, side adjusters and a long formal fall.',
+    material: 'Fine matte wool woven for a clean crease, dry surface and controlled movement.',
+    construction: 'Double inward pleats, extended waistband, side adjusters, slanted pockets and a hand-finished hem.',
+    care: 'Specialist dry clean only. Hang from the hem after wear to let the crease recover.',
+    delivery: COLLECTION_DELIVERY,
+    fitNote: 'Model wears size 30. High rise with room through the thigh and a long straight leg.',
+    storyTitle: ['The line', 'that carries', 'the room.'],
+    storyCopy: 'The pleats open only when needed, leaving the front calm when the wearer is still.',
+    movementTitle: ['Formal', 'without', 'fragility.'],
+    movementCopy: 'A deeper rise and controlled leg give the trouser enough presence for ceremony and enough ease for travel.',
+    materialLabel: 'Matte wool · Side adjusters',
+    signature: 'Collection-only · Numbered release',
+    images: [
+      collectionImage('charcoal-ceremony-trouser', 'main-v1'),
+      collectionImage('charcoal-ceremony-trouser', 'detail-v1'),
+      collectionImage('charcoal-ceremony-trouser', 'rear-v1'),
+      collectionImage('charcoal-ceremony-trouser', 'editorial-v1'),
+    ],
+    shopImage: collectionImage('charcoal-ceremony-trouser', 'main-v1'),
+    shopPosition: 'center 12%',
+    collectionImage: collectionImage('charcoal-ceremony-trouser', 'editorial-v1'),
+  },
+  {
+    slug: 'ivory-architectural-jacket',
+    collectionOnly: true,
+    number: 'C06',
+    name: 'Ivory architectural jacket',
+    display: ['Ivory', 'architectural jacket'],
+    category: 'Collection tailoring',
+    chapter: 'Collection 01',
+    price: 132000,
+    colors: ['Ivory', 'Black', 'Wine'],
+    sizes: ['XS', 'S', 'M', 'L'],
+    description: 'A collarless ivory wool-silk jacket with a sculpted shoulder, hidden closure and decisive waist.',
+    material: 'Matte wool-silk chosen for structure, breathability and a clean ivory surface.',
+    construction: 'Architectural shoulder, collarless neckline, hidden closure, internal canvas and shaped waist darts.',
+    care: 'Specialist dry clean only. Store on a broad hanger and cover the shoulder line.',
+    delivery: COLLECTION_DELIVERY,
+    fitNote: 'Model is 178 cm and wears size S. Defined through the shoulder and waist with a clean sleeve.',
+    storyTitle: ['Power,', 'drawn in', 'ivory.'],
+    storyCopy: 'The jacket uses shape instead of embellishment, bringing attention to shoulder, waist and line.',
+    movementTitle: ['Structure', 'with no', 'excess.'],
+    movementCopy: 'The hidden closure keeps the front uninterrupted while the shaped back holds the silhouette in motion.',
+    materialLabel: 'Wool silk · Sculpted shoulder',
+    signature: 'Collection-only · Numbered release',
+    images: [
+      collectionImage('ivory-architectural-jacket', 'main-v1'),
+      collectionImage('ivory-architectural-jacket', 'detail-v1'),
+      collectionImage('ivory-architectural-jacket', 'rear-v1'),
+      collectionImage('ivory-architectural-jacket', 'editorial-v1'),
+    ],
+    shopImage: collectionImage('ivory-architectural-jacket', 'main-v1'),
+    shopPosition: 'center 12%',
+    collectionImage: collectionImage('ivory-architectural-jacket', 'editorial-v1'),
+  },
+  {
+    slug: 'wine-silk-tunic-set',
+    collectionOnly: true,
+    number: 'C07',
+    name: 'Wine silk tunic set',
+    display: ['Wine silk', 'tunic set'],
+    category: 'Collection evening',
+    chapter: 'Collection 01',
+    price: 104000,
+    colors: ['Wine', 'Black', 'Ivory'],
+    sizes: ['XS', 'S', 'M', 'L'],
+    description: 'A deep wine silk tunic and wide-leg trouser set, modern in line and quietly Indian in proportion.',
+    material: 'Heavy matte silk crepe with a fluid fall and a deep wine tone that stays subdued in low light.',
+    construction: 'High neckline, side slits, clean sleeve finish, wide-leg trouser and hand-finished hems.',
+    care: 'Specialist dry clean only. Hang the tunic and trouser separately after wear.',
+    delivery: COLLECTION_DELIVERY,
+    fitNote: 'Model is 178 cm and wears size S. Straight through the tunic with movement at the side slit.',
+    storyTitle: ['Ceremony,', 'made', 'modern.'],
+    storyCopy: 'The silhouette nods to Indian evening dress without relying on embroidery, shine or ornament.',
+    movementTitle: ['A quiet', 'way to', 'enter.'],
+    movementCopy: 'The side slits and wide trouser leg create movement while the high neckline keeps the line composed.',
+    materialLabel: 'Matte silk crepe · Two piece set',
+    signature: 'Collection-only · Numbered release',
+    images: [
+      collectionImage('wine-silk-tunic-set', 'main-v1'),
+      collectionImage('wine-silk-tunic-set', 'detail-v1'),
+      collectionImage('wine-silk-tunic-set', 'rear-v1'),
+      collectionImage('wine-silk-tunic-set', 'editorial-v1'),
+    ],
+    shopImage: collectionImage('wine-silk-tunic-set', 'main-v1'),
+    shopPosition: 'center 12%',
+    collectionImage: collectionImage('wine-silk-tunic-set', 'editorial-v1'),
+  },
+  {
+    slug: 'pearl-evening-clutch',
+    collectionOnly: true,
+    number: 'C08',
+    name: 'Pearl evening clutch',
+    display: ['Pearl', 'evening clutch'],
+    category: 'Collection accessory',
+    chapter: 'Collection 01',
+    price: 58500,
+    colors: ['Ivory', 'Black', 'Oxblood'],
+    sizes: ['One size'],
+    description: 'A compact pearl-toned evening clutch with a muted brass frame, hidden closure and fine chain.',
+    material: 'Pearl satin, smooth leather edging, ivory lining and brushed brass hardware.',
+    construction: 'Rigid soft-rounded body, magnetic closure, internal card pocket and detachable chain.',
+    care: 'Wipe gently with a dry cloth. Store inside its dust sleeve away from dark fabrics.',
+    delivery: COLLECTION_DELIVERY,
+    fitNote: 'Measures 21 × 12 cm. Fits a phone, cards, keys and evening essentials.',
+    storyTitle: ['The final', 'small', 'gesture.'],
+    storyCopy: 'The clutch is designed to catch light softly, not sparkle, keeping the evening line quiet.',
+    movementTitle: ['Held', 'close to', 'the body.'],
+    movementCopy: 'The softened rectangular form sits naturally in the hand while the chain stays optional.',
+    materialLabel: 'Pearl satin · Brushed brass',
+    signature: 'Collection-only · Numbered release',
+    images: [
+      collectionImage('pearl-evening-clutch', 'main-v1'),
+      collectionImage('pearl-evening-clutch', 'detail-v1'),
+      collectionImage('pearl-evening-clutch', 'interior-v1'),
+      collectionImage('pearl-evening-clutch', 'editorial-v1'),
+    ],
+    shopImage: collectionImage('pearl-evening-clutch', 'main-v1'),
+    shopPosition: 'center',
+    collectionImage: collectionImage('pearl-evening-clutch', 'editorial-v1'),
+  },
+];
+const ALL_PRODUCT_BY_SLUG = { ...PRODUCT_BY_SLUG, ...Object.fromEntries(COLLECTION_PRODUCTS.map((product) => [product.slug, product])) };
 
 function OpxBar() {
   return (
@@ -43,8 +313,7 @@ function Header({ bag, onBag, onSearch, interiorPage = false }) {
       <a className="so-wordmark" href={homeLink()}>Saint Orson</a>
       <nav className="so-nav" aria-label="Primary navigation">
         <a href="#/shop">Shop all</a>
-        <a href={homeLink('morning')}>Collection</a>
-        <a href={homeLink('journey')}>Stories</a>
+        <a href="#/collection">Collection</a>
         <a href="#/studio">Studio</a>
       </nav>
       <div className="so-tools">
@@ -352,6 +621,159 @@ function ShopCard({ product, index, onAdd }) {
   );
 }
 
+function CollectionPage({ onAdd }) {
+  const root = useRef(null);
+  const heroProducts = COLLECTION_PRODUCTS.slice(0, 3);
+  const authorityProducts = COLLECTION_PRODUCTS.slice(0, 4);
+  const railProducts = COLLECTION_PRODUCTS;
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const ctx = gsap.context(() => {
+      gsap.timeline()
+        .from('.so-collection-hero img', { scale: 1.08, opacity: 0, duration: 1.4, ease: 'power3.out' }, 0)
+        .from('.so-collection-hero h1, .so-collection-hero p, .so-collection-hero a', {
+          y: 38,
+          opacity: 0,
+          duration: 1,
+          stagger: 0.09,
+          ease: 'power3.out',
+        }, 0.2)
+        .from('.so-collection-product', {
+          y: 46,
+          opacity: 0,
+          duration: 0.9,
+          stagger: 0.12,
+          ease: 'power3.out',
+        }, 0.42);
+
+      gsap.from('.so-collection-proof > span', {
+        y: 20,
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.08,
+        ease: 'power2.out',
+        scrollTrigger: { trigger: '.so-collection-proof', start: 'top 88%', once: true },
+      });
+
+      gsap.from('.so-collection-authority img, .so-collection-authority-copy > *', {
+        y: 52,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.08,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.so-collection-authority', start: 'top 76%', once: true },
+      });
+
+      gsap.from('.so-collection-look, .so-collection-piece', {
+        y: 58,
+        opacity: 0,
+        duration: 0.95,
+        stagger: 0.08,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.so-collection-looks', start: 'top 76%', once: true },
+      });
+    }, root);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <main className="so-collection" ref={root}>
+      <section className="so-collection-hero">
+        <img src={`${ASSET}${COLLECTION_PRODUCTS[0].collectionImage}`} alt="Saint Orson collection tailoring in a private evening setting" />
+        <div className="so-collection-hero-shade" />
+        <div className="so-collection-hero-copy">
+          <span>Collection 01</span>
+          <h1>Authority, cut for the room.</h1>
+          <p>Collection-only pieces for arrivals, dinners, boardrooms and the quiet hours between them.</p>
+          <a href="#collection-pieces">Enter the edit <i>&rarr;</i></a>
+        </div>
+        <div className="so-collection-hero-products" aria-label="Featured collection pieces">
+          {heroProducts.map((product) => (
+            <a className="so-collection-product" href={productHref(product.slug)} key={product.slug}>
+              <img src={`${ASSET}${product.shopImage}`} alt={product.name} loading="lazy" style={{ objectPosition: product.shopPosition }} />
+              <span>{product.number}</span>
+              <b>{product.name}</b>
+              <small>{formatINR(product.price)}</small>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section className="so-collection-proof" aria-label="Collection proof points">
+        <span><b>08</b> pieces</span>
+        <span><b>Small</b> batches</span>
+        <span><b>Private</b> styling</span>
+        <span><b>India</b> delivery</span>
+      </section>
+
+      <section className="so-collection-authority">
+        <img src={`${ASSET}${COLLECTION_PRODUCTS[1].collectionImage}`} alt="Saint Orson collection eveningwear in a quiet private room" loading="lazy" />
+        <div className="so-collection-authority-copy">
+          <span>Built as one edit</span>
+          <h2>The pieces hold each other in place.</h2>
+          <p>This is not a random catalogue. Each Collection piece is built as a separate purchase, but styled to carry the same authority across a full itinerary.</p>
+          <div className="so-collection-authority-grid">
+            {authorityProducts.map((product) => (
+              <a href={productHref(product.slug)} key={product.slug}>
+                <small>{product.number}</small>
+                <b>{product.name}</b>
+                <span>{product.category}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="so-collection-looks">
+        <header>
+          <span>The worn edit</span>
+          <h2>Seen as complete looks before it is sold as pieces.</h2>
+        </header>
+        <a className="so-collection-look so-collection-look-large" href={productHref(COLLECTION_PRODUCTS[0].slug)}>
+          <img src={`${ASSET}${COLLECTION_PRODUCTS[0].images[3]}`} alt="Saint Orson Midnight travel blazer editorial look" loading="lazy" />
+          <div><span>En route</span><b>{COLLECTION_PRODUCTS[0].name}</b></div>
+        </a>
+        <a className="so-collection-look" href={productHref(COLLECTION_PRODUCTS[1].slug)}>
+          <img src={`${ASSET}${COLLECTION_PRODUCTS[1].images[3]}`} alt="Saint Orson Obsidian silk column dress editorial look" loading="lazy" />
+          <div><span>After dark</span><b>{COLLECTION_PRODUCTS[1].name}</b></div>
+        </a>
+      </section>
+
+      <section className="so-collection-pieces" id="collection-pieces">
+        <header>
+          <span>Available now</span>
+          <h2>Eight decisive entries.</h2>
+          <a href="#/shop">Shop the main line &rarr;</a>
+        </header>
+        <div>
+          {railProducts.map((product, index) => (
+            <article className="so-collection-piece" key={product.slug}>
+              <a href={productHref(product.slug)}>
+                <img src={`${ASSET}${product.shopImage}`} alt={product.name} loading="lazy" style={{ objectPosition: product.shopPosition }} />
+              </a>
+              <div>
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <h3><a href={productHref(product.slug)}>{product.name}</a></h3>
+                <strong>{formatINR(product.price)}</strong>
+                <button type="button" onClick={() => onAdd(product)}>Add to bag</button>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="so-collection-service">
+        <span>Private collection service</span>
+        <h2>Let the edit arrive ready.</h2>
+        <p>Send a brief and a Saint Orson advisor will build the first fitting selection around your calendar, body and preferred level of formality.</p>
+        <a href="mailto:clients@saintorson.com?subject=Collection consultation">Request a private edit <i>&rarr;</i></a>
+      </section>
+    </main>
+  );
+}
+
 function ShopPage({ onAdd }) {
   const root = useRef(null);
   const gridRef = useRef(null);
@@ -532,7 +954,7 @@ function StudioPage() {
       </section>
 
       <section className="so-studio-handwork">
-        <img src={`${ASSET}studio/studio-handwork-v1.jpg`} alt="Hands finishing a lapel and buttonhole on charcoal wool tailoring" loading="lazy" />
+        <img src={`${ASSET}studio/studio-handwork-v1.jpg`} alt="Charcoal tailoring on a studio form beside cloth and finishing tools" loading="lazy" />
         <div>
           <span>Handwork</span>
           <h2>The last ten percent is never loud.</h2>
@@ -669,6 +1091,9 @@ function ProductPage({ product, onAdd }) {
     Care: product.care,
     Delivery: product.delivery,
   };
+  const relatedProducts = (product.collectionOnly ? COLLECTION_PRODUCTS : PRODUCTS)
+    .filter((item) => item.slug !== product.slug)
+    .slice(0, 3);
 
   return (
     <main className="so-pdp" ref={root}>
@@ -677,7 +1102,7 @@ function ProductPage({ product, onAdd }) {
         <div className="so-pdp-index"><span>Collection {product.number}</span><span>{product.category}</span></div>
         <div className="so-pdp-primary">
           <img src={`${ASSET}${product.images[activeImage]}`} alt={`${product.name} view ${activeImage + 1}`} />
-          <span>View {String(activeImage + 1).padStart(2, '0')} / 03</span>
+          <span>View {String(activeImage + 1).padStart(2, '0')} / {String(product.images.length).padStart(2, '0')}</span>
           <div className="so-pdp-thumbs" aria-label="Product images">
             {product.images.map((image, index) => (
               <button key={image} className={activeImage === index ? 'active' : ''} onClick={() => setActiveImage(index)} aria-label={`Show image ${index + 1}`}>
@@ -810,7 +1235,7 @@ function ProductPage({ product, onAdd }) {
       <section className="so-pdp-related">
         <header><span>Continue the edit</span><h2>Consider with.</h2><a href="#/shop">View all pieces →</a></header>
         <div>
-          {PRODUCTS.filter((item) => item.slug !== product.slug).slice(0, 3).map((item) => (
+          {relatedProducts.map((item) => (
             <a key={item.slug} href={productHref(item.slug)}>
               <div>
                 {item.shopCrop ? (
@@ -1101,12 +1526,13 @@ export default function App() {
   const [route, setRoute] = useState(() => window.location.hash);
   const [transitioning, setTransitioning] = useState(false);
   const productSlug = route.match(/^#\/product\/([^?]+)/)?.[1];
-  const product = productSlug ? PRODUCT_BY_SLUG[productSlug] : null;
+  const product = productSlug ? ALL_PRODUCT_BY_SLUG[productSlug] : null;
   const productPage = Boolean(product);
   const shopPage = route === '#/shop';
+  const collectionPage = route === '#/collection';
   const studioPage = route === '#/studio';
   const checkoutPage = route === '#/checkout';
-  const interiorPage = productPage || shopPage || studioPage || checkoutPage;
+  const interiorPage = productPage || shopPage || collectionPage || studioPage || checkoutPage;
 
   const bagCount = cart.reduce((sum, line) => sum + line.qty, 0);
   const cartTotal = cart.reduce((sum, line) => sum + line.price * line.qty, 0);
@@ -1304,9 +1730,10 @@ export default function App() {
   const transitionLabel = (() => {
     const nextSlug = window.location.hash.match(/^#\/product\/([^?]+)/)?.[1];
     if (window.location.hash === '#/shop') return 'The complete edit';
+    if (window.location.hash === '#/collection') return 'Collection 01';
     if (window.location.hash === '#/studio') return 'The studio';
     if (window.location.hash === '#/checkout') return 'Checkout';
-    return PRODUCT_BY_SLUG[nextSlug]?.name || 'Saint Orson';
+    return ALL_PRODUCT_BY_SLUG[nextSlug]?.name || 'Saint Orson';
   })();
 
   return (
@@ -1321,6 +1748,8 @@ export default function App() {
         <Checkout items={cart} total={cartTotal} onQty={setCartQty} onClear={clearCart} />
       ) : productPage ? (
         <ProductPage key={product.slug} product={product} onAdd={addToCart} />
+      ) : collectionPage ? (
+        <CollectionPage onAdd={addToCart} />
       ) : studioPage ? (
         <StudioPage />
       ) : shopPage ? (

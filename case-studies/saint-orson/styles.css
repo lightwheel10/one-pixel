@@ -481,6 +481,364 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 .so-view-product span { color: var(--so-red); margin-left: 8px; }
 
+/* Collection: the conversion-led edit, darker and more authoritative than Shop all. */
+.so-collection {
+  color: var(--so-paper);
+  background: #080807;
+}
+.so-collection a { color: inherit; }
+.so-collection-hero {
+  position: relative;
+  min-height: 100svh;
+  padding: clamp(118px, 12vw, 180px) clamp(20px, 4vw, 72px) clamp(32px, 4vw, 70px);
+  display: grid;
+  grid-template-columns: minmax(0, .88fr) minmax(520px, 1fr);
+  align-items: end;
+  gap: clamp(28px, 4vw, 70px);
+  overflow: hidden;
+}
+.so-collection-hero > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 63% center;
+}
+.so-collection-hero-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.9), rgba(0,0,0,.42) 54%, rgba(0,0,0,.72)),
+    linear-gradient(0deg, rgba(0,0,0,.86), transparent 48%);
+}
+.so-collection-hero-copy,
+.so-collection-hero-products {
+  position: relative;
+  z-index: 2;
+}
+.so-collection-hero-copy span,
+.so-collection-authority-copy > span,
+.so-collection-looks header span,
+.so-collection-pieces header span,
+.so-collection-service > span {
+  display: block;
+  color: var(--so-red);
+  font: 500 9px/1 var(--so-mono);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+.so-collection-hero-copy h1 {
+  max-width: 9ch;
+  margin-top: 18px;
+  font: 400 clamp(72px, 10vw, 178px)/.82 var(--so-serif);
+  text-transform: uppercase;
+}
+.so-collection-hero-copy p {
+  max-width: 34ch;
+  margin-top: 28px;
+  color: rgba(240,238,233,.76);
+  font: 400 clamp(18px, 1.35vw, 23px)/1.5 var(--so-serif);
+}
+.so-collection-hero-copy a,
+.so-collection-service a,
+.so-collection-pieces header a {
+  min-height: 54px;
+  margin-top: 34px;
+  padding: 0 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border: 1px solid rgba(240,238,233,.55);
+  color: var(--so-paper);
+  font: 500 8px/1 var(--so-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  transition: background .25s, color .25s, border-color .25s, transform .25s;
+}
+.so-collection-hero-copy a:hover,
+.so-collection-service a:hover {
+  color: var(--so-ink);
+  background: var(--so-paper);
+  border-color: var(--so-paper);
+  transform: translateY(-2px);
+}
+.so-collection-hero-copy i,
+.so-collection-service i { font-style: normal; color: var(--so-red); }
+.so-collection-hero-products {
+  align-self: end;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.so-collection-product {
+  position: relative;
+  min-height: clamp(300px, 32vw, 520px);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(240,238,233,.16);
+}
+.so-collection-product img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .86;
+  transition: transform .8s cubic-bezier(.2,.7,.2,1), opacity .4s;
+}
+.so-collection-product::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0,0,0,.72), transparent 58%);
+}
+.so-collection-product:hover img { transform: scale(1.045); opacity: 1; }
+.so-collection-product span,
+.so-collection-product b,
+.so-collection-product small {
+  position: relative;
+  z-index: 2;
+}
+.so-collection-product span,
+.so-collection-product small {
+  font: 500 8px/1 var(--so-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.so-collection-product span { color: var(--so-red); }
+.so-collection-product b {
+  margin-top: 9px;
+  font: 400 clamp(24px, 2vw, 38px)/.95 var(--so-serif);
+}
+.so-collection-product small { margin-top: 12px; color: rgba(240,238,233,.72); }
+.so-collection-proof {
+  min-height: 92px;
+  padding: 0 clamp(18px, 4vw, 72px);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid rgba(240,238,233,.12);
+  border-bottom: 1px solid rgba(240,238,233,.12);
+  background: #0d0d0b;
+}
+.so-collection-proof span {
+  min-height: 92px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-right: 1px solid rgba(240,238,233,.12);
+  color: rgba(240,238,233,.58);
+  font: 500 9px/1 var(--so-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.so-collection-proof span:last-child { border-right: 0; }
+.so-collection-proof b { color: var(--so-paper); font-weight: 500; }
+.so-collection-authority {
+  min-height: 860px;
+  display: grid;
+  grid-template-columns: 52% 48%;
+  border-bottom: 1px solid rgba(240,238,233,.13);
+}
+.so-collection-authority > img {
+  width: 100%;
+  height: 100%;
+  min-height: 720px;
+  object-fit: cover;
+  object-position: center;
+}
+.so-collection-authority-copy {
+  padding: clamp(52px, 7vw, 120px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.so-collection-authority-copy h2,
+.so-collection-looks header h2,
+.so-collection-service h2 {
+  margin-top: 18px;
+  font: 400 clamp(58px, 7vw, 126px)/.88 var(--so-serif);
+  text-transform: uppercase;
+}
+.so-collection-authority-copy p,
+.so-collection-service p {
+  max-width: 39ch;
+  margin-top: 28px;
+  color: rgba(240,238,233,.68);
+  font: 400 18px/1.65 var(--so-serif);
+}
+.so-collection-authority-grid {
+  margin-top: clamp(44px, 6vw, 90px);
+  border-top: 1px solid rgba(240,238,233,.16);
+}
+.so-collection-authority-grid a {
+  min-height: 96px;
+  display: grid;
+  grid-template-columns: 46px 1fr auto;
+  align-items: center;
+  gap: 18px;
+  border-bottom: 1px solid rgba(240,238,233,.16);
+}
+.so-collection-authority-grid small,
+.so-collection-authority-grid span {
+  color: rgba(240,238,233,.48);
+  font: 500 8px/1 var(--so-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.so-collection-authority-grid b {
+  font: 400 clamp(24px, 2vw, 38px)/1 var(--so-serif);
+}
+.so-collection-looks {
+  padding: clamp(64px, 8vw, 140px) clamp(18px, 4vw, 72px);
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 48px);
+}
+.so-collection-looks header { grid-column: 1 / 5; align-self: start; position: sticky; top: 92px; }
+.so-collection-look {
+  position: relative;
+  grid-column: span 4;
+  min-height: 640px;
+  overflow: hidden;
+  border: 1px solid rgba(240,238,233,.14);
+  background: #151511;
+}
+.so-collection-look-large { grid-column: 5 / 9; margin-top: 8vw; }
+.so-collection-look img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(.96);
+  transition: transform .9s cubic-bezier(.2,.7,.2,1), filter .45s;
+}
+.so-collection-look:hover img { transform: scale(1.04); filter: saturate(1.08); }
+.so-collection-look::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0,0,0,.78), transparent 55%);
+}
+.so-collection-look div {
+  position: absolute;
+  z-index: 2;
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+}
+.so-collection-look span {
+  color: var(--so-red);
+  font: 500 8px/1 var(--so-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.so-collection-look b {
+  display: block;
+  margin-top: 10px;
+  font: 400 clamp(34px, 3.3vw, 62px)/.9 var(--so-serif);
+}
+.so-collection-pieces {
+  padding: clamp(62px, 8vw, 130px) clamp(18px, 4vw, 72px);
+  color: var(--so-ink);
+  background: var(--so-paper);
+}
+.so-collection-pieces header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 30px;
+  margin-bottom: clamp(38px, 5vw, 72px);
+}
+.so-collection-pieces header h2 {
+  margin-top: 16px;
+  font: 400 clamp(54px, 7vw, 120px)/.88 var(--so-serif);
+  text-transform: uppercase;
+}
+.so-collection-pieces header a {
+  margin: 0;
+  color: var(--so-ink);
+  border-color: rgba(0,0,0,.35);
+}
+.so-collection-pieces header a:hover {
+  color: var(--so-paper);
+  background: var(--so-ink);
+  border-color: var(--so-ink);
+}
+.so-collection-pieces > div {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(14px, 2vw, 30px);
+}
+.so-collection-piece {
+  min-width: 0;
+}
+.so-collection-piece > a {
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #d8d4cc;
+}
+.so-collection-piece img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .7s cubic-bezier(.2,.7,.2,1);
+}
+.so-collection-piece:hover img { transform: scale(1.045); }
+.so-collection-piece > div {
+  padding-top: 16px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px 16px;
+  align-items: baseline;
+}
+.so-collection-piece span {
+  color: var(--so-red);
+  font: 500 8px/1 var(--so-mono);
+  letter-spacing: .12em;
+}
+.so-collection-piece h3 {
+  font: 400 clamp(24px, 2vw, 36px)/1 var(--so-serif);
+}
+.so-collection-piece strong {
+  grid-column: 2;
+  font: 500 10px/1 var(--so-mono);
+}
+.so-collection-piece button {
+  grid-column: 2;
+  justify-self: start;
+  margin-top: 4px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--so-ink);
+  font: 500 8px/1 var(--so-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.so-collection-service {
+  min-height: 600px;
+  padding: clamp(64px, 9vw, 145px) clamp(20px, 5vw, 92px);
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  align-content: center;
+  gap: clamp(26px, 6vw, 110px);
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.88), rgba(0,0,0,.5)),
+    url('/case-studies/saint-orson/home/hero-v1.jpg') center 36% / cover;
+}
+.so-collection-service > span { grid-column: 1 / -1; }
+.so-collection-service h2 { max-width: 9ch; }
+.so-collection-service p { align-self: end; }
+.so-collection-service a {
+  grid-column: 2;
+  width: min(100%, 410px);
+  margin-top: 10px;
+}
+
 /* Shop all: editorial catalogue with contained pointer depth. */
 .so-shop { color: var(--so-ink); background: var(--so-paper); }
 .so-shop-hero {
@@ -1308,6 +1666,25 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .so-footer { grid-template-columns: 1fr auto; }
   .so-footer nav { display: none; }
 
+  .so-collection-hero { grid-template-columns: 1fr; }
+  .so-collection-hero-copy h1 { max-width: 10ch; }
+  .so-collection-hero-products { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .so-collection-product { min-height: 360px; }
+  .so-collection-authority { grid-template-columns: 1fr; }
+  .so-collection-authority > img { min-height: 560px; }
+  .so-collection-looks header {
+    position: static;
+    grid-column: 1 / -1;
+  }
+  .so-collection-look,
+  .so-collection-look-large {
+    grid-column: span 6;
+    margin-top: 0;
+  }
+  .so-collection-pieces > div { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .so-collection-service { grid-template-columns: 1fr; }
+  .so-collection-service a { grid-column: 1; }
+
   .so-shop-hero { grid-template-columns: 1fr; align-content: end; }
   .so-shop-hero p { max-width: 42ch; }
   .so-shop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1415,6 +1792,76 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .so-final > a { min-width: 0; width: 100%; }
   .so-footer { min-height: 76px; padding: 0 18px; }
   .so-footer div { gap: 15px; }
+
+  .so-collection-hero {
+    min-height: auto;
+    padding: 120px 18px 26px;
+    display: block;
+  }
+  .so-collection-hero > img { object-position: 58% center; }
+  .so-collection-hero-copy { min-height: 620px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .so-collection-hero-copy h1 { font-size: clamp(58px, 15vw, 90px); }
+  .so-collection-hero-copy p { font-size: 17px; }
+  .so-collection-hero-copy a,
+  .so-collection-service a,
+  .so-collection-pieces header a { width: 100%; justify-content: center; }
+  .so-collection-hero-products {
+    margin-top: 28px;
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .so-collection-product {
+    flex: 0 0 72vw;
+    min-height: 410px;
+  }
+  .so-collection-proof {
+    min-height: 0;
+    grid-template-columns: 1fr 1fr;
+    padding: 0;
+  }
+  .so-collection-proof span {
+    min-height: 70px;
+    padding: 0 18px;
+    border-bottom: 1px solid rgba(240,238,233,.12);
+  }
+  .so-collection-proof span:nth-child(2n) { border-right: 0; }
+  .so-collection-authority { display: block; }
+  .so-collection-authority > img { min-height: 520px; }
+  .so-collection-authority-copy { padding: 58px 20px 66px; }
+  .so-collection-authority-copy h2,
+  .so-collection-looks header h2,
+  .so-collection-service h2 { font-size: clamp(52px, 14vw, 84px); }
+  .so-collection-authority-grid a {
+    min-height: 92px;
+    grid-template-columns: 36px 1fr;
+  }
+  .so-collection-authority-grid span { grid-column: 2; }
+  .so-collection-looks {
+    padding: 64px 18px;
+    grid-template-columns: 1fr;
+  }
+  .so-collection-looks header,
+  .so-collection-look,
+  .so-collection-look-large { grid-column: 1; }
+  .so-collection-look { min-height: 560px; }
+  .so-collection-pieces { padding: 62px 18px 78px; }
+  .so-collection-pieces header {
+    display: block;
+    margin-bottom: 34px;
+  }
+  .so-collection-pieces header h2 { font-size: clamp(52px, 14vw, 82px); }
+  .so-collection-pieces header a { margin-top: 22px; }
+  .so-collection-pieces > div { grid-template-columns: 1fr; gap: 46px; }
+  .so-collection-service {
+    min-height: 580px;
+    padding: 58px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-position: 58% center;
+  }
 
   .so-shop-hero {
     min-height: 720px;

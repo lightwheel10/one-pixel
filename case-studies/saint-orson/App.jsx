@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Loader } from '../../src/Loader.jsx';
@@ -8,10 +8,33 @@ gsap.registerPlugin(ScrollTrigger);
 
 const ASSET = '/case-studies/saint-orson/';
 const LOOKS = PRODUCTS.slice(0, 7);
+const LOOK_IMAGE_BY_SLUG = {
+  'merino-roll-neck': 'looks/look-01-merino-roll-neck.jpg',
+  'gabardine-trouser': 'looks/look-02-gabardine-trouser.jpg',
+  'silk-evening-shirt': 'looks/look-03-silk-evening-shirt.jpg',
+  'milano-coat': 'looks/look-04-milano-coat.jpg',
+  'cashmere-polo-knit': 'looks/look-05-cashmere-polo-knit.jpg',
+  'pleated-wool-trouser': 'looks/look-06-pleated-wool-trouser.jpg',
+  'draped-silk-dress': 'looks/look-07-draped-silk-dress.jpg',
+};
+const DRESS_COLOR_IMAGES = {
+  black: 'products/main/draped-silk-dress-main-v1.jpg',
+  navy: 'products/colors/draped-silk-dress-navy-v1.jpg',
+  wine: 'products/colors/draped-silk-dress-wine-v1.jpg',
+};
 const COLOR_HEX = {
   Black: '#101010', Navy: '#17203c', Wine: '#651c2b', Charcoal: '#454544',
   Ivory: '#ded8cb', Stone: '#aaa397', Chestnut: '#5c321f', Oxblood: '#571d26',
 };
+
+function OpxBar() {
+  return (
+    <div className="so-opx">
+      <span className="so-opx-note">A OnePixel sample site &middot; products, prices and checkout are placeholder</span>
+      <a className="so-opx-back" href="/">&larr; Back to OnePixel</a>
+    </div>
+  );
+}
 
 function Header({ bag, onBag, onSearch, interiorPage = false }) {
   const homeLink = (id = '') => interiorPage ? `#/${id ? `?section=${id}` : ''}` : `#${id}`;
@@ -22,7 +45,7 @@ function Header({ bag, onBag, onSearch, interiorPage = false }) {
         <a href="#/shop">Shop all</a>
         <a href={homeLink('morning')}>Collection</a>
         <a href={homeLink('journey')}>Stories</a>
-        <a href={homeLink('fit')}>Studio</a>
+        <a href="#/studio">Studio</a>
       </nav>
       <div className="so-tools">
         <button type="button" onClick={onSearch}>Search</button>
@@ -30,21 +53,6 @@ function Header({ bag, onBag, onSearch, interiorPage = false }) {
         <button type="button" onClick={onBag}>Bag ({bag})</button>
       </div>
     </header>
-  );
-}
-
-function ChapterRail({ active }) {
-  const chapters = ['top', 'morning', 'journey', 'fit', 'discover', 'evening'];
-  return (
-    <aside className="so-chapters" aria-label="Page chapters">
-      <span>Chapters</span>
-      {chapters.map((id, index) => (
-        <a key={id} className={active === id ? 'active' : ''} href={`#${id}`}>
-          {String(index + 1).padStart(2, '0')}
-        </a>
-      ))}
-      <i aria-hidden="true" />
-    </aside>
   );
 }
 
@@ -66,7 +74,7 @@ function LookTicker() {
 function Hero() {
   return (
     <section className="so-hero" id="top">
-      <img src={`${ASSET}hero.webp`} alt="Saint Orson model in black tailoring beside limestone architecture" />
+      <img src={`${ASSET}home/hero-v1.jpg`} alt="Saint Orson model in black tailoring beside limestone architecture" />
       <div className="so-hero-shade" />
       <div className="so-issue-side"><span>Issue</span><b>01</b></div>
       <div className="so-issue-number">01</div>
@@ -93,15 +101,15 @@ function Morning() {
         <a href="#journey">Read the story <span>→</span></a>
       </div>
       <div className="so-morning-photo">
-        <img src={`${ASSET}morning.webp`} alt="Woman wearing an ivory Saint Orson suit" loading="lazy" />
+        <img src={`${ASSET}home/morning-v1.jpg`} alt="Woman wearing an ivory Saint Orson suit" loading="lazy" />
       </div>
       <div className="so-related">
         <a href={productHref(blazer.slug)} className="so-related-product">
-          <div className="so-product-crop blazer"><img src={`${ASSET}products.webp`} alt="Ivory tailored blazer" loading="lazy" /></div>
+          <div className="so-product-crop"><img src={`${ASSET}${blazer.shopImage}`} alt="Ivory tailored blazer" loading="lazy" style={{ objectPosition: blazer.shopPosition }} /></div>
           <div><span>{blazer.name}</span><small>Ivory<br />{formatINR(blazer.price)}</small><i aria-hidden="true">+</i></div>
         </a>
         <a href={productHref(scarf.slug)} className="so-related-product">
-          <div className="so-product-crop scarf"><img src={`${ASSET}products.webp`} alt="Navy silk scarf" loading="lazy" /></div>
+          <div className="so-product-crop"><img src={`${ASSET}${scarf.shopImage}`} alt="Navy silk scarf" loading="lazy" style={{ objectPosition: scarf.shopPosition }} /></div>
           <div><span>{scarf.name}</span><small>Navy / Red<br />{formatINR(scarf.price)}</small><i aria-hidden="true">+</i></div>
         </a>
       </div>
@@ -110,9 +118,51 @@ function Morning() {
 }
 
 function Journey() {
+  const sectionRef = useRef(null);
+  const [activeLook, setActiveLook] = useState(3);
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const section = sectionRef.current;
+    if (!section) return undefined;
+
+    let timer = 0;
+    const stop = () => {
+      window.clearInterval(timer);
+      timer = 0;
+    };
+    const start = () => {
+      if (timer) return;
+      timer = window.setInterval(() => {
+        setActiveLook((current) => (current + 1) % LOOKS.length);
+      }, 2000);
+    };
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) start();
+      else stop();
+    }, { threshold: 0.35 });
+
+    observer.observe(section);
+    return () => {
+      stop();
+      observer.disconnect();
+    };
+  }, []);
+
   return (
-    <section className="so-journey" id="journey">
-      <img src={`${ASSET}train.webp`} alt="Saint Orson model walking beside a midnight train" loading="lazy" />
+    <section className="so-journey" id="journey" ref={sectionRef}>
+      <div className="so-journey-bg-stack" aria-hidden="true">
+        {LOOKS.map((product, index) => (
+          <img
+            key={product.slug}
+            src={`${ASSET}${LOOK_IMAGE_BY_SLUG[product.slug] || product.shopImage}`}
+            alt=""
+            loading={index === 3 ? 'eager' : 'lazy'}
+            className={activeLook === index ? 'active' : ''}
+          />
+        ))}
+      </div>
       <div className="so-journey-shade" />
       <div className="so-journey-copy">
         <span className="so-number">02.</span>
@@ -122,8 +172,15 @@ function Journey() {
       </div>
       <div className="so-look-strip">
         {LOOKS.map((product, index) => (
-          <a key={product.slug} href={productHref(product.slug)} className={index === 3 ? 'active' : ''}>
-            <span className={`so-look-thumb look-${index + 1}`}><img src={`${ASSET}${index % 2 ? 'morning' : 'hero'}.webp`} alt="" /></span>
+          <a
+            key={product.slug}
+            href={productHref(product.slug)}
+            className={activeLook === index ? 'active' : ''}
+            onMouseEnter={() => setActiveLook(index)}
+          >
+            <span className={`so-look-thumb look-${index + 1}`}>
+              <img src={`${ASSET}${LOOK_IMAGE_BY_SLUG[product.slug] || product.shopImage}`} alt="" loading="lazy" />
+            </span>
             <small>Look {product.number}</small>
           </a>
         ))}
@@ -137,7 +194,7 @@ function Fit() {
   const [size, setSize] = useState('38');
   return (
     <section className="so-fit" id="fit">
-      <img src={`${ASSET}tailoring.webp`} alt="" aria-hidden="true" loading="lazy" />
+      <img src={`${ASSET}home/tailoring-v1.jpg`} alt="" aria-hidden="true" loading="lazy" />
       <div className="so-fit-shade" />
       <div className="so-fit-title">
         <span className="so-number">03.</span>
@@ -187,35 +244,35 @@ function Discover({ onAdd }) {
       </header>
       <div className="so-contact-sheet">
         <a href={productHref(blazer.slug)} className="so-discover-tile so-discover-woman" aria-label="Explore morning tailoring">
-          <img src={`${ASSET}morning.webp`} alt="Woman in ivory Saint Orson tailoring" loading="lazy" />
+          <img src={`${ASSET}home/morning-v1.jpg`} alt="Woman in ivory Saint Orson tailoring" loading="lazy" />
           <span><b>01</b> Morning tailoring</span>
         </a>
         <a href={productHref(polo.slug)} className="so-discover-tile so-discover-man" aria-label="Explore the cashmere polo">
-          <img src={`${ASSET}hero.webp`} alt="Man wearing a black cashmere polo" loading="lazy" />
+          <img src={`${ASSET}home/hero-v1.jpg`} alt="Man wearing a black cashmere polo" loading="lazy" />
           <span><b>02</b> Cashmere polo</span>
         </a>
         <a href={productHref(dress.slug)} className="so-discover-tile so-discover-night" aria-label="Explore evening dressing">
-          <img src={`${ASSET}evening.webp`} alt="Woman in the evening collection" loading="lazy" />
+          <img src={`${ASSET}home/evening-v1.jpg`} alt="Woman in the evening collection" loading="lazy" />
           <span><b>03</b> After dark</span>
         </a>
         <a href={productHref(coat.slug)} className="so-discover-tile so-discover-atelier" aria-label="Explore tailoring details">
-          <img src={`${ASSET}tailoring.webp`} alt="Saint Orson tailoring materials" loading="lazy" />
+          <img src={`${ASSET}home/tailoring-v1.jpg`} alt="Saint Orson tailoring materials" loading="lazy" />
           <span><b>04</b> The cut within</span>
         </a>
         <a href={productHref(blazer.slug)} className="so-discover-tile so-discover-blazer" aria-label="Explore the ivory blazer">
-          <span className="so-product-crop blazer"><img src={`${ASSET}products.webp`} alt="Ivory tailored blazer" loading="lazy" /></span>
+          <img src={`${ASSET}${blazer.shopImage}`} alt="Ivory tailored blazer" loading="lazy" style={{ objectPosition: blazer.shopPosition }} />
           <span><b>05</b> Relaxed blazer <i>{formatINR(blazer.price)}</i></span>
         </a>
         <a href={productHref(scarf.slug)} className="so-discover-tile so-discover-scarf" aria-label="Explore the silk scarf">
-          <span className="so-product-crop scarf"><img src={`${ASSET}products.webp`} alt="Navy and red silk scarf" loading="lazy" /></span>
+          <img src={`${ASSET}${scarf.shopImage}`} alt="Navy and red silk scarf" loading="lazy" style={{ objectPosition: scarf.shopPosition }} />
           <span><b>06</b> Silk scarf <i>{formatINR(scarf.price)}</i></span>
         </a>
         <a href={productHref(dress.slug)} className="so-discover-tile so-discover-dress" aria-label="Explore the draped silk dress">
-          <img src={`${ASSET}dress.webp`} alt="Black draped silk dress" loading="lazy" />
+          <img src={`${ASSET}${dress.shopImage}`} alt="Black draped silk dress" loading="lazy" style={{ objectPosition: dress.shopPosition }} />
           <span><b>07</b> Draped silk <i>{formatINR(dress.price)}</i></span>
         </a>
         <article className="so-bag-feature">
-          <div className="so-product-crop bag"><img src={`${ASSET}products.webp`} alt="Dark chestnut weekend bag" loading="lazy" /></div>
+          <img src={`${ASSET}${holdall.shopImage}`} alt="Dark chestnut weekend bag" loading="lazy" style={{ objectPosition: holdall.shopPosition }} />
           <div>
             <span>Weekend holdall</span>
             <small>Dark chestnut<br />{formatINR(holdall.price)}</small>
@@ -242,11 +299,11 @@ function Evening({ onAdd }) {
         <p>Nightfall calls<br />for ease and<br />elegance.</p>
         <a href="#collection">Read the story <span>→</span></a>
       </div>
-      <img src={`${ASSET}evening.webp`} alt="Woman in a draped black evening dress" loading="lazy" />
+      <img src={`${ASSET}home/evening-v1.jpg`} alt="Woman in a draped black evening dress" loading="lazy" />
       <div className="so-dress-panel">
         <button className="so-close" aria-label="Close product">×</button>
         <div className={`so-dress ${color}`}>
-          <img src={`${ASSET}dress.webp`} alt="Draped black silk dress" loading="lazy" />
+          <img src={`${ASSET}${DRESS_COLOR_IMAGES[color] || product.shopImage}`} alt={`Draped ${color} silk dress`} loading="lazy" style={{ objectPosition: product.shopPosition }} />
         </div>
         <div className="so-dress-info">
           <h3>{product.name}</h3><p>{color}<br />{formatINR(product.price)}</p>
@@ -386,6 +443,112 @@ function ShopPage({ onAdd }) {
         <h2>Not certain where<br />to begin?</h2>
         <p>A Saint Orson advisor can assemble a private edit around your wardrobe, travel and preferred fit.</p>
         <button onClick={() => { window.location.href = 'mailto:clients@saintorson.com?subject=' + encodeURIComponent('Private styling consultation'); }}>Arrange a consultation <i>→</i></button>
+      </section>
+    </main>
+  );
+}
+
+function StudioPage() {
+  const root = useRef(null);
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const ctx = gsap.context(() => {
+      gsap.from('.so-studio-hero h1, .so-studio-hero p, .so-studio-hero a', {
+        y: 34,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.1,
+        ease: 'power3.out',
+      });
+      gsap.from('.so-studio-hero img', {
+        scale: 1.06,
+        opacity: 0,
+        duration: 1.35,
+        ease: 'power3.out',
+      });
+      gsap.from('.so-studio-step, .so-studio-fitting, .so-studio-note', {
+        y: 56,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.1,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.so-studio-system', start: 'top 78%', once: true },
+      });
+      gsap.from('.so-studio-handwork img, .so-studio-handwork div', {
+        y: 44,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.12,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.so-studio-handwork', start: 'top 76%', once: true },
+      });
+    }, root);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <main className="so-studio" ref={root}>
+      <section className="so-studio-hero">
+        <img src={`${ASSET}studio/studio-hero-v1.jpg`} alt="Saint Orson atelier with a tailor cutting cloth at a work table" />
+        <div className="so-studio-hero-shade" />
+        <div>
+          <span>Saint Orson studio</span>
+          <h1>The room where fit becomes quiet.</h1>
+          <p>Every garment begins with cloth, body and purpose. The studio is where those three are made to agree.</p>
+          <a href="mailto:clients@saintorson.com?subject=Studio appointment">Request a studio appointment <i>→</i></a>
+        </div>
+      </section>
+
+      <section className="so-studio-system">
+        <header>
+          <span>How the studio works</span>
+          <h2>Measured slowly.<br />Finished by hand.</h2>
+        </header>
+        <article className="so-studio-step">
+          <small>01</small>
+          <h3>Cloth</h3>
+          <p>We begin with weight, recovery and climate. A piece has to hold its line without fighting the body.</p>
+        </article>
+        <article className="so-studio-step">
+          <small>02</small>
+          <h3>Block</h3>
+          <p>Shoulder, rise, sleeve pitch and length are adjusted against the way you actually stand and move.</p>
+        </article>
+        <article className="so-studio-step">
+          <small>03</small>
+          <h3>Finish</h3>
+          <p>Edges, buttonholes and pressing are completed in small batches, with corrections kept visible to the studio.</p>
+        </article>
+        <figure className="so-studio-fitting">
+          <img src={`${ASSET}studio/studio-fitting-v1.jpg`} alt="Tailor adjusting the shoulder of a navy blazer during a fitting" loading="lazy" />
+        </figure>
+        <aside className="so-studio-note">
+          <b>Private fitting</b>
+          <span>Mumbai by appointment</span>
+          <p>Bring the pieces you actually wear. The studio reads proportion against your wardrobe, not against a mannequin.</p>
+        </aside>
+      </section>
+
+      <section className="so-studio-handwork">
+        <img src={`${ASSET}studio/studio-handwork-v1.jpg`} alt="Hands finishing a lapel and buttonhole on charcoal wool tailoring" loading="lazy" />
+        <div>
+          <span>Handwork</span>
+          <h2>The last ten percent is never loud.</h2>
+          <p>Pressing, canvas, thread tension and the fall of a lapel decide whether a piece feels composed after six hours of wear.</p>
+          <dl>
+            <div><dt>Canvas</dt><dd>Light structure, held where it earns its place.</dd></div>
+            <div><dt>Buttonholes</dt><dd>Finished by hand on jackets and coats.</dd></div>
+            <div><dt>Pressing</dt><dd>Shaped slowly so the garment settles, not shines.</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section className="so-studio-cta">
+        <span>Client studio</span>
+        <h2>Bring the day you dress for.</h2>
+        <a href="mailto:clients@saintorson.com?subject=Studio consultation">Begin with a fitting <i>→</i></a>
       </section>
     </main>
   );
@@ -712,7 +875,7 @@ function ProductPage({ product, onAdd }) {
 function FinalCall() {
   return (
     <section className="so-final" id="collection">
-      <img src={`${ASSET}hero.webp`} alt="" aria-hidden="true" loading="lazy" />
+      <img src={`${ASSET}home/hero-v1.jpg`} alt="" aria-hidden="true" loading="lazy" />
       <div className="so-final-shade" />
       <span>Issue 01</span>
       <h2>Well dressed.<br />Well lived.</h2>
@@ -935,16 +1098,15 @@ export default function App() {
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [active, setActive] = useState('top');
   const [route, setRoute] = useState(() => window.location.hash);
   const [transitioning, setTransitioning] = useState(false);
-  const chapterIds = useMemo(() => ['top', 'morning', 'journey', 'fit', 'discover', 'evening'], []);
   const productSlug = route.match(/^#\/product\/([^?]+)/)?.[1];
   const product = productSlug ? PRODUCT_BY_SLUG[productSlug] : null;
   const productPage = Boolean(product);
   const shopPage = route === '#/shop';
+  const studioPage = route === '#/studio';
   const checkoutPage = route === '#/checkout';
-  const interiorPage = productPage || shopPage || checkoutPage;
+  const interiorPage = productPage || shopPage || studioPage || checkoutPage;
 
   const bagCount = cart.reduce((sum, line) => sum + line.qty, 0);
   const cartTotal = cart.reduce((sum, line) => sum + line.price * line.qty, 0);
@@ -990,17 +1152,6 @@ export default function App() {
     };
   }, [route]);
 
-  useEffect(() => {
-    if (interiorPage) return undefined;
-    const sections = chapterIds.map((id) => document.getElementById(id)).filter(Boolean);
-    const observer = new IntersectionObserver((entries) => {
-      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-      if (visible[0]) setActive(visible[0].target.id);
-    }, { rootMargin: '-28% 0px -52%', threshold: [0, 0.1, 0.35] });
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, [chapterIds, interiorPage]);
-
   useLayoutEffect(() => {
     if (interiorPage) return undefined;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
@@ -1011,13 +1162,18 @@ export default function App() {
       const revealSections = gsap.utils.toArray('.so-morning, .so-journey, .so-fit, .so-discover, .so-evening, .so-final');
 
       revealSections.forEach((section) => {
-        const content = section.querySelectorAll('h2, .so-number, p, a');
+        const content = Array.from(section.querySelectorAll('h2, .so-number, p, a')).filter((element) => (
+          !element.closest('.so-look-strip')
+          && !element.closest('.so-contact-sheet')
+          && !element.closest('.so-bag-feature')
+        ));
         gsap.from(content, {
           y: 34,
           opacity: 0,
           duration: 1,
           stagger: 0.07,
           ease: 'power3.out',
+          clearProps: 'transform,opacity',
           scrollTrigger: { trigger: section, start: 'top 78%', once: true },
         });
       });
@@ -1049,7 +1205,7 @@ export default function App() {
         scrollTrigger: { trigger: '.so-related', start: 'top 80%', once: true },
       });
 
-      gsap.to('.so-journey > img', {
+      gsap.to('.so-journey-bg-stack', {
         xPercent: -3,
         scale: 1.05,
         ease: 'none',
@@ -1061,6 +1217,7 @@ export default function App() {
         duration: 0.75,
         stagger: 0.06,
         ease: 'power3.out',
+        clearProps: 'transform,opacity',
         scrollTrigger: { trigger: '.so-look-strip', start: 'top 90%', once: true },
       });
 
@@ -1147,6 +1304,7 @@ export default function App() {
   const transitionLabel = (() => {
     const nextSlug = window.location.hash.match(/^#\/product\/([^?]+)/)?.[1];
     if (window.location.hash === '#/shop') return 'The complete edit';
+    if (window.location.hash === '#/studio') return 'The studio';
     if (window.location.hash === '#/checkout') return 'Checkout';
     return PRODUCT_BY_SLUG[nextSlug]?.name || 'Saint Orson';
   })();
@@ -1154,15 +1312,17 @@ export default function App() {
   return (
     <div ref={rootRef}>
       <Loader duration={2200} mark="Saint Orson · Issue 01" />
+      <OpxBar />
       <div className={`so-route-transition ${transitioning ? 'active' : ''}`} aria-hidden="true">
         <span>Saint Orson</span><strong>{transitionLabel}</strong><i />
       </div>
       <Header bag={bagCount} interiorPage={interiorPage} onBag={() => setCartOpen(true)} onSearch={() => setSearchOpen(true)} />
-      {!interiorPage && <ChapterRail active={active} />}
       {checkoutPage ? (
         <Checkout items={cart} total={cartTotal} onQty={setCartQty} onClear={clearCart} />
       ) : productPage ? (
         <ProductPage key={product.slug} product={product} onAdd={addToCart} />
+      ) : studioPage ? (
+        <StudioPage />
       ) : shopPage ? (
         <ShopPage onAdd={addToCart} />
       ) : (

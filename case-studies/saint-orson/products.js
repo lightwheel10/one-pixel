@@ -1,4 +1,6 @@
 const delivery = 'Complimentary express delivery across India and returns within 14 days. Ships in a Saint Orson garment case.';
+const mainImage = (name) => `products/main/${name}.jpg`;
+const detailImage = (name) => `products/details/${name}.jpg`;
 
 const base = {
   colors: ['Black', 'Navy', 'Wine'],
@@ -29,7 +31,8 @@ export const PRODUCTS = [
     movementTitle: ['Built for', 'the first', 'layer.'],
     movementCopy: 'A narrow silhouette keeps the shoulder clean beneath a coat while the ribbed neck holds its shape.',
     materialLabel: 'Extra-fine merino · 18 gauge',
-    shopImage: 'hero.webp',
+    images: [mainImage('merino-roll-neck-main-v1'), detailImage('merino-roll-neck-detail-v1'), base.images[2]],
+    shopImage: mainImage('merino-roll-neck-main-v1'),
     shopPosition: '58% center',
   },
   {
@@ -52,7 +55,8 @@ export const PRODUCTS = [
     movementTitle: ['Made to', 'move through', 'the city.'],
     movementCopy: 'Room through the thigh gives ease in motion; the structured hem keeps the silhouette exact.',
     materialLabel: 'Wool gabardine · 280 gsm',
-    shopImage: 'hero.webp',
+    images: [mainImage('gabardine-trouser-main-v1'), detailImage('gabardine-trouser-detail-v1'), base.images[2]],
+    shopImage: mainImage('gabardine-trouser-main-v1'),
     shopPosition: '58% center',
   },
   {
@@ -74,7 +78,8 @@ export const PRODUCTS = [
     movementTitle: ['An evening', 'shirt that', 'breathes.'],
     movementCopy: 'Volume through the back allows the silk to move freely without losing the clean front line.',
     materialLabel: 'Silk crepe · 30 momme',
-    shopImage: 'evening.webp',
+    images: [mainImage('silk-evening-shirt-main-v1'), detailImage('silk-evening-shirt-detail-v1'), base.images[2]],
+    shopImage: mainImage('silk-evening-shirt-main-v1'),
     shopPosition: '45% center',
   },
   {
@@ -96,7 +101,8 @@ export const PRODUCTS = [
     movementTitle: ['The coat', 'between', 'places.'],
     movementCopy: 'Its long back vent opens in stride and settles cleanly the moment movement stops.',
     materialLabel: 'Wool cashmere · Double face',
-    shopImage: 'train.webp',
+    images: [mainImage('milano-coat-main-v1'), detailImage('milano-coat-detail-v1'), base.images[2]],
+    shopImage: mainImage('milano-coat-main-v1'),
     shopPosition: '70% center',
   },
   {
@@ -118,7 +124,8 @@ export const PRODUCTS = [
     movementTitle: ['Made for', 'the hours', 'between.'],
     movementCopy: 'The open neck moves from morning tailoring to evening without asking for a change.',
     materialLabel: 'Two-ply cashmere · 16 gauge',
-    shopImage: 'hero.webp',
+    images: [mainImage('cashmere-polo-knit-main-v1'), detailImage('cashmere-polo-knit-detail-v1'), base.images[2]],
+    shopImage: mainImage('cashmere-polo-knit-main-v1'),
     shopPosition: '61% center',
   },
   {
@@ -141,7 +148,8 @@ export const PRODUCTS = [
     movementTitle: ['A fuller', 'way to', 'move.'],
     movementCopy: 'Extra cloth through the hip creates ease without sacrificing the exactness of the taper.',
     materialLabel: 'Tropical wool · 240 gsm',
-    shopImage: 'morning.webp',
+    images: [mainImage('pleated-wool-trouser-main-v1'), detailImage('pleated-wool-trouser-detail-v1'), base.images[2]],
+    shopImage: mainImage('pleated-wool-trouser-main-v1'),
     shopPosition: '48% center',
   },
   {
@@ -163,7 +171,8 @@ export const PRODUCTS = [
     movementCopy: 'The weighted hem settles after every step. The back remains clean; all the drama belongs to the front.',
     materialLabel: 'Silk satin · 32 momme',
     signature: 'Cut in Como · Finished in Paris',
-    shopImage: 'dress-campaign.webp',
+    images: [mainImage('draped-silk-dress-main-v1'), detailImage('draped-silk-dress-detail-v1'), base.images[2]],
+    shopImage: mainImage('draped-silk-dress-main-v1'),
     shopPosition: 'center 20%',
   },
   {
@@ -185,7 +194,8 @@ export const PRODUCTS = [
     movementTitle: ['A jacket', 'for warmer', 'light.'],
     movementCopy: 'The open lining and light canvas preserve shape without trapping weight against the body.',
     materialLabel: 'Wool silk · Half canvas',
-    shopImage: 'morning.webp',
+    images: [mainImage('relaxed-tailored-blazer-main-v1'), detailImage('relaxed-tailored-blazer-detail-v1'), base.images[2]],
+    shopImage: mainImage('relaxed-tailored-blazer-main-v1'),
     shopPosition: '48% center',
   },
   {
@@ -208,9 +218,9 @@ export const PRODUCTS = [
     movementTitle: ['Color,', 'kept in', 'reserve.'],
     movementCopy: 'Navy carries the composition; oxblood appears only at the edge and in motion.',
     materialLabel: 'Silk twill · Hand rolled',
-    shopImage: 'products.webp',
+    images: [mainImage('silk-print-scarf-main-v1'), detailImage('silk-print-scarf-detail-v1'), base.images[2]],
+    shopImage: mainImage('silk-print-scarf-main-v1'),
     shopPosition: 'center',
-    shopCrop: 'scarf',
   },
   {
     ...base,
@@ -233,9 +243,9 @@ export const PRODUCTS = [
     movementTitle: ['Two nights,', 'carried', 'quietly.'],
     movementCopy: 'The short handles sit close to the hand while the structured base keeps the bag composed in transit.',
     materialLabel: 'Full-grain leather · Brass',
-    shopImage: 'products.webp',
+    images: [mainImage('weekend-holdall-main-v1'), detailImage('weekend-holdall-detail-v1'), base.images[2]],
+    shopImage: mainImage('weekend-holdall-main-v1'),
     shopPosition: 'center',
-    shopCrop: 'bag',
   },
 ];
 

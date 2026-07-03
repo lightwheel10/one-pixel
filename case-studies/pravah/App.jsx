@@ -126,6 +126,26 @@ function WhyPravah() {
         </div>
 
         <Reveal delay={0.05}>
+          <div className="mt-6 grid lg:grid-cols-[1.1fr_0.9fr] border border-white/10 bg-white/10 gap-px">
+            <div className="bg-panel p-7 sm:p-8 flex flex-col justify-between">
+              <div>
+                <p className="pv-eyebrow mb-4">// Engineer-led support</p>
+                <h3 className="font-display text-2xl md:text-3xl font-medium tracking-tight">The people answering tickets run the platform.</h3>
+              </div>
+              <p className="text-white/55 text-sm leading-relaxed max-w-xl mt-6">
+                Pravah is positioned like infrastructure, not a reseller wrapper: support is closer to the rack,
+                the network and the console, so production issues do not disappear into a queue.
+              </p>
+            </div>
+            <div className="bg-base min-h-[260px]">
+              <div className="pv-image-slab h-full min-h-[260px]">
+                <img src="/case-studies/pravah/images/support-engineer.webp" alt="Indian cloud engineer monitoring Pravah infrastructure" loading="lazy" decoding="async" />
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.05}>
           <div className="mt-6 overflow-x-auto">
             <div className="grid grid-cols-[1.2fr_1fr_1fr] gap-px bg-white/10 border border-white/10 min-w-[680px]">
               <div className="bg-base px-5 py-4" />

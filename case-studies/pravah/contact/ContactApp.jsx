@@ -214,6 +214,9 @@ export default function ContactApp() {
               <ContactForm />
             </div>
             <div className="lg:col-span-5">
+              <div className="pv-image-slab aspect-[16/9] mb-6">
+                <img src="/case-studies/pravah/images/support-engineer.webp" alt="Pravah support engineer monitoring infrastructure" loading="lazy" decoding="async" />
+              </div>
               <p className="font-mono text-[11px] uppercase tracking-wider text-white/45 mb-4">Or reach a team directly</p>
               <Channels />
             </div>

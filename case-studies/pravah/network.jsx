@@ -64,6 +64,9 @@ export function Regions() {
 
           <Reveal delay={0.05} className="lg:col-span-5 min-w-0 flex flex-col gap-6">
             <div className="border border-white/12 bg-panel p-6">
+              <div className="pv-image-slab mb-6 aspect-[16/9]">
+                <img src="/case-studies/pravah/images/india-network-ops.webp" alt="Pravah network operations room monitoring India-hosted regions" loading="lazy" decoding="async" />
+              </div>
               <Shield className="w-6 h-6 text-electric" />
               <h3 className="font-display text-xl mt-4">Your data stays in India</h3>
               <p className="text-white/55 text-sm mt-2 leading-relaxed">

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 210" role="img" aria-labelledby="title desc">
+  <title id="title">Pravah networking topology</title>
+  <desc id="desc">Internet traffic flows through a load balancer into three servers and then to Postgres.</desc>
+  <defs>
+    <style>
+      .box { fill: rgba(4, 5, 10, 0.02); stroke: rgba(238, 241, 247, 0.2); stroke-width: 1.2; }
+      .box-hot { fill: rgba(91, 140, 255, 0.12); stroke: rgba(91, 140, 255, 0.68); stroke-width: 1.4; }
+      .line { fill: none; stroke: rgba(91, 140, 255, 0.42); stroke-width: 1.5; stroke-dasharray: 18 16; stroke-linecap: round; }
+      .line-hot { fill: none; stroke: rgba(143, 180, 255, 0.7); stroke-width: 1.7; stroke-linecap: round; }
+      .node { fill: #5b8cff; opacity: 0.9; }
+      .label { fill: rgba(238, 241, 247, 0.72); font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace; font-size: 15px; letter-spacing: 0.02em; }
+      .label-hot { fill: #6f98ff; }
+      .micro { fill: rgba(238, 241, 247, 0.32); font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; }
+    </style>
+  </defs>
+
+  <g transform="translate(38 26)">
+    <text class="micro" x="0" y="7">PRIVATE NETWORK</text>
+    <text class="micro" x="606" y="7">FIREWALL + DDOS SHIELD</text>
+
+    <rect class="box" x="0" y="58" width="112" height="50" />
+    <text class="label" x="28" y="89">Internet</text>
+
+    <path class="line-hot" d="M112 83 H190" />
+    <circle class="node" cx="151" cy="83" r="3" />
+
+    <rect class="box-hot" x="190" y="58" width="168" height="50" />
+    <text class="label label-hot" x="213" y="89">Load balancer</text>
+
+    <path class="line-hot" d="M358 83 H430" />
+    <circle class="node" cx="394" cy="83" r="3" />
+
+    <rect class="box" x="430" y="0" width="94" height="44" />
+    <rect class="box" x="430" y="62" width="94" height="44" />
+    <rect class="box" x="430" y="124" width="94" height="44" />
+    <text class="label" x="456" y="28">srv-1</text>
+    <text class="label" x="456" y="90">srv-2</text>
+    <text class="label" x="456" y="152">srv-3</text>
+
+    <path class="line" d="M358 83 C386 83 398 22 430 22" />
+    <path class="line-hot" d="M358 83 H430" />
+    <path class="line" d="M358 83 C386 83 398 146 430 146" />
+
+    <path class="line-hot" d="M524 84 H608" />
+    <circle class="node" cx="566" cy="84" r="3" />
+
+    <rect class="box" x="608" y="58" width="118" height="50" />
+    <text class="label" x="636" y="89">Postgres</text>
+
+    <path class="line" d="M477 44 V62" />
+    <path class="line" d="M477 106 V124" />
+  </g>
+</svg>

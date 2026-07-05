@@ -976,7 +976,7 @@ function ProductPage({ product, onAdd }) {
       setDelivery('Enter a valid 6-digit PIN code.');
       return;
     }
-    setDelivery('Delivery in 2–4 working days · Complimentary');
+    setDelivery('Delivery in 2 to 4 working days · Complimentary');
   };
 
   const shareProduct = async () => {
@@ -1130,7 +1130,7 @@ function ProductPage({ product, onAdd }) {
           </form>
           <div className="so-pdp-trust">
             <div><b>Complimentary delivery</b><span>Across India</span></div>
-            <div><b>14-day returns</b><span>Collection available</span></div>
+            <div><b>Returns in 14 days</b><span>Collection available</span></div>
             <div><b>Secure payments</b><span>UPI · Cards · Netbanking</span></div>
           </div>
           <p className="so-pdp-note">{product.fitNote}</p>
@@ -1252,7 +1252,7 @@ function ProductPage({ product, onAdd }) {
               })}
             </div>
           )}
-          <button className="so-size-help" onClick={() => { window.location.href = 'mailto:clients@saintorson.com?subject=' + encodeURIComponent('Fit advice — ' + product.name); }}>Speak to a fit advisor <span>→</span></button>
+          <button className="so-size-help" onClick={() => { window.location.href = 'mailto:clients@saintorson.com?subject=' + encodeURIComponent('Fit advice for ' + product.name); }}>Speak to a fit advisor <span>→</span></button>
         </div>
       )}
     </main>
@@ -1326,7 +1326,7 @@ function CartDrawer({ open, items, count, total, onClose, onQty, onCheckout }) {
             </ul>
             <footer className="so-cart-foot">
               <div className="so-cart-total"><span>Subtotal</span><b>{formatINR(total)}</b></div>
-              <p>Complimentary delivery and 14-day returns across India.</p>
+              <p>Complimentary delivery and returns within 14 days, across India.</p>
               <button className="so-cart-checkout" onClick={onCheckout}>Checkout <span>{formatINR(total)}</span></button>
             </footer>
           </>
@@ -1448,7 +1448,7 @@ function Checkout({ items, total, onQty, onClear }) {
               <label>PIN code<input type="text" inputMode="numeric" required placeholder="400001" /></label>
             </div>
           </fieldset>
-          <p className="so-checkout-note">This is a demo checkout. No payment is taken and no card details are needed.</p>
+          <p className="so-checkout-note">This is a demo checkout, so no payment is collected. You will not need any UPI, card or netbanking details.</p>
           <button type="submit">Place order · {formatINR(total)}</button>
         </form>
         <aside className="so-checkout-summary">
@@ -1473,7 +1473,7 @@ function Checkout({ items, total, onQty, onClear }) {
           </ul>
           <dl className="so-checkout-totals">
             <div><dt>Subtotal</dt><dd>{formatINR(total)}</dd></div>
-            <div><dt>Delivery</dt><dd>Complimentary</dd></div>
+            <div><dt>Delivery</dt><dd>Complimentary · 2 to 4 days</dd></div>
             <div className="so-checkout-grand"><dt>Total</dt><dd>{formatINR(total)}</dd></div>
           </dl>
         </aside>

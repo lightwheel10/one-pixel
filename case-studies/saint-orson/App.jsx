@@ -337,10 +337,31 @@ function LookTicker() {
   );
 }
 
+const HERO_IMAGES = [
+  { src: 'home/hero-v1.jpg', alt: 'Saint Orson model in a black roll neck and tailored trousers' },
+  { src: 'home/tailoring-v1.jpg', alt: 'Saint Orson tailor shaping an ivory linen jacket in the atelier' },
+];
+
 function Hero() {
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const id = window.setInterval(() => setActive((current) => (current + 1) % HERO_IMAGES.length), 2000);
+    return () => window.clearInterval(id);
+  }, []);
+
   return (
     <section className="so-hero" id="top">
-      <img src={`${ASSET}home/hero-v1.jpg`} alt="Saint Orson model in a black roll neck and tailored trousers" />
+      {HERO_IMAGES.map((image, index) => (
+        <img
+          key={image.src}
+          className={active === index ? 'is-active' : ''}
+          src={`${ASSET}${image.src}`}
+          alt={index === 0 ? image.alt : ''}
+          aria-hidden={index === 0 ? undefined : 'true'}
+        />
+      ))}
       <div className="so-hero-shade" />
       <div className="so-hero-inner">
         <span className="so-hero-eyebrow">Autumn Winter 2026</span>

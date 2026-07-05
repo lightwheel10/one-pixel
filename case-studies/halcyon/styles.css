@@ -1228,6 +1228,19 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   to { transform: translateX(-50%); }
 }
 
+/* ============ MOBILE SPACING — tighten the tall section rhythm on phones ============ */
+/* Paras · 2026-07-05: section vertical padding is a fixed 144px, which reads as big empty bands on
+   a narrow screen. Halve it on phones so the page feels intentional, not sparse. Scoped to <=700px,
+   so the tablet/desktop rhythm is untouched. Uses padding-top/bottom so each section keeps its own
+   horizontal gutter. */
+@media (max-width: 700px) {
+  .hc-section   { padding-top: 72px; padding-bottom: 72px; }
+  .hc-featured  { padding-top: 72px; padding-bottom: 72px; }
+  .hc-record    { padding-top: 72px; padding-bottom: 72px; }
+  .hc-contact   { padding-top: 72px; padding-bottom: 72px; }
+  .hc-pullquote { padding-top: 56px; padding-bottom: 32px; }
+}
+
 
 /* ============ ONEPIXEL TRANSITION LOADER ============ */
 /* Ported from the main OnePixel site. The case-study page boots with the

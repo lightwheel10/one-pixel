@@ -92,7 +92,7 @@ export function Work() {
             <div className="section-num">Selected Work</div>
           </div>
           <div>
-            <h2 className="section-title">Sites we’ve <em>shipped</em>.</h2>
+            <h2 className="section-title">Sites we’ve <em>crafted</em>.</h2>
             <p className="section-sub" style={{ marginTop: 24 }}>
               A small slice of our work.
             </p>

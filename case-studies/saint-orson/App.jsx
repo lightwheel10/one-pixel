@@ -338,8 +338,8 @@ function LookTicker() {
 }
 
 const HERO_IMAGES = [
-  { src: 'home/hero-v1.jpg', alt: 'Saint Orson model in a black roll neck and tailored trousers' },
-  { src: 'home/morning-v1.jpg', alt: 'Woman in an ivory Saint Orson blazer suit with a silk scarf by a window' },
+  { src: 'home/hero-v1.jpg', alt: 'Saint Orson model in a black roll neck and tailored trousers', position: '55% center' },
+  { src: 'home/morning-v1.jpg', alt: 'Woman in an ivory Saint Orson blazer suit with a silk scarf by a window', position: '50% 20%' },
 ];
 
 function Hero() {
@@ -360,6 +360,7 @@ function Hero() {
           src={`${ASSET}${image.src}`}
           alt={index === 0 ? image.alt : ''}
           aria-hidden={index === 0 ? undefined : 'true'}
+          style={{ objectPosition: image.position }}
         />
       ))}
       <div className="so-hero-shade" />

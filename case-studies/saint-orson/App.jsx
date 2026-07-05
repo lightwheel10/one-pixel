@@ -607,21 +607,21 @@ function CollectionPage({ onAdd }) {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
     const ctx = gsap.context(() => {
       gsap.timeline()
-        .from('.so-collection-hero img', { scale: 1.08, opacity: 0, duration: 1.4, ease: 'power3.out' }, 0)
+        .from('.so-collection-hero img', { scale: 1.07, opacity: 0, duration: 1.05, ease: 'power3.out' }, 0)
         .from('.so-collection-hero h1, .so-collection-hero p, .so-collection-hero a', {
-          y: 38,
+          y: 32,
           opacity: 0,
-          duration: 1,
-          stagger: 0.09,
+          duration: 0.8,
+          stagger: 0.07,
           ease: 'power3.out',
-        }, 0.2)
+        }, 0.14)
         .from('.so-collection-product', {
-          y: 46,
+          y: 40,
           opacity: 0,
-          duration: 0.9,
-          stagger: 0.12,
+          duration: 0.7,
+          stagger: 0.08,
           ease: 'power3.out',
-        }, 0.42);
+        }, 0.28);
 
       gsap.from('.so-collection-proof > span', {
         y: 20,
@@ -1367,8 +1367,11 @@ function SearchOverlay({ open, onClose }) {
               {results.map((p) => (
                 <li key={p.slug}>
                   <a href={productHref(p.slug)} onClick={onClose}>
-                    <span className="so-search-cat">{p.category}</span>
-                    <span className="so-search-name">{p.name}</span>
+                    <span className="so-search-thumb"><img src={`${ASSET}${p.images[0]}`} alt="" loading="lazy" /></span>
+                    <span className="so-search-lines">
+                      <span className="so-search-cat">{p.category}</span>
+                      <span className="so-search-name">{p.name}</span>
+                    </span>
                     <span className="so-search-price">{formatINR(p.price)}</span>
                   </a>
                 </li>

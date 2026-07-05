@@ -11,12 +11,12 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; background: var(--so-black); }
+html { scroll-behavior: smooth; background: var(--so-black); overflow-x: clip; }
 body {
   background: var(--so-black);
   color: var(--so-paper);
   font-family: var(--so-sans);
-  overflow-x: hidden;
+  overflow-x: clip;
   padding-top: var(--so-opx-h);
   -webkit-font-smoothing: antialiased;
 }
@@ -810,7 +810,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   gap: clamp(40px, 9vw, 150px);
   color: var(--so-paper);
   background:
-    linear-gradient(115deg, rgba(0,0,0,.9), rgba(0,0,0,.38)),
+    linear-gradient(115deg, rgba(0,0,0,.92) 8%, rgba(0,0,0,.52) 62%, rgba(0,0,0,.6)),
     url('/case-studies/saint-orson/home/train-v1.jpg') center 48% / cover;
 }
 .so-shop-hero .so-number {
@@ -828,7 +828,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .so-shop-hero p {
   max-width: 32ch;
   padding-bottom: 10px;
-  color: rgba(240,238,233,.78);
+  color: rgba(244,242,238,.9);
   font: 400 clamp(17px, 1.4vw, 22px)/1.55 var(--so-serif);
 }
 .so-shop-filter {
@@ -1068,8 +1068,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 .so-studio-system header {
   grid-column: 1 / 6;
-  position: sticky;
-  top: 96px;
+  align-self: start;
 }
 .so-studio-system h2 {
   font: 400 clamp(56px, 6.4vw, 116px)/.9 var(--so-serif);
@@ -1106,13 +1105,14 @@ button, a { -webkit-tap-highlight-color: transparent; }
   font: 400 15px/1.65 var(--so-sans);
 }
 .so-studio-fitting {
+  position: relative;
   grid-column: 10 / 13;
   grid-row: span 2;
   min-height: 560px;
   overflow: hidden;
   background: #d6d0c6;
 }
-.so-studio-fitting img { height: 100%; object-fit: cover; }
+.so-studio-fitting img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
 .so-studio-note {
   grid-column: 1 / 5;
   padding-top: clamp(28px, 4vw, 70px);
@@ -1135,6 +1135,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   background: #070706;
 }
 .so-studio-handwork > img {
+  display: block;
+  width: 100%;
   height: 100%;
   object-fit: cover;
 }
@@ -1216,7 +1218,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   background: linear-gradient(to bottom, rgba(0,0,0,.22), transparent 28%, transparent 72%, rgba(0,0,0,.28));
   pointer-events: none;
 }
-.so-pdp-primary img { height: 112%; object-fit: cover; object-position: center 18%; }
+.so-pdp-primary img { position: absolute; inset: 0; width: 100%; height: 112%; object-fit: cover; object-position: center 18%; }
 .so-pdp-primary > span, .so-pdp-rear-photo > span {
   position: absolute; z-index: 2; left: 28px; bottom: 24px;
   color: white;
@@ -1277,7 +1279,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .so-pdp-buyhead button.saved { color: var(--so-red); }
 .so-pdp-buybox h1 {
   margin: 22px 0 12px;
-  font: 400 clamp(54px, 5vw, 96px)/.88 var(--so-serif);
+  font: 400 clamp(48px, 4.4vw, 82px)/.9 var(--so-serif);
   text-transform: uppercase;
 }
 .so-pdp-price {
@@ -2008,8 +2010,11 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .so-search-bar button { flex: none; font: 500 9px/1 var(--so-mono); letter-spacing: .1em; text-transform: uppercase; color: #6f6b64; transition: color .2s; }
 .so-search-bar button:hover { color: var(--so-ink); }
 .so-search-results { max-width: 1180px; margin: 18px auto 0; list-style: none; }
-.so-search-results a { display: grid; grid-template-columns: 1fr 2fr auto; gap: 20px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,.1); transition: padding-left .25s; }
+.so-search-results a { display: grid; grid-template-columns: 56px 1fr auto; gap: 20px; align-items: center; padding: 14px 0; border-bottom: 1px solid rgba(0,0,0,.1); transition: padding-left .25s; }
 .so-search-results a:hover { padding-left: 10px; }
+.so-search-thumb { width: 56px; height: 70px; overflow: hidden; background: #d9d4cc; }
+.so-search-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.so-search-lines { display: flex; flex-direction: column; gap: 7px; }
 .so-search-cat { font: 500 8px/1 var(--so-mono); letter-spacing: .1em; text-transform: uppercase; color: #79746c; }
 .so-search-name { font: 400 clamp(20px,2vw,30px)/1 var(--so-serif); }
 .so-search-price { font: 500 11px/1 var(--so-mono); text-align: right; }
@@ -2065,8 +2070,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 @media (max-width: 680px) {
   .so-cart { width: 100%; }
   .so-search-panel { padding: 88px 18px 34px; }
-  .so-search-results a { grid-template-columns: 1fr auto; gap: 6px 14px; }
-  .so-search-cat { grid-column: 1 / -1; }
+  .so-search-results a { grid-template-columns: 48px 1fr auto; gap: 14px; }
+  .so-search-thumb { width: 48px; height: 60px; }
   .so-checkout-grid { grid-template-columns: 1fr; gap: 38px; }
   .so-checkout-summary { order: -1; }
 }

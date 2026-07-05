@@ -1580,6 +1580,7 @@ export default function App() {
           && !element.closest('.so-contact-sheet')
           && !element.closest('.so-bag-feature')
           && !element.closest('.so-evening-card')
+          && !element.closest('.so-related')
         ));
         gsap.from(content, {
           y: 34,

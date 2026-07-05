@@ -236,11 +236,20 @@ export function Process() {
   };
   useEffect(() => () => cancelAnimationFrame(rafRef.current), []);
 
-  // Paras · 2026-06-18: drive the 4 steps from scroll. ONLY on a wide + tall screen does the
-  // .proc-stage core FREEZE-PIN and scrub the steps (fill tracks scroll 1:1, content cross-fades,
-  // pin kept short ~1.8 viewports). Phones / short screens DON'T scrub at all — CSS swaps the
-  // stage for the .proc-mobile swipe carousel (see render), driven by the user's thumb, not scroll.
-  // So there's no mobile ScrollTrigger here anymore. Reduced-motion: no pin.
+  // Paras · 2026-06-18: drive the 4 steps from scroll. The .proc-stage core FREEZE-PINs and scrubs
+  // the steps (fill tracks scroll 1:1, content cross-fades, pin kept short ~1.8 viewports). Phones /
+  // narrow / short screens DON'T scrub — CSS swaps the stage for the .proc-mobile swipe carousel
+  // (see render), driven by the user's thumb, not scroll. So there's no mobile ScrollTrigger here.
+  // Reduced-motion: no pin.
+  //
+  // Paras · 2026-07-05: gate is now WIDTH-led (1024px = iPad-landscape and up), not the old
+  // width+800h rule. The 800px height threshold measured in CSS pixels, which Windows display
+  // scaling / browser zoom distort — so the same monitor flipped to the carousel on a laptop set to
+  // 200% scaling (its reported viewport dipped under 800). We drop the freeze only when it genuinely
+  // can't fit: the four-step stack is ~600px even after the height-flex in styles.css, and pins 86px
+  // below the nav, so ~720px is the real floor before the bottom strip clips. The stage flexes with
+  // height (styles.css) so it stays comfortable from 720px up. Must stay byte-for-byte in sync with
+  // the .proc-stage/.proc-mobile swap query in styles.css.
   useEffect(() => {
     let cancelled = false;
     let firstFrame = 0;
@@ -252,7 +261,7 @@ export function Process() {
       setActive(Math.min(steps.length - 1, Math.floor(p * steps.length)));
     };
     const mm = gsap.matchMedia();
-    mm.add('(min-width: 901px) and (min-height: 800px)', () => {
+    mm.add('(min-width: 1024px) and (min-height: 720px)', () => {
       if (reduce()) return;
       const stage = ref.current.querySelector('.proc-stage');
       const trigger = ScrollTrigger.create({

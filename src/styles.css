@@ -1004,12 +1004,15 @@ body.dark .svc-panel.has-art::after {
 }
 
 /* Paras · 2026-06-19: mobile Process = swipe carousel. The pinned rail+display+strip (.proc-stage)
-   is a desktop delight; on phones / short screens we hide it and show .proc-mobile — a horizontal
+   is a desktop delight; on narrow / short screens we hide it and show .proc-mobile — a horizontal
    scroll-snap carousel of the 4 step cards + pixel dots. Swipe to advance; dots track + jump.
-   Breakpoint matches the JS pin's exactly (min 901w AND 800h → pinned stage; else → carousel), so
-   the two never show at once. (Replaces the earlier static stacked list — user wanted more than a list.) */
+   Breakpoint matches the JS pin's exactly (min 1024w AND 720h → pinned stage; else → carousel), so
+   the two never show at once. (Replaces the earlier static stacked list — user wanted more than a list.)
+   Paras · 2026-07-05: was 900w/800h. Moved to 1024w (iPad-landscape and up) so display scaling can't
+   flip a real desktop to the carousel, and to 720h — the true floor below which the flexed stage
+   (~600px min) would clip under the 86px nav. Keep in sync with the JS matchMedia in ServicesProcess.jsx. */
 .proc-mobile { display: none; }
-@media (max-width: 900px), (max-height: 799px) {
+@media (max-width: 1023px), (max-height: 719px) {
   .proc-stage { display: none; }
   .proc-mobile {
     display: block;
@@ -1165,16 +1168,24 @@ body.dark .svc-panel.has-art::after {
 }
 .proc-dot.on { width: 22px; background: var(--accent); }
 
-/* Paras · 2026-06-19: the Process freeze shows the WHOLE stage at once (rail + display + strip).
-   That stack was ~770px tall, so on shorter qualifying screens (≥800px tall) the bottom strip
-   — Discovery / Direction / Build / Launch + Care — clipped off the foot of the viewport. Tighten
-   the three biggest internal gaps (rail→display, display padding, display→strip) ONLY while the
-   freeze is active so the full stack fits with room to spare. This media query is exactly the
-   condition under which .proc-stage is shown + pinned, so nothing else is affected. */
-@media (min-width: 901px) and (min-height: 800px) {
-  .proc-rail { margin-bottom: 32px; }   /* was 80 */
-  .proc-display { padding: 44px 0; }     /* was 56 */
-  .proc-strip { margin-top: 32px; }      /* was 48 */
+/* Paras · 2026-07-05: the Process freeze shows the WHOLE stage at once (rail + display + strip) —
+   ~712px tall at rest. It pins 86px below the top (under the nav), so it needs ~800px of height to
+   sit flush. Rather than gate that on a fixed 800px (which display scaling distorts — see the JS +
+   the swap query above), the stage now FLEXES with viewport height: every big vertical gap is
+   clamp(min, Nvh, max), so it's spacious on a tall screen and compresses to ~600px on a short one,
+   never clipping. The freeze runs from 720px up (iPad-landscape and every desktop); below that it's
+   the carousel. This query is exactly the condition under which .proc-stage is shown + pinned, so
+   nothing outside the freeze is touched. vh here = the pinned viewport height, which is what we fit into. */
+@media (min-width: 1024px) and (min-height: 720px) {
+  .proc-rail   { height: clamp(78px, 11vh, 90px); margin-top: clamp(12px, 2.5vh, 24px); margin-bottom: clamp(16px, 4vh, 40px); }
+  .proc-display { padding: clamp(20px, 5vh, 48px) 0; gap: clamp(28px, 4vw, 56px); }
+  .proc-body   { padding-top: clamp(4px, 1vh, 12px); }
+  .proc-meta   { margin-bottom: clamp(10px, 2.2vh, 20px); }
+  .proc-title  { margin-bottom: clamp(10px, 2.2vh, 20px); }
+  .proc-desc   { font-size: clamp(15px, 2.2vh, 18px); margin-bottom: clamp(14px, 3.6vh, 32px); }
+  .proc-deliv-label { margin-bottom: clamp(8px, 1.6vh, 14px); }
+  .proc-strip  { margin-top: clamp(14px, 3.6vh, 40px); }
+  .proc-strip-item { padding-top: clamp(11px, 2vh, 18px); padding-bottom: clamp(11px, 2vh, 18px); }
 }
 
 /* ============ HOSTING OFFER ============ */

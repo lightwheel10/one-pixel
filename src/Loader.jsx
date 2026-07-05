@@ -15,7 +15,14 @@ export function Loader({ duration = 9000, mark = 'OnePixel' }) {
     document.body.style.overflow = 'hidden';
 
     const flick = setTimeout(() => setFlickering(true), 4800 * scale);
-    const dismiss = setTimeout(() => setGone(true), 7500 * scale);
+    const dismiss = setTimeout(() => {
+      setGone(true);
+      // Paras · 2026-07-05: fire the moment the loader STARTS fading out (not at unmount), so a page
+      // can reveal its hero UNDER the departing loader and let the loader's own fade be the visible
+      // cross-fade. Additive: 'onepixel:loader-complete' still fires at unmount below (scroll is only
+      // restored then), so existing listeners on the main site are unchanged.
+      document.dispatchEvent(new CustomEvent('onepixel:loader-leaving'));
+    }, 7500 * scale);
     const unmount = setTimeout(() => {
       setMounted(false);
       document.body.style.overflow = prevOverflow;

@@ -32,7 +32,6 @@ export function Nav() {
       </div>
       <a href="#top" className="hc-mark">
         <span className="name">Mehta &amp; Sons</span>
-        <span className="est">Bombay · Est. 1962</span>
       </a>
       <div className="hc-nav-right">
         <span className="hc-nav-meta">+91 22 2640 0162</span>
@@ -52,7 +51,9 @@ export function Hero() {
     const mm = gsap.matchMedia();
 
     const ctx = gsap.context(() => {
-      gsap.set('.hc-hero-bg', { scale: 1.14 });
+      // Backdrop starts hidden (autoAlpha) so it enters as a designed beat of the timeline below,
+      // rather than being uncovered by the loader at whatever opacity/scale it happens to be at.
+      gsap.set('.hc-hero-bg', { scale: 1.14, autoAlpha: 0 });
       gsap.set('.hc-hero-line .in', { yPercent: 120 });
       gsap.set('.hc-hero-mark, .hc-hero-eyebrow, .hc-hero-cue, .hc-hero-foot > *', { opacity: 0, y: 18 });
       gsap.set('.hc-hero-rule, .hc-hero-kept-rule', { scaleX: 0 });
@@ -91,12 +92,16 @@ export function Hero() {
       played = true;
       ctx.add(() => {
         if (reduce) {
-          gsap.set('.hc-hero-bg', { scale: 1.04 });
+          gsap.set('.hc-hero-bg', { scale: 1.04, autoAlpha: 1 });
           gsap.set('.hc-hero-line .in', { yPercent: 0 });
           gsap.set('.hc-hero-mark, .hc-hero-eyebrow, .hc-hero-cue, .hc-hero-foot > *', { opacity: 1, y: 0 });
           gsap.set('.hc-hero-rule, .hc-hero-kept-rule', { scaleX: 1 });
           return;
         }
+        // Backdrop becomes opaque INSTANTLY — the departing loader (fading out on top) is the visible
+        // cream-to-photo cross-fade, so easing opacity here too would let the dark hero base bleed
+        // through mid-fade. Only the scale eases, for a slow settle as the loader lifts.
+        gsap.set('.hc-hero-bg', { autoAlpha: 1 });
         const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
         tl.to('.hc-hero-bg', { scale: 1.04, duration: 1.9, ease: 'power2.out' }, 0)
           .to('.hc-hero-rule', { scaleX: 1, duration: 1.0, stagger: 0.12 }, 0.15)
@@ -108,13 +113,33 @@ export function Hero() {
       });
     };
 
-    // The loader locks scroll for ~2.5s; reveal the hero as it lifts.
-    document.addEventListener('onepixel:loader-complete', play, { once: true });
-    const fb = setTimeout(play, 2800);
+    // Paras · 2026-07-05: the hero entrance is ASSET-GATED and synced to the loader's DEPARTURE. It
+    // plays only once BOTH the background image has decoded AND the loader has begun leaving
+    // (onepixel:loader-leaving, fired as its fade starts) — so the backdrop is revealed by the fading
+    // loader in one cream-to-photo cross-fade: no dark-base gap, no lone nav, no wait. imgCap is a
+    // hard stop so a stalled image can't freeze the reveal; loader-complete + fb are fallbacks in
+    // case 'leaving' is ever missed (both idempotent via the `leaving`/`played` guards).
+    let leaving = false, imgReady = false;
+    const start = () => { if (leaving && imgReady) play(); };
+
+    const pre = new Image();
+    pre.src = HC_PHOTOS.heroland;
+    const onImg = () => { imgReady = true; start(); };
+    if (pre.complete) onImg();
+    else if (pre.decode) pre.decode().then(onImg).catch(onImg);
+    else { pre.onload = onImg; pre.onerror = onImg; }
+    const imgCap = setTimeout(onImg, 3500);
+
+    const onLeaving = () => { leaving = true; start(); };
+    document.addEventListener('onepixel:loader-leaving', onLeaving, { once: true });
+    document.addEventListener('onepixel:loader-complete', onLeaving, { once: true });
+    const fb = setTimeout(onLeaving, 2800);
 
     return () => {
       clearTimeout(fb);
-      document.removeEventListener('onepixel:loader-complete', play);
+      clearTimeout(imgCap);
+      document.removeEventListener('onepixel:loader-leaving', onLeaving);
+      document.removeEventListener('onepixel:loader-complete', onLeaving);
       mm.revert();
       ctx.revert();
     };
@@ -193,15 +218,15 @@ export function FeaturedEstate() {
           <div className="hc-featured-content">
             <div className="hc-mono">Lonavala, MH</div>
             <h2><em>Sahyadri</em> House</h2>
-            <div className="subtitle">A late nineteenth century manor on twelve quiet acres</div>
+            <div className="subtitle">A modern house on twelve quiet acres above the valley</div>
             <p className="blurb">
-              Built in 1894 for a Bombay textile merchant and held by a single family until last year, Sahyadri House is a study in restraint: laterite stone, Mangalore tiles, and wide teak floors, set against the Western Ghats. Aditya Mehta walked the property in 1969. His granddaughter walked it again last week.
+              Set on twelve acres above the valley, Sahyadri House is a modern home built with a long view. Rammed earth and stone keep the rooms cool, teak screens soften the afternoon light, and glass opens the house to the Western Ghats. The terraces run the full length of the living spaces, so for most of the year you are half outdoors. It is quietly on offer for the first time.
             </p>
             <div className="hc-featured-specs">
               <div className="hc-spec"><div className="v">5</div><div className="l">Bedrooms</div></div>
               <div className="hc-spec"><div className="v">4</div><div className="l">Baths</div></div>
               <div className="hc-spec"><div className="v">12</div><div className="l">Acres</div></div>
-              <div className="hc-spec"><div className="v">1894</div><div className="l">Built</div></div>
+              <div className="hc-spec"><div className="v">2021</div><div className="l">Built</div></div>
             </div>
             <div className="hc-featured-cta">
               <a href="#contact" className="hc-link">

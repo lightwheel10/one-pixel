@@ -318,7 +318,6 @@ function Header({ bag, onBag, onSearch, interiorPage = false }) {
       </nav>
       <div className="so-tools">
         <button type="button" onClick={onSearch}>Search</button>
-        <button type="button" onClick={() => { window.location.href = 'mailto:clients@saintorson.com?subject=' + encodeURIComponent('Client account'); }}>Account</button>
         <button type="button" onClick={onBag}>Bag ({bag})</button>
       </div>
     </header>
@@ -326,16 +325,14 @@ function Header({ bag, onBag, onSearch, interiorPage = false }) {
 }
 
 function LookTicker() {
-  const polo = PRODUCT_BY_SLUG['cashmere-polo-knit'];
-  const trouser = PRODUCT_BY_SLUG['pleated-wool-trouser'];
-  const coat = PRODUCT_BY_SLUG['milano-coat'];
   return (
     <div className="so-ticker">
-      <span className="accent">Wearing look 04</span>
-      <a href={productHref(polo.slug)}>{polo.name}</a><b>·</b><span>Navy</span><span>{formatINR(polo.price)}</span>
-      <b>·</b><a href={productHref(trouser.slug)}>{trouser.name}</a><span>Ivory</span><span>{formatINR(trouser.price)}</span>
-      <b>·</b><a href={productHref(coat.slug)}>{coat.name}</a><span>Navy</span><span>{formatINR(coat.price)}</span>
-      <a href="#discover">Isolate garment <i>⌖</i></a>
+      <span className="accent">By appointment</span>
+      <span>Mumbai</span>
+      <span>New Delhi</span>
+      <span>Bengaluru</span>
+      <span>Hyderabad</span>
+      <a href="#/studio">Book a fitting <i>→</i></a>
     </div>
   );
 }
@@ -343,17 +340,14 @@ function LookTicker() {
 function Hero() {
   return (
     <section className="so-hero" id="top">
-      <img src={`${ASSET}home/hero-v1.jpg`} alt="Saint Orson model in black tailoring beside limestone architecture" />
+      <img src={`${ASSET}home/hero-v1.jpg`} alt="Saint Orson model in a black roll neck and tailored trousers" />
       <div className="so-hero-shade" />
-      <div className="so-issue-side"><span>Issue</span><b>01</b></div>
-      <div className="so-issue-number">01</div>
-      <div className="so-weather">
-        <span>Spring<br />Summer<br />2026</span>
-        <span>08:32<br />AM</span>
-        <span>14°C<br />Paris</span>
+      <div className="so-hero-inner">
+        <span className="so-hero-eyebrow">Autumn Winter 2026</span>
+        <h1>A day, well cut.</h1>
+        <p className="so-hero-sub">Tailoring and evening wear, cut in India for the hours that matter.</p>
+        <a className="so-hero-cta" href="#/shop">Shop the collection <span>→</span></a>
       </div>
-      <h1>A day,<br />well cut</h1>
-      <a className="so-scroll" href="#morning">Scroll to begin <span>↓</span></a>
     </section>
   );
 }
@@ -364,10 +358,8 @@ function Morning() {
   return (
     <section className="so-morning so-light" id="morning">
       <div className="so-morning-copy">
-        <span className="so-number">01.</span>
         <h2>Morning<br />structure</h2>
         <p>City light.<br />Considered silhouettes.<br />Purpose in every detail.</p>
-        <a href="#journey">Read the story <span>→</span></a>
       </div>
       <div className="so-morning-photo">
         <img src={`${ASSET}home/morning-v1.jpg`} alt="Woman wearing an ivory Saint Orson suit" loading="lazy" />
@@ -434,7 +426,6 @@ function Journey() {
       </div>
       <div className="so-journey-shade" />
       <div className="so-journey-copy">
-        <span className="so-number">02.</span>
         <h2>En route</h2>
         <p>The in-between.<br />Moments that<br />move the day forward.</p>
         <a href="#fit">Read the story <span>→</span></a>
@@ -459,40 +450,20 @@ function Journey() {
 }
 
 function Fit() {
-  const [fit, setFit] = useState('Regular');
-  const [size, setSize] = useState('38');
   return (
     <section className="so-fit" id="fit">
       <img src={`${ASSET}home/tailoring-v1.jpg`} alt="" aria-hidden="true" loading="lazy" />
       <div className="so-fit-shade" />
-      <div className="so-fit-title">
-        <span className="so-number">03.</span>
+      <div className="so-fit-content">
+        <span className="so-fit-eyebrow">The cut</span>
         <h2>Find<br />your<br />cut</h2>
-        <small>Measure · Adjust · Perfect</small>
-      </div>
-      <div className="so-fit-message">
-        <p>A better fit<br />changes everything.</p>
-        <a href="#discover">Start the tool <span>→</span></a>
-      </div>
-      <div className="so-jacket" aria-hidden="true">
-        <svg viewBox="0 0 260 310">
-          <path d="M83 28 118 15h24l35 13 38 44-27 25-9-15v194H80V82l-9 15-27-25 39-44Z" />
-          <path d="m118 15-17 46 29 31 29-31-17-46M130 92v184M101 61l29 31 29-31M91 128h28M141 128h28M92 198h25M143 198h25" />
-        </svg>
-      </div>
-      <div className="so-fit-controls">
-        <fieldset>
-          <legend>Fit</legend>
-          {['Slim', 'Regular', 'Relaxed'].map((item) => (
-            <label key={item}><input type="radio" checked={fit === item} onChange={() => setFit(item)} />{item}</label>
-          ))}
-        </fieldset>
-        <fieldset>
-          <legend>Size</legend>
-          {['36', '38', '40', '42', '44'].map((item) => (
-            <label key={item}><input type="radio" checked={size === item} onChange={() => setSize(item)} />{item}</label>
-          ))}
-        </fieldset>
+        <p>A better fit changes everything.</p>
+        <ul className="so-fit-points">
+          <li><b>Shoulder</b><span>Set by hand</span></li>
+          <li><b>Rise</b><span>Cut for you</span></li>
+          <li><b>Hem</b><span>Finished clean</span></li>
+        </ul>
+        <a href="#discover">See the pieces <span>→</span></a>
       </div>
     </section>
   );
@@ -508,37 +479,37 @@ function Discover({ onAdd }) {
   return (
     <section className="so-discover so-light" id="discover">
       <header>
-        <div><span className="so-number">04.</span><h2>Discover</h2></div>
+        <div><h2>Discover</h2></div>
         <p>A working wardrobe, seen in fragments.<br />Seven pieces. One day.</p>
       </header>
       <div className="so-contact-sheet">
         <a href={productHref(blazer.slug)} className="so-discover-tile so-discover-woman" aria-label="Explore morning tailoring">
           <img src={`${ASSET}home/morning-v1.jpg`} alt="Woman in ivory Saint Orson tailoring" loading="lazy" />
-          <span><b>01</b> Morning tailoring</span>
+          <span>Morning tailoring</span>
         </a>
         <a href={productHref(polo.slug)} className="so-discover-tile so-discover-man" aria-label="Explore the cashmere polo">
           <img src={`${ASSET}home/hero-v1.jpg`} alt="Man wearing a black cashmere polo" loading="lazy" />
-          <span><b>02</b> Cashmere polo</span>
+          <span>Cashmere polo</span>
         </a>
         <a href={productHref(dress.slug)} className="so-discover-tile so-discover-night" aria-label="Explore evening dressing">
           <img src={`${ASSET}home/evening-v1.jpg`} alt="Woman in the evening collection" loading="lazy" />
-          <span><b>03</b> After dark</span>
+          <span>After dark</span>
         </a>
         <a href={productHref(coat.slug)} className="so-discover-tile so-discover-atelier" aria-label="Explore tailoring details">
           <img src={`${ASSET}home/tailoring-v1.jpg`} alt="Saint Orson tailoring materials" loading="lazy" />
-          <span><b>04</b> The cut within</span>
+          <span>The cut within</span>
         </a>
         <a href={productHref(blazer.slug)} className="so-discover-tile so-discover-blazer" aria-label="Explore the ivory blazer">
           <img src={`${ASSET}${blazer.shopImage}`} alt="Ivory tailored blazer" loading="lazy" style={{ objectPosition: blazer.shopPosition }} />
-          <span><b>05</b> Relaxed blazer <i>{formatINR(blazer.price)}</i></span>
+          <span>Relaxed blazer <i>{formatINR(blazer.price)}</i></span>
         </a>
         <a href={productHref(scarf.slug)} className="so-discover-tile so-discover-scarf" aria-label="Explore the silk scarf">
           <img src={`${ASSET}${scarf.shopImage}`} alt="Navy and red silk scarf" loading="lazy" style={{ objectPosition: scarf.shopPosition }} />
-          <span><b>06</b> Silk scarf <i>{formatINR(scarf.price)}</i></span>
+          <span>Silk scarf <i>{formatINR(scarf.price)}</i></span>
         </a>
         <a href={productHref(dress.slug)} className="so-discover-tile so-discover-dress" aria-label="Explore the draped silk dress">
           <img src={`${ASSET}${dress.shopImage}`} alt="Black draped silk dress" loading="lazy" style={{ objectPosition: dress.shopPosition }} />
-          <span><b>07</b> Draped silk <i>{formatINR(dress.price)}</i></span>
+          <span>Draped silk <i>{formatINR(dress.price)}</i></span>
         </a>
         <article className="so-bag-feature">
           <img src={`${ASSET}${holdall.shopImage}`} alt="Dark chestnut weekend bag" loading="lazy" style={{ objectPosition: holdall.shopPosition }} />
@@ -562,30 +533,34 @@ function Evening({ onAdd }) {
   const [saved, setSaved] = useState(false);
   return (
     <section className="so-evening" id="evening">
+      <img src={`${ASSET}home/evening-v1.jpg`} alt="Woman in a draped black evening dress" loading="lazy" />
+      <div className="so-evening-shade" />
       <div className="so-evening-copy">
-        <span className="so-number">05.</span>
         <h2>Evening<br />chapter</h2>
         <p>Nightfall calls<br />for ease and<br />elegance.</p>
         <a href="#collection">Read the story <span>→</span></a>
       </div>
-      <img src={`${ASSET}home/evening-v1.jpg`} alt="Woman in a draped black evening dress" loading="lazy" />
-      <div className="so-dress-panel">
-        <button className="so-close" aria-label="Close product">×</button>
-        <div className={`so-dress ${color}`}>
-          <img src={`${ASSET}${DRESS_COLOR_IMAGES[color] || product.shopImage}`} alt={`Draped ${color} silk dress`} loading="lazy" style={{ objectPosition: product.shopPosition }} />
+      <div className="so-evening-card">
+        <div className="so-evening-card-head">
+          <h3>{product.name}</h3>
+          <b>{formatINR(product.price)}</b>
         </div>
-        <div className="so-dress-info">
-          <h3>{product.name}</h3><p>{color}<br />{formatINR(product.price)}</p>
-          <a className="so-view-product" href={productHref(product.slug)}>View full details <span>→</span></a>
-          <label>Color</label>
+        <div className="so-evening-card-row">
+          <span>Colour</span>
           <div className="so-swatches">
             {['black', 'navy', 'wine'].map((item) => <button key={item} className={`${item} ${color === item ? 'active' : ''}`} aria-pressed={color === item} onClick={() => setColor(item)} aria-label={item} />)}
           </div>
-          <label>Size</label>
+        </div>
+        <div className="so-evening-card-row">
+          <span>Size</span>
           <div className="so-sizes">
             {['XS', 'S', 'M', 'L'].map((item) => <button key={item} className={size === item ? 'active' : ''} aria-pressed={size === item} onClick={() => setSize(item)}>{item}</button>)}
           </div>
-          <div className="so-buy-row"><button onClick={() => onAdd(product, { color: color.charAt(0).toUpperCase() + color.slice(1), size })}>Add to bag</button><button onClick={() => setSaved((value) => !value)}>{saved ? 'Saved ✓' : 'Save for later'}</button></div>
+        </div>
+        <button className="so-evening-add" onClick={() => onAdd(product, { color: color.charAt(0).toUpperCase() + color.slice(1), size })}>Add to bag <b>{formatINR(product.price)}</b></button>
+        <div className="so-evening-card-foot">
+          <a href={productHref(product.slug)}>View full details <span>→</span></a>
+          <button className="so-evening-save" onClick={() => setSaved((value) => !value)} aria-pressed={saved}>{saved ? 'Saved ✓' : 'Save'}</button>
         </div>
       </div>
     </section>
@@ -693,7 +668,6 @@ function CollectionPage({ onAdd }) {
           {heroProducts.map((product) => (
             <a className="so-collection-product" href={productHref(product.slug)} key={product.slug}>
               <img src={`${ASSET}${product.shopImage}`} alt={product.name} loading="lazy" style={{ objectPosition: product.shopPosition }} />
-              <span>{product.number}</span>
               <b>{product.name}</b>
               <small>{formatINR(product.price)}</small>
             </a>
@@ -745,7 +719,6 @@ function CollectionPage({ onAdd }) {
         <header>
           <span>Available now</span>
           <h2>Eight decisive entries.</h2>
-          <a href="#/shop">Shop the main line &rarr;</a>
         </header>
         <div>
           {railProducts.map((product, index) => (
@@ -1098,11 +1071,10 @@ function ProductPage({ product, onAdd }) {
   return (
     <main className="so-pdp" ref={root}>
       <section className="so-pdp-opening">
-        <a className="so-pdp-back" href="#/">← Issue 01</a>
-        <div className="so-pdp-index"><span>Collection {product.number}</span><span>{product.category}</span></div>
+        <a className="so-pdp-back" href="#/">← Back to Saint Orson</a>
+        <div className="so-pdp-index"><span>{product.category}</span></div>
         <div className="so-pdp-primary">
           <img src={`${ASSET}${product.images[activeImage]}`} alt={`${product.name} view ${activeImage + 1}`} />
-          <span>View {String(activeImage + 1).padStart(2, '0')} / {String(product.images.length).padStart(2, '0')}</span>
           <div className="so-pdp-thumbs" aria-label="Product images">
             {product.images.map((image, index) => (
               <button key={image} className={activeImage === index ? 'active' : ''} onClick={() => setActiveImage(index)} aria-label={`Show image ${index + 1}`}>
@@ -1114,7 +1086,7 @@ function ProductPage({ product, onAdd }) {
         </div>
         <aside className="so-pdp-buybox" id="pdp-purchase">
           <div className="so-pdp-buyhead">
-            <span className="so-pdp-kicker">{product.chapter} · Look {product.number}</span>
+            <span className="so-pdp-kicker">{product.chapter}</span>
             <div><button className={saved ? 'saved' : ''} onClick={() => setSaved(!saved)} aria-label="Save product">{saved ? '♥' : '♡'}</button><button onClick={shareProduct} aria-label="Share product">↗</button></div>
           </div>
           <h1>{product.display[0]}<br />{product.display[1]}</h1>
@@ -1151,7 +1123,6 @@ function ProductPage({ product, onAdd }) {
           <button className={`so-pdp-add ${added ? 'added' : ''}`} onClick={addProduct}>
             <span>{added ? 'Added to bag' : 'Add to bag'}</span><span>{added ? '✓' : formatINR(product.price)}</span>
           </button>
-          <button className="so-pdp-appointment" onClick={() => { window.location.href = 'mailto:clients@saintorson.com?subject=' + encodeURIComponent('Private fitting — ' + product.name); }}>Arrange a private fitting <span>→</span></button>
           <form className="so-pdp-delivery" onSubmit={estimateDelivery}>
             <label htmlFor="delivery-pin">Delivery to your PIN code</label>
             <div><input id="delivery-pin" value={pincode} onChange={(event) => setPincode(event.target.value.replace(/\D/g, '').slice(0, 6))} inputMode="numeric" placeholder="400001" /><button type="submit">Check</button></div>
@@ -1168,7 +1139,6 @@ function ProductPage({ product, onAdd }) {
 
       <section className="so-pdp-detail-story">
         <div className="so-pdp-detail-copy">
-          <span className="so-number">01.</span>
           <small>The construction</small>
           <h2>{product.storyTitle.map((line) => <span key={line}>{line}<br /></span>)}</h2>
           <p>{product.storyCopy}</p>
@@ -1181,7 +1151,7 @@ function ProductPage({ product, onAdd }) {
       </section>
 
       <section className="so-pdp-specification">
-        <header><span className="so-number">02.</span><h2>The garment,<br />considered.</h2></header>
+        <header><h2>The garment,<br />considered.</h2></header>
         <div className="so-pdp-accordions">
           {Object.entries(details).map(([title, text]) => (
             <article key={title} className={openDetail === title ? 'open' : ''}>
@@ -1195,10 +1165,8 @@ function ProductPage({ product, onAdd }) {
       <section className="so-pdp-movement">
         <div className="so-pdp-rear-photo">
           <img src={`${ASSET}${product.images[2]}`} alt={`${product.name} rear view`} loading="lazy" />
-          <span>View 03 / 03</span>
         </div>
         <div className="so-pdp-movement-copy">
-          <span className="so-number">03.</span>
           <small>In movement</small>
           <h2>{product.movementTitle.map((line) => <span key={line}>{line}<br /></span>)}</h2>
           <p>{product.movementCopy}</p>
@@ -1208,15 +1176,9 @@ function ProductPage({ product, onAdd }) {
 
       <section className="so-pdp-reviews" id="reviews">
         <header>
-          <span className="so-number">04.</span>
           <div><small>Client notes</small><h2>Worn,<br />then known.</h2></div>
           <div className="so-review-score"><strong>4.8</strong><span>★★★★★<br />38 verified reviews</span></div>
         </header>
-        <div className="so-fit-summary">
-          <span>How it fits</span>
-          <div><i style={{ '--fit': '68%' }} /><b>True to size</b></div>
-          <p>86% of clients kept their usual Saint Orson size.</p>
-        </div>
         <div className="so-review-grid">
           {[
             ['Ananya S.', 'Mumbai', 'The construction is exceptional. It holds at the waist and then moves beautifully without feeling formal.', 'Size S · True to size'],
@@ -1251,7 +1213,7 @@ function ProductPage({ product, onAdd }) {
       </section>
 
       <section className="so-pdp-closing">
-        <div><span>Saint Orson · Collection {product.number}</span><h2>Considered<br />for the hours<br />that matter.</h2></div>
+        <div><span>Saint Orson</span><h2>Considered<br />for the hours<br />that matter.</h2></div>
         <button onClick={addProduct}><span>{added ? 'Added to bag' : `Add ${color} · ${size}`}</span><span>{added ? '✓' : `${formatINR(product.price)} →`}</span></button>
       </section>
 
@@ -1264,7 +1226,7 @@ function ProductPage({ product, onAdd }) {
         <div className="so-pdp-lightbox" role="dialog" aria-modal="true" aria-label={`${product.name} image viewer`}>
           <button onClick={() => setZoomOpen(false)} aria-label="Close image viewer">×</button>
           <img src={`${ASSET}${product.images[activeImage]}`} alt={`${product.name} enlarged view`} />
-          <div>{product.images.map((image, index) => <button key={image} className={activeImage === index ? 'active' : ''} onClick={() => setActiveImage(index)}>{String(index + 1).padStart(2, '0')}</button>)}</div>
+          <div>{product.images.map((image, index) => <button key={image} className={activeImage === index ? 'active' : ''} onClick={() => setActiveImage(index)} aria-label={`Show image ${index + 1}`} />)}</div>
         </div>
       )}
 
@@ -1592,6 +1554,7 @@ export default function App() {
           !element.closest('.so-look-strip')
           && !element.closest('.so-contact-sheet')
           && !element.closest('.so-bag-feature')
+          && !element.closest('.so-evening-card')
         ));
         gsap.from(content, {
           y: 34,
@@ -1605,10 +1568,10 @@ export default function App() {
       });
 
       heroTimeline = gsap.timeline({ paused: true })
-        .from('.so-hero > img', { scale: 1.08, duration: 1.8, ease: 'power2.out' }, 0)
-        .from('.so-issue-number', { xPercent: -16, opacity: 0, duration: 1.5, ease: 'power3.out' }, 0.1)
-        .from('.so-hero h1', { yPercent: 32, opacity: 0, duration: 1.25, ease: 'power3.out' }, 0.32)
-        .from('.so-weather, .so-issue-side, .so-scroll', { y: 18, opacity: 0, duration: 0.8, stagger: 0.1, ease: 'power2.out' }, 0.52);
+        .from('.so-hero > img', { scale: 1.06, duration: 1.8, ease: 'power2.out' }, 0)
+        .from('.so-hero-eyebrow', { y: 16, opacity: 0, duration: 1, ease: 'power3.out' }, 0.25)
+        .from('.so-hero h1', { y: 26, opacity: 0, duration: 1.15, ease: 'power3.out' }, 0.4)
+        .from('.so-hero-sub, .so-hero-cta', { y: 16, opacity: 0, duration: 0.85, stagger: 0.12, ease: 'power2.out' }, 0.7);
 
       gsap.to('.so-hero > img', {
         yPercent: 5,
@@ -1647,21 +1610,6 @@ export default function App() {
         scrollTrigger: { trigger: '.so-look-strip', start: 'top 90%', once: true },
       });
 
-      gsap.from('.so-jacket svg', {
-        scale: 0.84,
-        opacity: 0,
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: '.so-fit', start: 'top 70%', once: true },
-      });
-      gsap.from('.so-fit-controls fieldset', {
-        x: 24,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.14,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: '.so-fit', start: 'top 70%', once: true },
-      });
 
       gsap.from('.so-discover-tile', {
         clipPath: 'inset(100% 0 0 0)',
@@ -1684,20 +1632,12 @@ export default function App() {
         ease: 'power3.inOut',
         scrollTrigger: { trigger: '.so-evening', start: 'top 72%', once: true },
       });
-      gsap.from('.so-dress-panel', {
-        xPercent: 18,
+      gsap.from('.so-evening-card', {
+        y: 30,
         opacity: 0,
-        duration: 1.1,
+        duration: 1,
         ease: 'power3.out',
         scrollTrigger: { trigger: '.so-evening', start: 'top 65%', once: true },
-      });
-      gsap.from('.so-dress img', {
-        y: 36,
-        scale: 0.92,
-        opacity: 0,
-        duration: 1.15,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: '.so-dress-panel', start: 'top 78%', once: true },
       });
     }, rootRef);
 

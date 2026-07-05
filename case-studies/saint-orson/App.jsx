@@ -579,7 +579,6 @@ function Evening({ onAdd }) {
       <div className="so-evening-copy">
         <h2>Evening<br />chapter</h2>
         <p>Nightfall calls<br />for ease and<br />elegance.</p>
-        <a href="#collection">Read the story <span>→</span></a>
       </div>
       <div className="so-evening-card">
         <div className="so-evening-card-head">
@@ -1305,7 +1304,6 @@ function FinalCall() {
     <section className="so-final" id="collection">
       <img src={`${ASSET}home/hero-v1.jpg`} alt="" aria-hidden="true" loading="lazy" />
       <div className="so-final-shade" />
-      <span>Issue 01</span>
       <h2>Well dressed.<br />Well lived.</h2>
       <p>Clothing for<br />the hours that<br />matter most.</p>
       <a href="#morning">Enter the collection <span>→</span></a>

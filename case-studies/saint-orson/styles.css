@@ -1570,7 +1570,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   align-items: end;
   overflow: hidden;
 }
-.so-final > img { position: absolute; inset: 0; height: 100%; object-fit: cover; object-position: center 48%; filter: grayscale(.5); }
+.so-final > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 22%; filter: grayscale(.5); }
 .so-final-shade { position: absolute; inset: 0; background: rgba(0,0,0,.52); }
 .so-final > *:not(img):not(.so-final-shade):not(span) { position: relative; z-index: 2; }
 .so-final > span { position: absolute; z-index: 2; top: 30px; left: 3%; color: var(--so-red); font: 500 10px/1 var(--so-mono); letter-spacing: .12em; text-transform: uppercase; }
@@ -1748,7 +1748,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .so-evening-card { left: 16px; right: 16px; bottom: 16px; width: auto; }
 
   .so-final { min-height: 380px; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; padding: 32px 18px; gap: 22px; }
-  .so-final > img { object-position: 60% center; }
+  .so-final > img { object-position: 60% 22%; }
   .so-final h2 { font-size: 44px; }
   .so-final > a { min-width: 0; width: 100%; }
   .so-footer { min-height: 76px; padding: 0 18px; }

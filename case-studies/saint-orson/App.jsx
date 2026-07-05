@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Loader } from '../../src/Loader.jsx';
@@ -405,6 +405,24 @@ function Journey() {
   const stripRef = useRef(null);
   const [activeLook, setActiveLook] = useState(3);
   const [stripIn, setStripIn] = useState(false);
+  const timerRef = useRef(0);
+  const inViewRef = useRef(false);
+  const hoverRef = useRef(false);
+
+  // The auto-cycle runs only while the section is in view AND no look is hovered.
+  // Pausing just clears the interval, so resuming continues from the current look.
+  const syncCycle = useCallback(() => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const shouldRun = !reduce && inViewRef.current && !hoverRef.current;
+    if (shouldRun && !timerRef.current) {
+      timerRef.current = window.setInterval(() => {
+        setActiveLook((current) => (current + 1) % LOOKS.length);
+      }, 2000);
+    } else if (!shouldRun && timerRef.current) {
+      window.clearInterval(timerRef.current);
+      timerRef.current = 0;
+    }
+  }, []);
 
   // Reveal the look cards the moment the strip enters view. IntersectionObserver
   // uses live geometry, so it fires reliably regardless of ScrollTrigger.refresh()
@@ -421,33 +439,18 @@ function Journey() {
   }, []);
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
     const section = sectionRef.current;
     if (!section) return undefined;
-
-    let timer = 0;
-    const stop = () => {
-      window.clearInterval(timer);
-      timer = 0;
-    };
-    const start = () => {
-      if (timer) return;
-      timer = window.setInterval(() => {
-        setActiveLook((current) => (current + 1) % LOOKS.length);
-      }, 2000);
-    };
-
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) start();
-      else stop();
+      inViewRef.current = entry.isIntersecting;
+      syncCycle();
     }, { threshold: 0.35 });
-
     observer.observe(section);
     return () => {
-      stop();
       observer.disconnect();
+      if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = 0; }
     };
-  }, []);
+  }, [syncCycle]);
 
   return (
     <section className="so-journey" id="journey" ref={sectionRef}>
@@ -466,7 +469,6 @@ function Journey() {
       <div className="so-journey-copy">
         <h2>En route</h2>
         <p>The in-between.<br />Moments that<br />move the day forward.</p>
-        <a href="#fit">Read the story <span>→</span></a>
       </div>
       <div className={`so-look-strip ${stripIn ? 'is-in' : ''}`} ref={stripRef}>
         {LOOKS.map((product, index) => (
@@ -474,7 +476,8 @@ function Journey() {
             key={product.slug}
             href={productHref(product.slug)}
             className={activeLook === index ? 'active' : ''}
-            onMouseEnter={() => setActiveLook(index)}
+            onMouseEnter={() => { setActiveLook(index); hoverRef.current = true; syncCycle(); }}
+            onMouseLeave={() => { hoverRef.current = false; syncCycle(); }}
           >
             <span className={`so-look-thumb look-${index + 1}`}>
               <img src={`${ASSET}${LOOK_IMAGE_BY_SLUG[product.slug] || product.shopImage}`} alt="" loading="lazy" />

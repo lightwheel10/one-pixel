@@ -339,7 +339,7 @@ function LookTicker() {
 
 const HERO_IMAGES = [
   { src: 'home/hero-v1.jpg', alt: 'Saint Orson model in a black roll neck and tailored trousers' },
-  { src: 'home/tailoring-v1.jpg', alt: 'Saint Orson tailor shaping an ivory linen jacket in the atelier' },
+  { src: 'home/morning-v1.jpg', alt: 'Woman in an ivory Saint Orson blazer suit with a silk scarf by a window' },
 ];
 
 function Hero() {
@@ -347,7 +347,7 @@ function Hero() {
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
-    const id = window.setInterval(() => setActive((current) => (current + 1) % HERO_IMAGES.length), 2000);
+    const id = window.setInterval(() => setActive((current) => (current + 1) % HERO_IMAGES.length), 4000);
     return () => window.clearInterval(id);
   }, []);
 

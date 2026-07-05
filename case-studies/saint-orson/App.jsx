@@ -402,7 +402,23 @@ function Morning() {
 
 function Journey() {
   const sectionRef = useRef(null);
+  const stripRef = useRef(null);
   const [activeLook, setActiveLook] = useState(3);
+  const [stripIn, setStripIn] = useState(false);
+
+  // Reveal the look cards the moment the strip enters view. IntersectionObserver
+  // uses live geometry, so it fires reliably regardless of ScrollTrigger.refresh()
+  // timing on this long, image-heavy page.
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setStripIn(true); return undefined; }
+    const strip = stripRef.current;
+    if (!strip) return undefined;
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setStripIn(true); io.disconnect(); }
+    }, { threshold: 0.18 });
+    io.observe(strip);
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
@@ -452,7 +468,7 @@ function Journey() {
         <p>The in-between.<br />Moments that<br />move the day forward.</p>
         <a href="#fit">Read the story <span>→</span></a>
       </div>
-      <div className="so-look-strip">
+      <div className={`so-look-strip ${stripIn ? 'is-in' : ''}`} ref={stripRef}>
         {LOOKS.map((product, index) => (
           <a
             key={product.slug}
@@ -1626,17 +1642,6 @@ export default function App() {
         ease: 'none',
         scrollTrigger: { trigger: '.so-journey', start: 'top bottom', end: 'bottom top', scrub: 1 },
       });
-      gsap.from('.so-look-strip > a', {
-        y: 30,
-        opacity: 0,
-        duration: 0.75,
-        stagger: 0.06,
-        ease: 'power3.out',
-        clearProps: 'transform,opacity',
-        scrollTrigger: { trigger: '.so-look-strip', start: 'top 90%', once: true },
-      });
-
-
       gsap.from('.so-discover-tile', {
         clipPath: 'inset(100% 0 0 0)',
         duration: 0.9,

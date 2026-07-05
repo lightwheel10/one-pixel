@@ -98,6 +98,22 @@ fbq('track', 'PageView');
 <!-- End Meta Pixel Code -->
 </head>
 <body>
+<!-- Paras · 2026-07-04: theme must be applied BEFORE first paint. React's useEffect in App.jsx
+     runs after the browser paints, so without this the first frame rendered the light theme
+     (and pre-CSS, plain white) before snapping to dark. This synchronous script mirrors the
+     localStorage logic in App.jsx exactly; the inline html background covers the gap before
+     styles.css loads and is cleared by App.jsx once CSS takes over. -->
+<script>
+(function () {
+  var dark = true;
+  try {
+    var saved = localStorage.getItem('onepixel-theme');
+    if (saved) dark = saved === 'dark';
+  } catch (e) {}
+  if (dark) document.body.classList.add('dark');
+  document.documentElement.style.background = dark ? '#0A0A0A' : '#F5F1EA';
+})();
+</script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=1319596419799499&ev=PageView&noscript=1"
 /></noscript>

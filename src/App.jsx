@@ -24,6 +24,9 @@ export default function App() {
 
   useEffect(() => {
     document.body.classList.toggle('dark', dark);
+    // index.html paints a pre-CSS inline background on <html> to prevent the first-frame
+    // flash; clear it here so the stylesheet's var(--bg) owns the color from now on.
+    document.documentElement.style.background = '';
     try { localStorage.setItem('onepixel-theme', dark ? 'dark' : 'light'); } catch (e) {}
   }, [dark]);
 

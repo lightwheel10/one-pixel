@@ -145,11 +145,13 @@ export const LOOK = {
   items: ['maheshwar-stole', 'kora-throw', 'tussar-scarf'],
 };
 
+// Each stage shows its own image in the "cloth within" section (placeholder mapping from the
+// existing photography — swap any IMG ref to change what a stage shows).
 export const WEAVE = [
-  { n: '01', label: 'Fibre',  text: 'Rain-fed kala cotton and wild tussar silk, grown without irrigation and hand-spun close to the field.' },
-  { n: '02', label: 'Colour', text: 'Indigo from the vat, madder from root, myrobalan from fruit. Every colour here was grown, never mixed in a lab.' },
-  { n: '03', label: 'Weave',  text: 'Pit looms and frame looms across four states. A little under a metre a day, by hand, by people we know.' },
-  { n: '04', label: 'Finish', text: 'Washed, pressed, and checked against the light. It reaches you soft, and only grows softer.' },
+  { n: '01', label: 'Fibre',  img: IMG.detailMacro, text: 'Rain-fed kala cotton and wild tussar silk, grown without irrigation and hand-spun close to the field.' },
+  { n: '02', label: 'Colour', img: IMG.maker2,      text: 'Indigo from the vat, madder from root, myrobalan from fruit. Every colour here was grown, never mixed in a lab.' },
+  { n: '03', label: 'Weave',  img: IMG.craftMain,   text: 'Pit looms and frame looms across four states. A little under a metre a day, by hand, by people we know.' },
+  { n: '04', label: 'Finish', img: IMG.foldedStack, text: 'Washed, pressed, and checked against the light. It reaches you soft, and only grows softer.' },
 ];
 
 // "Shop the room" — products placed as numbered hotspots over the interior photo (x/y in %)

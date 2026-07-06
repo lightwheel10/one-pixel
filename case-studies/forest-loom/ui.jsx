@@ -104,24 +104,19 @@ export function Header() {
               <button className="fl-burger" aria-label="Open menu" aria-expanded={menu} onClick={() => setMenu(true)}>
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M3 9h18M3 15h18" /></svg>
               </button>
-              <nav className="fl-nav" aria-label="Primary">
-                <a href="#/shop">Shop all</a>
-                <a href="#/shop/throws">Throws</a>
-                <a href="#/shop/wearables">To wear</a>
-                <a href="#/shop/home">Home</a>
-                <a href="#/story">Our cloth</a>
-              </nav>
+              <a href="#/" className="fl-logo">Forest <span>&amp;</span> Loom</a>
             </div>
 
-            <a href="#/" className="fl-logo">Forest <span>&amp;</span> Loom</a>
+            <nav className="fl-nav" aria-label="Primary">
+              <a href="#/">Home</a>
+              <a href="#/shop">Shop all</a>
+              <a href="#/story">Our cloth</a>
+            </nav>
 
             <div className="fl-utils">
               <button className="fl-util" aria-label="Search" onClick={() => setSearch(true)}>
                 <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.2-4.2" /></svg>
               </button>
-              <a href="#/account" className="fl-util fl-util-account" aria-label="Account">
-                <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4.5 20c0-3.6 3.4-5.5 7.5-5.5s7.5 1.9 7.5 5.5" /></svg>
-              </a>
               <button className="fl-util fl-util-bag" aria-label={`Bag, ${count} items`} onClick={() => setOpen(true)}>
                 <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M6.5 8h11l-1 11.5h-9L6.5 8z" /><path d="M9 8.5V6.5a3 3 0 0 1 6 0v2" /></svg>
                 {count > 0 && <span className="fl-util-count">{count}</span>}

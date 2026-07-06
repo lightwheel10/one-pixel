@@ -67,7 +67,7 @@ export function Home() {
         <div className="fl-hero-scrim" aria-hidden="true" />
 
         <div className="fl-hero-inner">
-          <span className="fl-hero-eyebrow">The Living Lookbook · Spring 2026</span>
+          <span className="fl-hero-eyebrow">Spring 2026</span>
           <h1 className="fl-hero-title"><span className="fl-hl">The</span><span className="fl-hl">Living</span><span className="fl-hl">Cloth</span></h1>
           <button className="fl-hero-scrollcue" onClick={() => goTo('look')}>Scroll</button>
         </div>
@@ -93,7 +93,7 @@ export function Home() {
                   <a href={'#/product/' + p.id} className="fl-look-name">{p.name}</a>
                   <span className="fl-look-price">{formatRupee(p.price)}</span>
                 </div>
-                <AddDot product={p} />
+                <a href={'#/product/' + p.id} className="fl-look-go" aria-label={`View ${p.name}`}>↗</a>
               </li>
             ))}
           </ul>
@@ -103,7 +103,11 @@ export function Home() {
 
       {/* ---- the weave (craft) ---- */}
       <section className="fl-weave fl-slash-down" id="weave">
-        <div className="fl-weave-media"><img src={IMG.craftMain} alt="Cloth on the loom" loading="lazy" /></div>
+        <div className="fl-weave-media">
+          {WEAVE.map((w, i) => (
+            <img key={w.n} src={w.img} alt={w.label} className={i === weave ? 'is-on' : ''} loading={i === 0 ? 'eager' : 'lazy'} />
+          ))}
+        </div>
         <div className="fl-weave-panel" data-reveal>
           <span className="fl-eyebrow fl-eyebrow-gold">The cloth within</span>
           <ol className="fl-weave-nav">
@@ -179,13 +183,6 @@ export function Home() {
         </div>
       </section>
     </div>
-  );
-}
-
-function AddDot({ product }) {
-  const { add } = useCart();
-  return (
-    <button className="fl-look-add" aria-label={`Add ${product.name} to bag`} onClick={() => add(product, product.base)}>+</button>
   );
 }
 

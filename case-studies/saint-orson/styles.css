@@ -594,6 +594,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   min-height: 92px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   border-right: 1px solid rgba(240,238,233,.12);
   color: rgba(240,238,233,.58);
@@ -673,7 +674,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
   border: 1px solid rgba(240,238,233,.14);
   background: #151511;
 }
-.so-collection-look-large { grid-column: 5 / 9; margin-top: 8vw; }
+/* Nudge the large look right so the sticky header's oversized wording (e.g. "COMPLETE")
+   clears it instead of almost touching. Desktop only; reset in the <=980px block below. */
+.so-collection-look-large { grid-column: 5 / 9; margin-top: 8vw; margin-left: clamp(28px, 3vw, 56px); }
 .so-collection-look img {
   width: 100%;
   height: 100%;
@@ -1644,6 +1647,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .so-collection-look-large {
     grid-column: span 6;
     margin-top: 0;
+    margin-left: 0;
   }
   .so-collection-pieces > div { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .so-collection-service { grid-template-columns: 1fr; }

@@ -996,7 +996,6 @@ function ProductPage({ product, onAdd }) {
   const [added, setAdded] = useState(false);
   const [openDetail, setOpenDetail] = useState('Composition');
   const [activeImage, setActiveImage] = useState(0);
-  const [zoomOpen, setZoomOpen] = useState(false);
   const [saved, setSaved] = useState(false);
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
   const [stickyVisible, setStickyVisible] = useState(false);
@@ -1037,65 +1036,24 @@ function ProductPage({ product, onAdd }) {
   }, [product.slug]);
 
   useEffect(() => {
-    const modalOpen = zoomOpen || sizeGuideOpen;
-    if (!modalOpen) return undefined;
+    if (!sizeGuideOpen) return undefined;
     const previous = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     const close = (event) => {
-      if (event.key === 'Escape') {
-        setZoomOpen(false);
-        setSizeGuideOpen(false);
-      }
+      if (event.key === 'Escape') setSizeGuideOpen(false);
     };
     window.addEventListener('keydown', close);
     return () => {
       document.body.style.overflow = previous;
       window.removeEventListener('keydown', close);
     };
-  }, [zoomOpen, sizeGuideOpen]);
+  }, [sizeGuideOpen]);
 
   useLayoutEffect(() => {
+    // No entrance animation on the page itself. The destination is revealed purely by the black
+    // route screen slowly fading out over it (see the route transition in App + styles.css), so
+    // the whole page eases into view together and nothing moves. Just land at the top.
     window.scrollTo({ top: 0, behavior: 'auto' });
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
-
-    const ctx = gsap.context(() => {
-      gsap.timeline()
-        .from('.so-pdp-primary img', { scale: 1.08, duration: 1.6, ease: 'power2.out' }, 0)
-        .from('.so-pdp-index, .so-pdp-back', { opacity: 0, y: 18, duration: .7, stagger: .1, ease: 'power2.out' }, .15)
-        .from('.so-pdp-buybox > *', { opacity: 0, y: 28, duration: .85, stagger: .07, ease: 'power3.out' }, .3);
-
-      gsap.to('.so-pdp-primary img', {
-        yPercent: 7,
-        ease: 'none',
-        scrollTrigger: { trigger: '.so-pdp-opening', start: 'top top', end: 'bottom top', scrub: .8 },
-      });
-
-      gsap.from('.so-pdp-detail-copy > *', {
-        y: 34, opacity: 0, duration: .9, stagger: .08, ease: 'power3.out',
-        scrollTrigger: { trigger: '.so-pdp-detail-story', start: 'top 72%', once: true },
-      });
-      gsap.from('.so-pdp-detail-photo', {
-        clipPath: 'inset(0 100% 0 0)', duration: 1.3, ease: 'power3.inOut',
-        scrollTrigger: { trigger: '.so-pdp-detail-story', start: 'top 72%', once: true },
-      });
-      gsap.from('.so-pdp-rear-photo', {
-        clipPath: 'inset(0 0 100% 0)', duration: 1.25, ease: 'power3.inOut',
-        scrollTrigger: { trigger: '.so-pdp-movement', start: 'top 72%', once: true },
-      });
-      gsap.from('.so-pdp-movement-copy > *', {
-        x: 36, opacity: 0, duration: .9, stagger: .08, ease: 'power3.out',
-        scrollTrigger: { trigger: '.so-pdp-movement', start: 'top 72%', once: true },
-      });
-      gsap.from('.so-review-grid article', {
-        y: 40, opacity: 0, duration: .85, stagger: .1, ease: 'power3.out',
-        scrollTrigger: { trigger: '.so-pdp-reviews', start: 'top 74%', once: true },
-      });
-      gsap.from('.so-pdp-related a', {
-        y: 42, opacity: 0, duration: .9, stagger: .1, ease: 'power3.out',
-        scrollTrigger: { trigger: '.so-pdp-related', start: 'top 76%', once: true },
-      });
-    }, root);
-    return () => ctx.revert();
   }, [product.slug]);
 
   const details = {
@@ -1112,17 +1070,18 @@ function ProductPage({ product, onAdd }) {
     <main className="so-pdp" ref={root}>
       <section className="so-pdp-opening">
         <a className="so-pdp-back" href="#/">← Back to Saint Orson</a>
-        <div className="so-pdp-index"><span>{product.category}</span></div>
         <div className="so-pdp-primary">
           <img src={`${ASSET}${product.images[activeImage]}`} alt={`${product.name} view ${activeImage + 1}`} />
-          <div className="so-pdp-thumbs" aria-label="Product images">
+
+          {/* (A + B) Thumbnail rail grouped in a frosted panel so it reads as a control,
+              not faint boxes floating on the photo. */}
+          <div className="so-pdp-thumbs" role="group" aria-label="Product views">
             {product.images.map((image, index) => (
-              <button key={image} className={activeImage === index ? 'active' : ''} onClick={() => setActiveImage(index)} aria-label={`Show image ${index + 1}`}>
+              <button key={image} className={activeImage === index ? 'active' : ''} onClick={() => setActiveImage(index)} aria-pressed={activeImage === index} aria-label={`Show image ${index + 1}`}>
                 <img src={`${ASSET}${image}`} alt="" />
               </button>
             ))}
           </div>
-          <button className="so-pdp-zoom" onClick={() => setZoomOpen(true)} aria-label="Zoom product image">⌕</button>
         </div>
         <aside className="so-pdp-buybox" id="pdp-purchase">
           <div className="so-pdp-buyhead">
@@ -1261,14 +1220,6 @@ function ProductPage({ product, onAdd }) {
         <div><span>{product.name}</span><b>{formatINR(product.price)}</b></div>
         <div><span>{color} · {size}</span><button onClick={addProduct}>{added ? 'Added ✓' : 'Add to bag'}</button></div>
       </div>
-
-      {zoomOpen && (
-        <div className="so-pdp-lightbox" role="dialog" aria-modal="true" aria-label={`${product.name} image viewer`}>
-          <button onClick={() => setZoomOpen(false)} aria-label="Close image viewer">×</button>
-          <img src={`${ASSET}${product.images[activeImage]}`} alt={`${product.name} enlarged view`} />
-          <div>{product.images.map((image, index) => <button key={image} className={activeImage === index ? 'active' : ''} onClick={() => setActiveImage(index)} aria-label={`Show image ${index + 1}`} />)}</div>
-        </div>
-      )}
 
       {sizeGuideOpen && (
         <div className="so-size-modal" role="dialog" aria-modal="true" aria-label="Size and fit guide">
@@ -1559,7 +1510,10 @@ export default function App() {
     // Under reduced motion the CSS overlay transition is instant, so don't sit on the cover
     // delay (it would just be a blank stall) — swap immediately. Otherwise keep the editorial timing.
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const coverDelay = reduce ? 0 : 460;
+    // The black screen fades in over .6s (coverDelay matches it), holds ~1.1s so the destination
+    // name is readable, then fades out over .9s to reveal the page (durations live in styles.css).
+    const coverDelay = reduce ? 0 : 600;
+    const holdDelay = reduce ? 0 : 1080;
     const onHash = () => {
       const next = window.location.hash;
       if (next === route) return;
@@ -1572,7 +1526,7 @@ export default function App() {
           const section = new URLSearchParams(next.split('?')[1] || '').get('section');
           window.setTimeout(() => document.getElementById(section || 'top')?.scrollIntoView(), 40);
         }
-        window.setTimeout(() => setTransitioning(false), reduce ? 0 : 80);
+        window.setTimeout(() => setTransitioning(false), holdDelay);
       }, coverDelay);
     };
     window.addEventListener('hashchange', onHash);

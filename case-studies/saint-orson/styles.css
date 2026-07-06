@@ -99,11 +99,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
   justify-content: flex-end;
   color: var(--so-paper);
   background: var(--so-black);
-  clip-path: inset(100% 0 0 0);
+  opacity: 0;
   pointer-events: none;
-  transition: clip-path .46s cubic-bezier(.76,0,.24,1);
+  /* Reveal (fade-out) runs slower than the cover (fade-in) for a softer, smoother landing. */
+  transition: opacity .9s cubic-bezier(.4, 0, .2, 1);
 }
-.so-route-transition.active { clip-path: inset(0 0 0 0); }
+.so-route-transition.active { opacity: 1; transition: opacity .6s cubic-bezier(.4, 0, .2, 1); }
 .so-route-transition > span {
   color: var(--so-red);
   font: 500 9px/1 var(--so-mono);
@@ -1204,7 +1205,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   grid-template-columns: minmax(0, 61%) minmax(380px, 39%);
   background: #d9d4cc;
 }
-.so-pdp-back, .so-pdp-index {
+.so-pdp-back {
   position: absolute;
   z-index: 5;
   top: 92px;
@@ -1214,7 +1215,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
   text-transform: uppercase;
 }
 .so-pdp-back { left: 30px; }
-.so-pdp-index { left: calc(61% - 185px); display: flex; gap: 30px; }
 .so-pdp-primary { position: relative; overflow: hidden; background: #c8c1b7; }
 .so-pdp-primary::after {
   content: '';
@@ -1228,40 +1228,44 @@ button, a { -webkit-tap-highlight-color: transparent; }
   color: white;
   font: 500 8px/1 var(--so-mono); letter-spacing: .13em; text-transform: uppercase;
 }
+/* (A + B) Thumbnail rail — grouped in a frosted panel with clearly bordered,
+   high-opacity tiles so it reads as an interactive control, not faint boxes. */
 .so-pdp-thumbs {
   position: absolute;
   z-index: 4;
-  left: 26px;
+  left: 22px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 10px;
+  border-radius: 3px;
+  background: rgba(22, 20, 18, .34);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, .24);
 }
 .so-pdp-thumbs button {
-  width: 54px;
-  height: 68px;
+  position: relative;
+  width: 58px;
+  height: 74px;
   overflow: hidden;
-  border: 1px solid transparent;
-  opacity: .65;
-  transition: opacity .25s, border-color .25s;
+  border: 1px solid rgba(255, 255, 255, .45);
+  border-radius: 2px;
+  opacity: .82;
+  cursor: pointer;
+  transition: opacity .25s, border-color .25s, transform .25s;
 }
-.so-pdp-thumbs button.active { opacity: 1; border-color: white; }
-.so-pdp-thumbs img { width: 100%; height: 100%; object-fit: cover; }
-.so-pdp-zoom {
-  position: absolute;
-  z-index: 4;
-  right: 24px;
-  bottom: 22px;
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(255,255,255,.65);
-  border-radius: 50%;
-  color: white;
-  font-size: 19px;
+.so-pdp-thumbs button:hover { opacity: 1; transform: translateY(-1px); }
+.so-pdp-thumbs button.active { opacity: 1; border-color: #fff; box-shadow: 0 0 0 1px #fff; }
+/* Coral marker on the active thumb, echoing the brand accent. */
+.so-pdp-thumbs button.active::after {
+  content: '';
+  position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+  background: var(--so-red);
 }
+.so-pdp-thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .so-pdp-buybox {
   position: relative;
   z-index: 2;
@@ -1524,18 +1528,13 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .so-pdp-sticky b { color: rgba(255,255,255,.65); }
 .so-pdp-sticky button { min-height: 44px; padding: 0 23px; color: white; background: var(--so-red); font: 500 8px/1 var(--so-mono); letter-spacing: .1em; text-transform: uppercase; }
 
-.so-pdp-lightbox, .so-size-modal {
+.so-size-modal {
   position: fixed;
   inset: 0;
   z-index: 9600;
   animation: so-modal-in .35s cubic-bezier(.2,.7,.2,1) both;
 }
-.so-pdp-lightbox { display: grid; place-items: center; color: white; background: rgba(5,5,5,.97); }
-.so-pdp-lightbox > button, .so-modal-close { position: absolute; top: 22px; right: 26px; z-index: 2; font-size: 25px; }
-.so-pdp-lightbox > img { width: min(82vw, 1050px); height: min(84vh, 900px); object-fit: contain; }
-.so-pdp-lightbox > div { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); display: flex; gap: 18px; }
-.so-pdp-lightbox > div button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,.35); transition: background .25s, transform .25s; }
-.so-pdp-lightbox > div button.active { background: var(--so-red); transform: scale(1.25); }
+.so-modal-close { position: absolute; top: 22px; right: 26px; z-index: 2; font-size: 25px; }
 .so-size-modal {
   left: auto;
   width: min(560px, 100%);
@@ -1667,7 +1666,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .so-studio-handwork > img { min-height: 460px; }
 
   .so-pdp-opening { grid-template-columns: 56% 44%; }
-  .so-pdp-index { display: none; }
   .so-pdp-buybox { padding: 105px 30px 38px; }
   .so-pdp-buybox h1 { font-size: clamp(48px, 6vw, 68px); }
   .so-pdp-detail-story, .so-pdp-movement { min-height: 760px; }
@@ -1902,9 +1900,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .so-pdp-back { top: 76px; left: 18px; }
   .so-pdp-primary { height: 84svh; min-height: 620px; }
   .so-pdp-primary img { height: 108%; object-position: center 16%; }
-  .so-pdp-thumbs { left: 14px; top: auto; bottom: 18px; transform: none; flex-direction: row; }
-  .so-pdp-thumbs button { width: 42px; height: 54px; }
-  .so-pdp-zoom { right: 16px; bottom: 20px; }
+  .so-pdp-thumbs { left: 14px; top: auto; bottom: 16px; transform: none; flex-direction: row; padding: 7px; gap: 6px; }
+  .so-pdp-thumbs button { width: 44px; height: 56px; }
   .so-pdp-buybox { padding: 48px 20px 38px; }
   .so-pdp-buybox h1 { font-size: clamp(52px, 16vw, 74px); }
   .so-pdp-lede { font-size: 17px; }

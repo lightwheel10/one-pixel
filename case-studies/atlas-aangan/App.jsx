@@ -263,22 +263,21 @@ function Process() {
   const processAssets = ['process-discover-3d.webp', 'process-design-3d.webp', 'process-book-3d.webp', 'process-support-3d.webp'];
   return (
     <section className="aa-section aa-process" id="process">
-      <div className="aa-process-copy reveal">
+      <div className="aa-process-head reveal">
+        <p className="aa-kicker">How we plan</p>
         <h2>Planning that removes the guesswork.</h2>
         <p>We turn a loose idea into a route you can trust, then stay close until you are back home.</p>
-        <img className="aa-process-art" src={homeAsset('process-route-3d.webp')} alt="" loading="lazy" aria-hidden="true" />
       </div>
-      <div className="aa-process-grid">
+      <ol className="aa-process-steps">
         {process.map(([title, copy], index) => (
-          <article className="reveal" key={title}>
-            <img className="aa-process-card-art" src={homeAsset(processAssets[index])} alt="" loading="lazy" aria-hidden="true" />
-            <div>
-              <h3>{title}</h3>
-              <p>{copy}</p>
-            </div>
-          </article>
+          <li className="aa-process-step reveal" key={title}>
+            <span className="aa-process-num">{String(index + 1).padStart(2, '0')}</span>
+            <span className="aa-process-icon"><img src={homeAsset(processAssets[index])} alt="" loading="lazy" aria-hidden="true" /></span>
+            <h3>{title}</h3>
+            <p>{copy}</p>
+          </li>
         ))}
-      </div>
+      </ol>
     </section>
   );
 }
@@ -797,8 +796,8 @@ function HomePage() {
       <Stats />
       <Destinations />
       <Process />
-      <TrustStrip />
       <PlannerNote />
+      <TrustStrip />
     </>
   );
 }

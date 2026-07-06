@@ -19,6 +19,10 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { background: var(--bg); color: var(--ink); }
+/* Reserve the scrollbar gutter so releasing the intro loader's scroll lock
+   (Loader.jsx toggles body overflow) doesn't reflow the page when the
+   scrollbar reappears on classic-scrollbar platforms. */
+html { scrollbar-gutter: stable; }
 body {
   font-family: var(--body);
   font-size: 17px;

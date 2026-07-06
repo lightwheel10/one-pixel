@@ -127,13 +127,9 @@ function Header() {
       <nav className={open ? 'atlas-nav is-open' : 'atlas-nav'} onClick={() => setOpen(false)}>
         <a href="#atlas">Atlas</a>
         <a href="#projects">Projects</a>
-        <a href="#technology">Technology</a>
-        <a href="#operations">Operations</a>
-        <a href="#impact">Impact</a>
         <a href="#about">About</a>
       </nav>
-      <p className="header-coordinate">Engineered in India<br />25.1025 N / 72.5724 E</p>
-      <span className="compass" aria-hidden="true">+</span>
+      <p className="header-coordinate">Made in India<br />25.1025 N / 72.5724 E</p>
     </header>
   );
 }
@@ -150,20 +146,15 @@ function Hero() {
           <p className="mono-label">The energy atlas</p>
           <h1>India,<br />turned<br />toward<br />the sun<span>.</span></h1>
           <p className="hero-summary">Solar infrastructure that powers growth for generations.</p>
-          <a href="#atlas" className="scroll-link"><i /> Scroll to explore <b /></a>
+          <a href="#atlas" className="scroll-link"><i /> Scroll to explore</a>
         </div>
         <footer><span>Project 01 / Rajasthan</span><span>27.2330 N / 73.8050 E</span></footer>
       </article>
-      <div className="hero-annotation">
-        <span>02</span>
-        <p>Built for<br />high irradiance.<br />Built to last.</p>
-      </div>
       <div className="hero-stats">
         <span>Capacity under management<strong>1.8 GW+</strong></span>
         <span>Projects<strong>23</strong></span>
         <span>States<strong>8</strong></span>
       </div>
-      <div className="energy-line hero-line"><i /><b /><em /></div>
     </section>
   );
 }
@@ -254,9 +245,13 @@ function Technology() {
   return (
     <section className="technology atlas-section" id="technology">
       <div className="technology-sticky">
-        <div className="technology-copy">
+        <div className="technology-head">
           <p className="mono-label">Engineered to perform</p>
-          <h2>Built in layers.<br />Built to last<span>.</span></h2>
+          <h2>Built in layers. Built to last<span>.</span></h2>
+        </div>
+
+        <div className="technology-row">
+        <div className="technology-copy">
           <ol>
             {assemblySteps.map(([number, title, copy]) => (
               <li className="technology-step" key={title}>
@@ -294,7 +289,7 @@ function Technology() {
           ))}
           <footer>Quality. Every layer.<br />Performance. Every day.</footer>
         </div>
-        <div className="energy-line technology-line"><i /><b /><em /></div>
+        </div>
       </div>
     </section>
   );
@@ -319,23 +314,26 @@ function Operations() {
         </div>
       </section>
       <section className="fieldwork atlas-section">
-        <div className="fieldwork-title reveal">
+        <div className="fieldwork-head reveal">
           <p className="mono-label">Engineering & maintenance</p>
-          <h2>Human<br />intelligence.<br />Machine<br />precision<span>.</span></h2>
+          <p className="fieldwork-note">People. Processes. Performance.</p>
         </div>
         <div className="fieldwork-grid">
-          {[
-            ['Engineering', 'In-house design, yield modelling and detailed engineering.', '/case-studies/karya/images/field-engineering.webp'],
-            ['Monitoring', '24/7 remote monitoring and AI-driven analysis.'],
-            ['Maintenance', 'Preventive maintenance programs for maximum uptime.', '/case-studies/karya/images/field-maintenance.webp'],
-          ].map(([title, copy, image]) => (
-            <article className="field-card reveal" key={title}>
-              <ImageBox label={`${title} at a Karya Solar site`} note="Indian solar operations team" src={image} />
-              <div><strong>{title}</strong><p>{copy}</p></div>
-            </article>
-          ))}
+          <div className="fieldwork-phrase reveal">
+            <h2>Human<br />intelligence<span>.</span></h2>
+          </div>
+          <article className="field-card reveal">
+            <ImageBox label="Engineering at a Karya Solar site" note="Indian solar operations team" src="/case-studies/karya/images/field-engineering.webp" />
+            <div><strong>Engineering</strong><p>In-house design, yield modelling and detailed engineering.</p></div>
+          </article>
+          <div className="fieldwork-phrase reveal">
+            <h2>Machine<br />precision<span>.</span></h2>
+          </div>
+          <article className="field-card reveal">
+            <ImageBox label="Maintenance at a Karya Solar site" note="Indian solar operations team" src="/case-studies/karya/images/field-maintenance.webp" />
+            <div><strong>Maintenance</strong><p>Preventive maintenance programs for maximum uptime.</p></div>
+          </article>
         </div>
-        <p className="fieldwork-note reveal">People.<br />Processes.<br />Performance.</p>
       </section>
     </>
   );
@@ -473,18 +471,12 @@ export default function App() {
         stagger: 0.06,
         ease: 'power3.out',
       });
-      gsap.from('.hero-statement', { y: 35, opacity: 0, duration: 1, delay: 0.2, ease: 'power3.out' });
-      gsap.from('.hero-annotation, .hero-stats', { opacity: 0, duration: 0.8, delay: 0.55, stagger: 0.12 });
+      gsap.from('.hero-stats', { opacity: 0, duration: 0.8, delay: 0.55 });
 
-      gsap.utils.toArray('.reveal').forEach((element) => {
-        gsap.from(element, {
-          y: 30,
-          opacity: 0,
-          duration: 0.8,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: element, start: 'top 90%', once: true },
-        });
-      });
+      // .reveal elements are handled by the CSS + IntersectionObserver system
+      // (html.js-reveal .reveal -> .is-in). GSAP must not also animate their
+      // opacity/transform, or its inline styles clobber the CSS reveal and the
+      // elements get stuck invisible.
 
       gsap.utils.toArray('.energy-line').forEach((line) => {
         if (line.classList.contains('technology-line')) return;
@@ -650,7 +642,8 @@ export default function App() {
         video.addEventListener('loadedmetadata', primeVideo, { once: true });
         primeVideo();
 
-        gsap.set('.technology-copy .mono-label, .technology-copy h2', { opacity: 0, y: 24 });
+        // Heading is revealed by its own on-enter trigger (see media.add below), not the
+        // scrub, so it shows first instead of leaving a blank pinned screen.
         gsap.set(steps, { opacity: 0, y: 12 });
         gsap.set('.assembly-grid', { opacity: 0, scale: 0.96 });
         gsap.set(video, { opacity: 0, y: 30, scale: 0.96 });
@@ -658,14 +651,11 @@ export default function App() {
         gsap.set('.assembly-progress', { opacity: 0 });
         gsap.set('.assembly-progress i', { scaleX: 0, transformOrigin: 'left center' });
         gsap.set('.performance > div, .performance footer', { opacity: 0, x: 18 });
-        gsap.set('.technology-line', { scaleX: 0, transformOrigin: 'left center' });
 
         timeline
           .to('.assembly-grid', { opacity: 1, scale: 1, duration: 0.45, ease: 'power2.out' }, 0)
-          .to('.technology-copy .mono-label', { opacity: 1, y: 0, duration: 0.34, ease: 'power2.out' }, 0.12)
-          .to('.technology-copy h2', { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, 0.28)
-          .to(video, { opacity: 1, y: 0, scale: 1, duration: 0.62, ease: 'power2.out' }, 0.52)
-          .to('.assembly-progress', { opacity: 1, duration: 0.25 }, 0.78);
+          .to(video, { opacity: 1, y: 0, scale: 1, duration: 0.62, ease: 'power2.out' }, 0.2)
+          .to('.assembly-progress', { opacity: 1, duration: 0.25 }, 0.5);
 
         timeline.to(playhead, {
           time: duration,
@@ -689,16 +679,17 @@ export default function App() {
 
         timeline
           .to(steps, { opacity: 0.62, duration: 0.35 }, introDuration + 9.5)
-          .to(labels, { opacity: 0, duration: 0.2 }, introDuration + 9.62)
-          .to('.performance > div', {
-            opacity: 1,
-            x: 0,
-            duration: 0.42,
-            stagger: 0.16,
-            ease: 'power2.out',
-          }, introDuration + 9.45)
-          .to('.performance footer', { opacity: 1, x: 0, duration: 0.42, ease: 'power2.out' }, introDuration + 10.05)
-          .to('.technology-line', { scaleX: 1, duration: 0.7, ease: 'power2.inOut' }, introDuration + 9.85);
+          .to(labels, { opacity: 0, duration: 0.2 }, introDuration + 9.62);
+
+        // Reveal the performance stats one at a time as the user scrolls, spread across
+        // the scrub, rather than all at once near the end.
+        const perfItems = gsap.utils.toArray('.performance > div');
+        const perfTimes = [1.6, 3.4, 5.2, 7.0];
+        perfItems.forEach((item, i) => {
+          timeline.to(item, { opacity: 1, x: 0, duration: 0.55, ease: 'power2.out' },
+            introDuration + (perfTimes[i] ?? (1.6 + i * 1.8)));
+        });
+        timeline.to('.performance footer', { opacity: 1, x: 0, duration: 0.55, ease: 'power2.out' }, introDuration + 8.7);
 
         return () => {
           video.removeEventListener('loadedmetadata', primeVideo);
@@ -712,7 +703,7 @@ export default function App() {
         if (!video) return null;
 
         video.pause();
-        gsap.set('.technology-copy .mono-label, .technology-copy h2', { opacity: 0, y: 20 });
+        gsap.set('.technology-head .mono-label, .technology-head h2', { opacity: 0, y: 20 });
         gsap.set(steps, { opacity: 0, y: 12 });
         gsap.set('.assembly-grid', { opacity: 0, scale: 0.98 });
         gsap.set(video, { opacity: 0, y: 18, scale: 0.98 });
@@ -738,8 +729,8 @@ export default function App() {
         });
 
         timeline
-          .to('.technology-copy .mono-label', { opacity: 1, y: 0, duration: 0.28, ease: 'power2.out' }, 0)
-          .to('.technology-copy h2', { opacity: 1, y: 0, duration: 0.48, ease: 'power3.out' }, 0.1)
+          .to('.technology-head .mono-label', { opacity: 1, y: 0, duration: 0.28, ease: 'power2.out' }, 0)
+          .to('.technology-head h2', { opacity: 1, y: 0, duration: 0.48, ease: 'power3.out' }, 0.1)
           .to(steps, { opacity: 1, y: 0, duration: 0.38, stagger: 0.06, ease: 'power2.out' }, 0.24)
           .to('.assembly-grid', { opacity: 1, scale: 1, duration: 0.36, ease: 'power2.out' }, 0.28)
           .to(video, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power2.out' }, 0.34)
@@ -752,6 +743,13 @@ export default function App() {
       };
 
       media.add('(min-width: 901px)', () => {
+        // Reveal the heading the moment the section enters view — before it pins and
+        // independent of the scrub — so it shows first and the pinned screen is never blank.
+        gsap.set('.technology-head .mono-label, .technology-head h2', { opacity: 0, y: 24 });
+        gsap.timeline({ scrollTrigger: { trigger: '.technology', start: 'top 78%', once: true } })
+          .to('.technology-head .mono-label', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 0)
+          .to('.technology-head h2', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.12);
+
         return buildAssemblyTimeline({
           trigger: '.technology',
           start: 'top top',

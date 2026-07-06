@@ -23,6 +23,7 @@ html {
   background: var(--color-base);
   scroll-behavior: smooth;
   scroll-padding-top: 96px;
+  scrollbar-gutter: stable;
 }
 
 body {

@@ -21,6 +21,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: var(--opx-h);
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -73,7 +74,6 @@ p {
 .section-heading,
 .header-coordinate,
 .hero-stats,
-.hero-annotation,
 .project-card,
 .performance,
 .map-stats,
@@ -151,12 +151,13 @@ h2 span {
   right: 0;
   left: 0;
   display: grid;
-  grid-template-columns: 1.2fr 2.8fr 1fr auto;
+  grid-template-columns: 1.2fr 2.8fr 1fr;
   align-items: center;
   min-height: 66px;
   padding: 0 var(--pad);
   border-bottom: 1px solid var(--line);
   background: var(--paper);
+  color: var(--ink);
 }
 
 .atlas-brand {
@@ -164,22 +165,6 @@ h2 span {
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-}
-
-.atlas-brand span {
-  position: relative;
-}
-
-.atlas-brand span::after {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--amber);
-  content: '';
-  transform: translate(-50%, -50%);
 }
 
 .atlas-nav {
@@ -226,18 +211,6 @@ h2 span {
   font-size: 8px;
   line-height: 1.6;
   text-transform: uppercase;
-}
-
-.compass {
-  display: grid;
-  width: 30px;
-  height: 30px;
-  margin-left: 22px;
-  place-items: center;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  color: var(--amber);
-  font-family: 'DM Mono', monospace;
 }
 
 .menu-button {
@@ -410,7 +383,17 @@ h2 span {
   height: 28px;
   border: 1px solid var(--line);
   border-radius: 50%;
-  transition: border-color 220ms ease, transform 220ms ease;
+  transition: border-color 220ms ease;
+  animation: karya-scroll-bob 1.6s ease-in-out infinite;
+}
+
+@keyframes karya-scroll-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-link i { animation: none; }
 }
 
 .scroll-link i::after {
@@ -425,26 +408,12 @@ h2 span {
   transform: translateX(-50%) rotate(45deg);
 }
 
-.scroll-link b {
-  width: 62px;
-  height: 1px;
-  background: var(--line);
-  transform-origin: left center;
-  transition: background 220ms ease, transform 220ms ease;
-}
-
 .scroll-link:hover {
   color: var(--amber);
 }
 
 .scroll-link:hover i {
   border-color: var(--amber);
-  transform: translateY(3px);
-}
-
-.scroll-link:hover b {
-  background: var(--amber);
-  transform: scaleX(1.18);
 }
 
 .hero-statement footer {
@@ -459,22 +428,6 @@ h2 span {
   font-family: 'DM Mono', monospace;
   font-size: 8px;
   text-transform: uppercase;
-}
-
-.hero-annotation {
-  position: absolute;
-  z-index: 3;
-  top: 250px;
-  right: 12%;
-  display: flex;
-  gap: 28px;
-  font-size: 10px;
-  line-height: 1.7;
-  text-transform: uppercase;
-}
-
-.hero-annotation span {
-  color: var(--amber);
 }
 
 .hero-stats {
@@ -498,6 +451,35 @@ h2 span {
   margin-top: 9px;
   font-size: 18px;
   font-weight: 400;
+}
+
+/* Bigger screens: collapse the hero into a single viewport so the card,
+   annotation and the bottom stats row are all visible without scrolling.
+   Sizing is height-aware (vh) so it holds from short laptops to tall desktops.
+   Phones/tablets keep the taller stacked layout via the max-width blocks. */
+@media (min-width: 1051px) {
+  .atlas-hero {
+    min-height: calc(100vh - var(--opx-h));
+  }
+
+  .hero-statement {
+    min-height: 0;
+    height: min(650px, calc(100vh - var(--opx-h) - 66px - clamp(96px, 13vh, 150px)));
+    margin-top: clamp(20px, 5vh, 74px);
+  }
+
+  .hero-copy {
+    padding: clamp(24px, 4vh, 48px) clamp(30px, 2.6vw, 40px) clamp(64px, 8vh, 92px);
+  }
+
+  .hero-copy h1 {
+    margin-bottom: clamp(12px, 2.4vh, 32px);
+    font-size: clamp(44px, min(5.2vw, 7.6vh), 86px);
+  }
+
+  .scroll-link {
+    margin-top: clamp(16px, 3vh, 48px);
+  }
 }
 
 .energy-line {
@@ -531,14 +513,6 @@ h2 span {
   left: 100%;
 }
 
-.hero-line {
-  top: 66px;
-  left: 25.7%;
-  width: 52.3%;
-  transform: rotate(90deg);
-  transform-origin: left;
-}
-
 .atlas-section {
   padding: 42px var(--pad);
   border-bottom: 1px solid var(--line);
@@ -556,7 +530,7 @@ h2 span {
 
 .technology h2,
 .map-copy h2,
-.fieldwork-title h2,
+.fieldwork-phrase h2,
 .impact h2 {
   margin: 0;
   font-size: clamp(42px, 4vw, 68px);
@@ -912,18 +886,37 @@ h2 span {
 
 .technology-sticky {
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(190px, 0.88fr) minmax(430px, 1.9fr) minmax(150px, 0.68fr);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   min-height: 100svh;
-  gap: clamp(22px, 3vw, 52px);
-  align-items: center;
+  gap: clamp(30px, 4.5vh, 60px);
   padding: 54px var(--pad);
   overflow: hidden;
   background: var(--paper);
 }
 
+/* Heading sits centered on its own line at the top; the build steps, video and
+   performance reveal beneath it in a top-aligned row. */
+.technology-head {
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.technology-head h2 {
+  white-space: nowrap;
+}
+
+.technology-row {
+  display: grid;
+  grid-template-columns: minmax(190px, 0.88fr) minmax(430px, 1.9fr) minmax(150px, 0.68fr);
+  gap: clamp(22px, 3vw, 52px);
+  align-items: start;
+}
+
 .technology-copy ol {
-  margin: 35px 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
@@ -1002,6 +995,14 @@ h2 span {
   border-bottom: 1px solid var(--line);
 }
 
+/* Align the first performance row's text with the first build step on the left
+   (desktop row only; mobile lays performance out as a 2-column grid). */
+@media (min-width: 901px) {
+  .technology-row .performance > div:first-child {
+    padding-top: 0;
+  }
+}
+
 .performance > div > span {
   color: var(--amber);
 }
@@ -1024,12 +1025,6 @@ h2 span {
   font-size: 9px;
   line-height: 1.7;
   text-transform: uppercase;
-}
-
-.technology-line {
-  right: 7%;
-  bottom: 8%;
-  width: 16%;
 }
 
 .operations-map {
@@ -1110,17 +1105,31 @@ h2 span {
 }
 
 .fieldwork {
-  display: grid;
-  grid-template-columns: 0.8fr 2.3fr 0.55fr;
-  gap: 12px;
   padding-top: 50px;
   padding-bottom: 50px;
 }
 
+.fieldwork-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  margin-bottom: clamp(30px, 4.5vh, 56px);
+}
+
+/* Alternating rhythm: phrase, image, phrase, image. Reads across as
+   "Human intelligence. Machine precision." punctuated by the two site photos. */
 .fieldwork-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 7px;
+  grid-template-columns: 0.9fr 1fr 0.9fr 1fr;
+  gap: clamp(16px, 1.9vw, 38px);
+  align-items: center;
+}
+
+.fieldwork-phrase h2 {
+  margin: 0;
+  font-size: clamp(32px, 3.1vw, 54px);
+  line-height: 0.98;
 }
 
 .field-card {
@@ -1162,13 +1171,14 @@ h2 span {
 }
 
 .fieldwork-note {
-  align-self: end;
-  padding: 0 0 28px 15px;
+  margin: 0;
+  padding-left: 14px;
   border-left: 1px solid var(--amber);
   font-family: 'DM Mono', monospace;
   font-size: 9px;
-  line-height: 1.8;
+  line-height: 1.6;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .impact {
@@ -1484,10 +1494,6 @@ h2 span {
     grid-column: 2;
   }
 
-  .compass {
-    display: none;
-  }
-
   .manifesto {
     grid-template-columns: minmax(150px, 0.72fr) minmax(360px, 1.65fr) minmax(150px, 0.72fr);
   }
@@ -1541,7 +1547,7 @@ h2 span {
     min-height: 210px;
   }
 
-  .technology-sticky {
+  .technology-row {
     grid-template-columns: minmax(175px, 0.75fr) minmax(410px, 1.65fr) minmax(140px, 0.62fr);
     gap: 24px;
   }
@@ -1567,12 +1573,9 @@ h2 span {
     padding: 25px 0 0;
   }
 
-  .fieldwork {
-    grid-template-columns: 0.7fr 2fr;
-  }
-
-  .fieldwork-note {
-    grid-column: 1 / 3;
+  .fieldwork-grid {
+    grid-template-columns: 0.9fr 1fr;
+    gap: clamp(20px, 3vw, 40px) clamp(20px, 2.4vw, 38px);
   }
 
   .impact {
@@ -1595,6 +1598,19 @@ h2 span {
     min-height: 0;
     padding: 64px var(--pad);
     overflow: visible;
+  }
+
+  .technology-row {
+    display: block;
+  }
+
+  .technology-head {
+    margin-bottom: 40px;
+    text-align: left;
+  }
+
+  .technology-head h2 {
+    white-space: normal;
   }
 
   .technology-copy {
@@ -1623,10 +1639,6 @@ h2 span {
 
   .performance footer {
     grid-column: 1 / 3;
-  }
-
-  .technology-line {
-    display: none;
   }
 }
 
@@ -1658,9 +1670,7 @@ h2 span {
     font-size: clamp(54px, 15vw, 72px);
   }
 
-  .hero-annotation,
-  .vertical-label,
-  .hero-line {
+  .vertical-label {
     display: none;
   }
 
@@ -1725,27 +1735,15 @@ h2 span {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .fieldwork {
-    grid-template-columns: 1fr;
+  .fieldwork-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
 
   .fieldwork-grid {
-    display: flex;
-    margin-right: calc(var(--pad) * -1);
-    padding-right: var(--pad);
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .field-card {
-    min-width: 76vw;
-    scroll-snap-align: start;
-  }
-
-  .fieldwork-note {
-    grid-column: auto;
+    grid-template-columns: 1fr;
+    gap: clamp(22px, 5vw, 40px);
   }
 
   .impact-ledger {
@@ -1887,7 +1885,7 @@ body::after {
 .manifesto-head h2,
 .technology h2,
 .map-copy h2,
-.fieldwork-title h2,
+.fieldwork-phrase h2,
 .impact h2,
 .closing-copy h2 { text-wrap: balance; }
 .hero-summary,

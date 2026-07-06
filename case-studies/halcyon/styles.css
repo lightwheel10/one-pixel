@@ -22,6 +22,9 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
+/* Reserve the scrollbar gutter so the page doesn't reflow when the intro
+   loader releases its scroll lock and the scrollbar reappears. */
+html { scrollbar-gutter: stable; }
 /* NB: no `scroll-behavior: smooth` here — it conflicts with GSAP ScrollTrigger
    pinning (causes jumpy entry/exit on the pinned "Record" reel). */
 body {

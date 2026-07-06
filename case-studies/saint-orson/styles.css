@@ -759,26 +759,18 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .so-collection-piece:hover img { transform: scale(1.045); }
 .so-collection-piece > div {
   padding-top: 16px;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 10px 16px;
-  align-items: baseline;
-}
-.so-collection-piece span {
-  color: var(--so-red);
-  font: 500 8px/1 var(--so-mono);
-  letter-spacing: .12em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
 }
 .so-collection-piece h3 {
   font: 400 clamp(24px, 2vw, 36px)/1 var(--so-serif);
 }
 .so-collection-piece strong {
-  grid-column: 2;
   font: 500 10px/1 var(--so-mono);
 }
 .so-collection-piece button {
-  grid-column: 2;
-  justify-self: start;
   margin-top: 4px;
   padding-bottom: 5px;
   border-bottom: 1px solid var(--so-ink);

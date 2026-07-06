@@ -761,13 +761,12 @@ function CollectionPage({ onAdd }) {
           <h2>Eight decisive entries.</h2>
         </header>
         <div>
-          {railProducts.map((product, index) => (
+          {railProducts.map((product) => (
             <article className="so-collection-piece" key={product.slug}>
               <a href={productHref(product.slug)}>
                 <img src={`${ASSET}${product.shopImage}`} alt={product.name} loading="lazy" style={{ objectPosition: product.shopPosition }} />
               </a>
               <div>
-                <span>{String(index + 1).padStart(2, '0')}</span>
                 <h3><a href={productHref(product.slug)}>{product.name}</a></h3>
                 <strong>{formatINR(product.price)}</strong>
                 <button type="button" onClick={() => onAdd(product)}>Add to bag</button>

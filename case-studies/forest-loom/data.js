@@ -141,7 +141,6 @@ export const HERO_SLIDES = [IMG.heroMain, IMG.heroAlt, IMG.heroC, IMG.heroD];
 
 export const LOOK = {
   title: 'Modern heritage,\nnatural ease.',
-  label: 'Look 01',
   items: ['maheshwar-stole', 'kora-throw', 'tussar-scarf'],
 };
 

@@ -83,7 +83,6 @@ export function Home() {
       <section className="fl-look fl-slash-up" id="look">
         <div className="fl-look-media"><img src={IMG.lookMain} alt="A look from the collection" loading="lazy" /></div>
         <div className="fl-look-panel" data-reveal>
-          <span className="fl-eyebrow">{LOOK.label}</span>
           <h2 className="fl-h2">{LOOK.title.split('\n').map((t, i) => <span key={i}>{t}<br /></span>)}</h2>
           <ul className="fl-look-list">
             {lookItems.map((p) => (

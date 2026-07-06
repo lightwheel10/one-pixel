@@ -243,9 +243,7 @@ export function Footer() {
           </div>
           <div className="fl-foot-col">
             <span className="fl-flabel">The house</span>
-            <a href="#/about">About us</a>
             <a href="#/story">Our cloth</a>
-            <a href="#/story">The makers</a>
             <a href="#/contact">Contact us</a>
           </div>
           <div className="fl-foot-col">

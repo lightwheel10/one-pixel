@@ -838,7 +838,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 .so-shop-filter {
   position: sticky;
-  top: 0;
+  /* Pin below the fixed OnePixel bar, not behind it. --so-opx-h is the single source of truth
+     for that bar's height (also used by body padding + .so-header), so this stays in sync. */
+  top: var(--so-opx-h);
   z-index: 20;
   min-height: 64px;
   padding: 0 clamp(20px, 4vw, 64px);

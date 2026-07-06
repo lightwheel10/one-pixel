@@ -24,7 +24,7 @@ function OpxBar() {
 }
 
 // Faint multi-strike lightning as a section backdrop ("the current" running through the page).
-function SectionLightning({ opacity = 0.3, bolts = 2, intensity = 0.24, speed = 1.3 }) {
+function SectionLightning({ opacity = 0.3, bolts = 2, intensity = 0.168, speed = 1.3 }) {
   return (
     <div className="absolute inset-0 z-0 pointer-events-none" style={{ opacity }} aria-hidden="true">
       <Lightning hue={248} bolts={bolts} speed={speed} intensity={intensity} size={2} />
@@ -196,7 +196,7 @@ function CopyCommand({ cmd }) {
 function CallToAction() {
   return (
     <section className="relative py-28 px-4 sm:px-6 lg:px-8 overflow-hidden border-t border-white/10">
-      <SectionLightning opacity={0.4} bolts={2} intensity={0.26} />
+      <SectionLightning opacity={0.4} bolts={2} intensity={0.182} />
       <div className="absolute top-0 left-0 right-0 z-10 pv-current" aria-hidden="true" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[760px] h-[360px] bg-electric/10 blur-[120px] z-0" aria-hidden="true" />
       <Reveal className="relative z-10 max-w-3xl mx-auto text-center">

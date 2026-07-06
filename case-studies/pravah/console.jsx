@@ -198,7 +198,7 @@ export function Console() {
   return (
     <section id="console" className="relative overflow-hidden border-y border-white/10 py-24 px-4 sm:px-6 lg:px-8">
       <div className="absolute inset-0 z-0 pointer-events-none" style={{ opacity: 0.14 }} aria-hidden="true">
-        <Lightning hue={248} bolts={2} speed={1.1} intensity={0.22} size={2} />
+        <Lightning hue={248} bolts={2} speed={1.1} intensity={0.154} size={2} />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto">

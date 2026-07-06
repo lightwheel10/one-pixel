@@ -425,7 +425,7 @@ export const HeroSection = () => {
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-black"></div>
         <div className="absolute inset-0 opacity-70">
-          <Lightning hue={248} bolts={3} xOffset={0} speed={1.4} intensity={0.28} size={2} />
+          <Lightning hue={248} bolts={3} xOffset={0} speed={1.4} intensity={0.196} size={2} />
         </div>
         <div className="pv-floor"></div>
         <div className="absolute bottom-[52%] left-0 right-0 h-px bg-gradient-to-r from-transparent via-electric/40 to-transparent"></div>

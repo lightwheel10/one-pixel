@@ -40,7 +40,7 @@ export function Regions() {
   return (
     <section id="regions" className="relative overflow-hidden border-y border-white/10 py-24 px-4 sm:px-6 lg:px-8 pv-dots">
       <div className="absolute inset-0 z-0 pointer-events-none" style={{ opacity: 0.16 }} aria-hidden="true">
-        <Lightning hue={248} bolts={2} speed={1.2} intensity={0.24} size={2} />
+        <Lightning hue={248} bolts={2} speed={1.2} intensity={0.168} size={2} />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto">

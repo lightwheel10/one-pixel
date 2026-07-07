@@ -271,7 +271,6 @@ function Process() {
       <ol className="aa-process-steps">
         {process.map(([title, copy], index) => (
           <li className="aa-process-step reveal" key={title}>
-            <span className="aa-process-num">{String(index + 1).padStart(2, '0')}</span>
             <span className="aa-process-icon"><img src={homeAsset(processAssets[index])} alt="" loading="lazy" aria-hidden="true" /></span>
             <h3>{title}</h3>
             <p>{copy}</p>
@@ -812,12 +811,30 @@ function pageFromPath() {
 }
 
 function OpxBar() {
+  // Leaving the case study clears the session flag, so the loader replays on a fresh entry.
+  const exit = () => { try { sessionStorage.removeItem('aa:loaded'); } catch { /* ignore */ } };
   return (
     <div className="aa-opx">
       <span className="aa-opx-note">A OnePixel sample site &middot; trips, prices and details are placeholder</span>
-      <a className="aa-opx-back" href="/">&larr; Back to OnePixel</a>
+      <a className="aa-opx-back" href="/" onClick={exit}>&larr; Back to OnePixel</a>
     </div>
   );
+}
+
+// The OnePixel loader plays only on the FIRST Atlas & Aangan page of a session (the landing).
+// Internal navigation between the MPA pages skips it; a fresh entry after exiting replays it.
+// (MPA pages share sessionStorage per tab, so the flag survives navigation but not a closed tab.)
+function EntryLoader({ mark = 'Atlas & Aangan' }) {
+  const [show] = useState(() => {
+    try {
+      if (sessionStorage.getItem('aa:loaded')) return false;
+      sessionStorage.setItem('aa:loaded', '1');
+      return true;
+    } catch {
+      return true;
+    }
+  });
+  return show ? <Loader duration={2400} mark={mark} /> : null;
 }
 
 export default function App() {
@@ -990,7 +1007,7 @@ export default function App() {
 
   return (
     <div ref={root}>
-      <Loader duration={2400} mark="Atlas & Aangan" />
+      <EntryLoader mark="Atlas & Aangan" />
       <OpxBar />
       <Header />
       <main>

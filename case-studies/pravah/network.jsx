@@ -87,8 +87,8 @@ export function Regions() {
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-px bg-white/10 border border-white/10 mt-6">
-          {regions.map((r) => (
-            <div key={r.code} className="group bg-base p-5 hover:bg-panel transition-colors">
+          {regions.map((r, i) => (
+            <div key={r.code} className={`group bg-base p-5 hover:bg-panel transition-colors${i === regions.length - 1 ? ' col-span-2 lg:col-span-1' : ''}`}>
               <div className="flex items-center justify-between">
                 <span className="font-mono text-[11px] text-electric">{r.code}</span>
                 <span className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-wide text-white/40">

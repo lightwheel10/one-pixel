@@ -495,9 +495,8 @@ function TripDetailPage() {
           <p>Arrive bright, move slower, leave with space between the memories.</p>
         </div>
         <div className="aa-itinerary">
-          {itinerary.map(([day, title, copy, image], index) => (
+          {itinerary.map(([day, title, copy, image]) => (
             <article className="aa-itinerary-row reveal" key={title}>
-              <span className="aa-itinerary-count">{String(index + 1).padStart(2, '0')}</span>
               <i aria-hidden="true" />
               <div className="aa-itinerary-copy"><small>{day}</small><h3>{title}</h3><p>{copy}</p></div>
               <img src={image} alt={title} loading="lazy" />

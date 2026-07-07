@@ -306,7 +306,7 @@ function OpxBar() {
   );
 }
 
-function Header({ bag, onBag, onSearch, interiorPage = false }) {
+function Header({ bag, onBag, onSearch, onMenu, interiorPage = false }) {
   const homeLink = (id = '') => interiorPage ? `#/${id ? `?section=${id}` : ''}` : `#${id}`;
   return (
     <header className={`so-header${interiorPage ? ' product-page' : ''}`}>
@@ -317,8 +317,11 @@ function Header({ bag, onBag, onSearch, interiorPage = false }) {
         <a href="#/studio">Studio</a>
       </nav>
       <div className="so-tools">
-        <button type="button" onClick={onSearch}>Search</button>
+        <button type="button" className="so-tool-search" onClick={onSearch}>Search</button>
         <button type="button" onClick={onBag}>Bag ({bag})</button>
+        <button type="button" className="so-burger" aria-label="Open menu" onClick={onMenu}>
+          <span aria-hidden="true" /><span aria-hidden="true" />
+        </button>
       </div>
     </header>
   );
@@ -1380,6 +1383,35 @@ function SearchOverlay({ open, onClose }) {
   );
 }
 
+function MobileMenu({ open, onClose, onSearch }) {
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKey = (event) => { if (event.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = previous; };
+  }, [open, onClose]);
+  return (
+    <div className={`so-menu ${open ? 'open' : ''}`} aria-hidden={!open}>
+      <div className="so-menu-scrim" onClick={onClose} aria-hidden="true" />
+      <nav className="so-menu-panel" aria-label="Primary navigation">
+        <div className="so-menu-top">
+          <span className="so-menu-label">Menu</span>
+          <button type="button" onClick={onClose} aria-label="Close menu">Close ×</button>
+        </div>
+        <ul className="so-menu-nav">
+          <li><a href="#/shop" onClick={onClose}>Shop all</a></li>
+          <li><a href="#/collection" onClick={onClose}>Collection</a></li>
+          <li><a href="#/studio" onClick={onClose}>Studio</a></li>
+          <li><button type="button" onClick={() => { onClose(); onSearch(); }}>Search</button></li>
+        </ul>
+        <a className="so-menu-cta" href="#/studio" onClick={onClose}>Book a fitting <span aria-hidden="true">→</span></a>
+      </nav>
+    </div>
+  );
+}
+
 function Checkout({ items, total, onQty, onClear }) {
   const [placed, setPlaced] = useState(false);
   const [order, setOrder] = useState('');
@@ -1477,6 +1509,7 @@ export default function App() {
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [route, setRoute] = useState(() => window.location.hash);
   const [transitioning, setTransitioning] = useState(false);
   const productSlug = route.match(/^#\/product\/([^?]+)/)?.[1];
@@ -1668,7 +1701,7 @@ export default function App() {
       <div className={`so-route-transition ${transitioning ? 'active' : ''}`} aria-hidden="true">
         <span>Saint Orson</span><strong>{transitionLabel}</strong><i />
       </div>
-      <Header bag={bagCount} interiorPage={interiorPage} onBag={() => setCartOpen(true)} onSearch={() => setSearchOpen(true)} />
+      <Header bag={bagCount} interiorPage={interiorPage} onBag={() => setCartOpen(true)} onSearch={() => setSearchOpen(true)} onMenu={() => setMenuOpen(true)} />
       {checkoutPage ? (
         <Checkout items={cart} total={cartTotal} onQty={setCartQty} onClear={clearCart} />
       ) : productPage ? (
@@ -1702,6 +1735,7 @@ export default function App() {
         onCheckout={() => { setCartOpen(false); window.location.hash = '/checkout'; }}
       />
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} onSearch={() => setSearchOpen(true)} />
     </div>
   );
 }

@@ -604,7 +604,6 @@ function PlanPage() {
               </article>
             ))}
           </div>
-          <div className="aa-form-progress"><b>01</b><i /><b>02</b><i /><b>03</b><i /><b>04</b></div>
           <TravelForm />
         </main>
         <PlannerPanel />
@@ -910,7 +909,6 @@ export default function App() {
           '.aa-plan-intro h1',
           '.aa-plan-intro > p:last-child',
           '.aa-plan-promise',
-          '.aa-form-progress',
           '.aa-travel-form',
           '.aa-planner-panel',
         ],

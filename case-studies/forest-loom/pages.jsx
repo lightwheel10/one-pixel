@@ -147,9 +147,11 @@ export function Home() {
               onClick={() => setHot(i)}
             >{i + 1}</button>
           ))}
-          <div className="fl-room-card">
-            <ShopCard id={ROOM[hot].id} eyebrow={`${hot + 1} / ${getProduct(ROOM[hot].id)?.type === 'home' ? 'For the home' : 'In this room'}`} />
-          </div>
+        </div>
+        {/* Sibling of the media (not inside it) so it can overlay on desktop but stack
+            cleanly below the full room photo on mobile, where an overlay would bury it. */}
+        <div className="fl-room-card">
+          <ShopCard id={ROOM[hot].id} eyebrow={`${hot + 1} / ${getProduct(ROOM[hot].id)?.type === 'home' ? 'For the home' : 'In this room'}`} />
         </div>
         <div className="fl-room-copy" data-reveal>
           <span className="fl-eyebrow fl-eyebrow-gold">Shop the room</span>

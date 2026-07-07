@@ -1745,7 +1745,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .so-bag-feature > div:nth-child(2) { left: 14px; right: 14px; bottom: 14px; }
 
   .so-evening { min-height: 92svh; }
-  .so-evening > img { object-position: center 16%; }
+  /* the model stands at ~33% from the left; a centred crop slices her off on the
+     tall portrait frame, so bias the focal point left to keep her in view. */
+  .so-evening > img { object-position: 30% center; }
   .so-evening-shade { background: linear-gradient(to bottom, rgba(0,0,0,.72) 0%, rgba(0,0,0,.2) 30%, rgba(0,0,0,.3) 58%, rgba(0,0,0,.78) 100%); }
   .so-evening-copy { width: 100%; justify-content: flex-start; align-items: flex-start; text-align: left; padding: 32px 22px; }
   .so-evening-copy h2 { font-size: 54px; }

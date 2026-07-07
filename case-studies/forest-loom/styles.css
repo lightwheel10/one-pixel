@@ -266,12 +266,17 @@ input { font: inherit; }
 .fl-room-card { position: absolute; right: clamp(20px,4vw,48px); bottom: clamp(20px,4vw,48px); z-index: 3; }
 .fl-room-copy { position: absolute; left: var(--gutter); top: clamp(96px,15vh,170px); z-index: 3; max-width: 340px; }
 .fl-room-copy .fl-h2-on { margin: 14px 0 20px; }
+/* the shoppable list is a mobile-only fallback for the desktop hotspots + card */
+.fl-room-shop { display: none; }
 @media (max-width: 720px) {
-  .fl-room-copy { position: static; padding: clamp(36px,7vh,64px) var(--gutter) 0; max-width: none; }
-  /* show the whole room at its natural ratio so nothing is cropped and the hotspots
-     land on the right pieces; the card drops below the photo instead of burying it. */
+  .fl-room-copy { position: static; padding: clamp(36px,7vh,64px) var(--gutter) 4px; max-width: none; }
+  /* show the whole room at its natural ratio so nothing is cropped */
   .fl-room-media { min-height: 0; aspect-ratio: 1672 / 941; }
-  .fl-room-card { position: static; margin: 20px var(--gutter) 0; }
+  /* the hotspot pins and the single overlay card feel disconnected on a narrow
+     screen; hide them and shop the room as a plain list instead. */
+  .fl-hotspot { display: none; }
+  .fl-room-card { display: none; }
+  .fl-room-shop { display: block; padding: 20px var(--gutter) 0; margin-bottom: 0; }
 }
 
 /* ---------- home collection ---------- */

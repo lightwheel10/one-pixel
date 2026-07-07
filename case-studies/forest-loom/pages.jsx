@@ -158,6 +158,20 @@ export function Home() {
           <h2 className="fl-h2 fl-h2-on">Curated pieces,<br />considered home.</h2>
           <a href="#/shop/home" className="fl-link fl-link-light">View all</a>
         </div>
+        {/* Mobile only: the hotspot-and-card interaction does not translate to a narrow
+            screen, so the pieces drop into a plain shoppable list beneath the photo. */}
+        <ul className="fl-room-shop fl-look-list">
+          {ROOM.map((r) => getProduct(r.id)).filter(Boolean).map((p) => (
+            <li key={p.id} className="fl-look-row">
+              <a href={'#/product/' + p.id} className="fl-look-thumb"><img src={p.img} alt={p.name} loading="lazy" /></a>
+              <div className="fl-look-rowbody">
+                <a href={'#/product/' + p.id} className="fl-look-name">{p.name}</a>
+                <span className="fl-look-price">{formatRupee(p.price)}</span>
+              </div>
+              <a href={'#/product/' + p.id} className="fl-look-go" aria-label={`View ${p.name}`}>↗</a>
+            </li>
+          ))}
+        </ul>
       </section>
 
       {/* ---- the collection ---- */}

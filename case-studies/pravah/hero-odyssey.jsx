@@ -339,16 +339,24 @@ export const HeroSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            onClick={() => setMobileMenuOpen(false)}
             className="lg:hidden fixed inset-0 z-[9999] bg-black/95 backdrop-blur-lg"
           >
+            {/* Offset the close control past the notch/status bar so it is never hidden;
+                tapping anywhere on the overlay also closes it as a fail-safe. */}
+            <button
+              className="absolute p-3 text-white hover:text-white/70"
+              style={{ top: 'calc(env(safe-area-inset-top, 0px) + 1rem)', right: 'calc(env(safe-area-inset-right, 0px) + 1rem)' }}
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="Close navigation"
+            >
+              <X className="h-7 w-7" stroke="#ffffff" />
+            </button>
             <div className="flex flex-col items-center justify-center h-full gap-7 text-lg">
-              <button className="absolute top-6 right-6 p-2" onClick={() => setMobileMenuOpen(false)} aria-label="Close navigation">
-                <X className="h-6 w-6" />
-              </button>
               {navLinks.map(([label, href]) => (
                 <a key={label} href={href} onClick={() => setMobileMenuOpen(false)}>{label}</a>
               ))}
-              <a href="/case-studies/pravah/auth/">Console login</a>
+              <a href="/case-studies/pravah/auth/" onClick={() => setMobileMenuOpen(false)}>Console login</a>
               <Button href="/case-studies/pravah/auth/#signup" variant="primary" className="mt-2">Get started</Button>
             </div>
           </motion.div>

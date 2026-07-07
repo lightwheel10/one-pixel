@@ -104,14 +104,17 @@ export function Products() {
                     fleet with a built-in DDoS shield.
                   </p>
                 </div>
-                <div className="lg:flex-1 lg:border-l border-white/10 lg:pl-8">
-                  <img
-                    src="/case-studies/pravah/images/network-topology.svg"
-                    alt="Networking topology from internet to load balancer, servers, and Postgres"
-                    className="pv-network-diagram"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                <div className="lg:flex-1 lg:border-l border-white/10 lg:pl-8 min-w-0">
+                  {/* wide 520px diagram: contain it in a scroller so it never widens the page */}
+                  <div className="overflow-x-auto">
+                    <img
+                      src="/case-studies/pravah/images/network-topology.svg"
+                      alt="Networking topology from internet to load balancer, servers, and Postgres"
+                      className="pv-network-diagram"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
                 </div>
               </div>
             </div>

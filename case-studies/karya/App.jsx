@@ -470,6 +470,10 @@ export default function App() {
         duration: 0.75,
         stagger: 0.06,
         ease: 'power3.out',
+        // The mobile nav is a hidden fixed overlay (opacity/transform toggled by
+        // .is-open); without clearProps the intro leaves inline opacity:0 on it and
+        // the menu opens invisibly. Clear the inline styles so CSS controls it again.
+        clearProps: 'opacity,transform',
       });
       gsap.from('.hero-stats', { opacity: 0, duration: 0.8, delay: 0.55 });
 

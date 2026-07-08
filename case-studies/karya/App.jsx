@@ -707,13 +707,14 @@ export default function App() {
         if (!video) return null;
 
         video.pause();
+        // On phones the assembly is a continuously looping video (not a scroll scrub),
+        // so the progress bar is hidden in CSS and left un-animated here.
+        video.loop = true;
         gsap.set('.technology-head .mono-label, .technology-head h2', { opacity: 0, y: 20 });
         gsap.set(steps, { opacity: 0, y: 12 });
         gsap.set('.assembly-grid', { opacity: 0, scale: 0.98 });
         gsap.set(video, { opacity: 0, y: 18, scale: 0.98 });
         gsap.set('.assembly-label', { opacity: 0 });
-        gsap.set('.assembly-progress', { opacity: 0 });
-        gsap.set('.assembly-progress i', { scaleX: 0, transformOrigin: 'left center' });
         gsap.set('.performance > div, .performance footer', { opacity: 0, y: 12 });
 
         const timeline = gsap.timeline({
@@ -738,8 +739,6 @@ export default function App() {
           .to(steps, { opacity: 1, y: 0, duration: 0.38, stagger: 0.06, ease: 'power2.out' }, 0.24)
           .to('.assembly-grid', { opacity: 1, scale: 1, duration: 0.36, ease: 'power2.out' }, 0.28)
           .to(video, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power2.out' }, 0.34)
-          .to('.assembly-progress', { opacity: 1, duration: 0.2 }, 0.64)
-          .to('.assembly-progress i', { scaleX: 1, duration: 0.9, ease: 'power2.inOut' }, 0.76)
           .to('.performance > div', { opacity: 1, y: 0, duration: 0.34, stagger: 0.06, ease: 'power2.out' }, 0.9)
           .to('.performance footer', { opacity: 1, y: 0, duration: 0.34, ease: 'power2.out' }, 1.18);
 

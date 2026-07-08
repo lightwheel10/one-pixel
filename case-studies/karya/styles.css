@@ -1630,6 +1630,12 @@ h2 span {
     will-change: opacity, transform;
   }
 
+  /* On phones the assembly plays as a looping video, so the scrub progress bar
+     has no meaning here — hide it. */
+  .assembly-progress {
+    display: none;
+  }
+
   .performance {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

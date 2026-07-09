@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
+import { Analytics } from '@vercel/analytics/react';
 import { Loader } from './Loader.jsx';
 import { Nav } from './Nav.jsx';
 import { Hero } from './Hero.jsx';
@@ -116,6 +117,7 @@ export default function App() {
         <FAQ />
         <Contact />
       </main>
+      <Analytics />
     </>
   );
 }
